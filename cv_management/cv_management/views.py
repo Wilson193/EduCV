@@ -19,8 +19,5 @@ def signin(request):
 def signup(request):
     return render(request, 'auth/signup.html')
 
-def teachers(request):
-    return render(request, 'teachers.html', {'is_teacher_template':True})
-
 def dashboard(request):
     return render(request, 'pages/dashboard.html')

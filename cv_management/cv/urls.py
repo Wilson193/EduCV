@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import index, create_cv
 
 urlpatterns = [
-    path('', views.index, name='cv'),
+    path('', index, name='cv'),
+    path('create/', create_cv , name='cv'),
 ]
