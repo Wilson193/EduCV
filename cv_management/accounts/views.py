@@ -1,22 +1,27 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.contrib import messages
+from docente.models import Docente  # Asegúrate de importar tu modelo
 
-def login_view(request):
+def signin(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        cedula = request.POST.get('cedula')
         password = request.POST.get('password')
-        
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            # Verificar si el usuario es un docente (podemos usar un grupo o permisos)
-            if user.groups.filter(name='Docente').exists():
-                login(request, user)
-                return redirect('docente_dashboard')  # Redirigir al dashboard de docentes
-            else:
-                messages.error(request, 'No tienes permiso para acceder como docente.')
+
+        try:
+            print("mostrar datos")
+            print(user = Docente.objects.get(cedula=cedula)) # Buscar por cédula
+        except Docente.DoesNotExist:
+            user = None
+
+        if user and user.clave == password:  # Comparar la contraseña
+            login(request, user)  # Iniciar sesión
+            return redirect('nombre_de_la_vista_deseada')
         else:
-            messages.error(request, 'Credenciales inválidas.')
-            
-    return render(request, 'accounts/login.html')
+            print(request, 'Credenciales inválidas.')
+
+    return render(request, 'signin.html')
+
+def signup(request):
+    return render(request, 'signup.html')
+
