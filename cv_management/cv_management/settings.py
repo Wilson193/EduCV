@@ -32,15 +32,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
+    'cv',
+    'coordinador_academico',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cv',
     'docente',
-    'coordinador_academico',
 ]
 
 MIDDLEWARE = [
@@ -106,6 +107,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = '/settings/'
+LOGOUT_REDIRECT_URL = '/'
+
 
 
 # Internationalization

@@ -8,6 +8,7 @@ class Persona(models.Model):
     num_telefono = models.BigIntegerField()
     universidad = models.CharField(max_length=100)
     cargo = models.CharField(max_length=100)
+    clave = models.CharField(max_length=20)
     
     class Meta:
         abstract = True
