@@ -33,14 +33,21 @@ def signin(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+        
         user = authenticate(request, email=email, password=password)
+        
+        print(user)
         if user is not None:
-            login(request, user)
+            login(request, user)        
+            print(user.groups.filter(name='Docente').exists())
             if user.groups.filter(name='Docente').exists():
-                return redirect('dashboard')
+                print("entra al if")
+                return redirect('settings')
             elif user.groups.filter(name='Coordinador').exists():
+                print("entra al elif")
                 return redirect('search')
         else:
             messages.error(request, 'Credenciales inválidas.')
+            print(request, 'Credenciales inválidas.')
 
-    return render(request, 'login.html')
+    return render(request, 'signin.html')
