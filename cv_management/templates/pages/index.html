@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,14 +18,15 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <a href="home/" class="text-gray-600 hover:text-blue-500">Inicio</a>
-                    <a href="" class="text-gray-600 hover:text-blue-500">Docentes</a>><!--falta crear esta pagina que muestra el listado de profesores?-->
-                    <a href="" class="text-gray-600 hover:text-blue-500">Publicaciones</a><!--no se pa que es esto-->>
-                    <a href="" class="text-gray-600 hover:text-blue-500">Contacto</a><!-- no se pa que es esto-->>
+                    <a href="" class="text-gray-600 hover:text-blue-500">Docentes</a><!--falta crear esta pagina que muestra el listado de profesores?-->
+                    <a href="" class="text-gray-600 hover:text-blue-500">Publicaciones</a><!--no se pa que es esto-->
+                    <a href="" class="text-gray-600 hover:text-blue-500">Contacto</a><!-- no se pa que es esto-->
                 </div>
             </div>
         </div>
     </header>
 
+    <!--
     <main class="bg-blue-500 text-white py-20">
         <div class="max-w-4xl mx-auto text-center">
             <h2 class="text-4xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
@@ -32,6 +34,31 @@
             <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
         </div>
     </main>
+    -->
+
+    <!--
+    <main class="bg-custom text-white py-20 d-flex flex-column align-items-center justify-content-center">
+    <div class="text-center">
+        <img src="{% static 'images/fondo.jpg' %}" class="img-fluid mb-3" alt="Imagen" style="width:600px; height:400px; border-radius:45px; padding:20px; margin-top:10px;">
+        <h2 class="text-4xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
+        <p class="text-lg mb-6" style="text-align: center; font-size: smaller;">
+            Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.
+        </p>
+        <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
+    </div>
+    </main>
+    -->
+
+    <main class="bg-custom text-white py-20 d-flex flex-column align-items-center justify-content-center" style="background-image: url('{% static '/images/' %}'); background-size: cover; background-position: center;">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
+            <p class="text-lg mb-6" style="text-align: center; font-size: smaller;">
+                Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.
+            </p>
+            <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
+        </div>
+    </main>
+    
 
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

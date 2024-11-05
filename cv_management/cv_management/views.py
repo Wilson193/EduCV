@@ -21,3 +21,6 @@ def signup(request):
 
 def dashboard(request):
     return render(request, 'pages/dashboard.html')
+
+def resetpassword(request):
+    return render(request, 'pages/reset-password.html')

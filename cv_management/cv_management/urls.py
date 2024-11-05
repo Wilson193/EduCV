@@ -11,5 +11,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('settings/', views.settings, name='settings'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('reset/', views.resetpassword, name='reset-password'),
     path('admin/', admin.site.urls),
 ]
