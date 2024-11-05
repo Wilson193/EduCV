@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-km61+n9!-(=muyt3oen%i&!8n7(ngc@m74d1@_og6_bgvu3g@6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [

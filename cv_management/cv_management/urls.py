@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import handler404
 
 from . import views
+
+handler404 = 'cv_management.views.custom_404_view'
 
 urlpatterns = [
     path('CV/', include('cv.urls')),

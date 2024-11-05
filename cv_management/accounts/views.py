@@ -41,10 +41,9 @@ def signin(request):
             login(request, user)   
                  
             if user.groups.filter(name='Docente').exists():
-                return redirect('settings')
+                return redirect('dashboard')
             elif user.groups.filter(name='Coordinador').exists():
-                print("entra al elif")
-                return redirect('search')
+                return redirect('dashboard')
         else:
             messages.error(request, 'Credenciales inválidas.')
             print(request, 'Credenciales inválidas.')

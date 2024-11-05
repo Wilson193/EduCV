@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 404 - Página no encontrada</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Fondo del espacio */
+        body {
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+            color: #fff;
+        }
+        /* Animación del astronauta */
+        .astronaut {
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        /* Animación de flotación */
+        @keyframes float {
+            0%, 100% { transform: translateY(-20px); }
+            50% { transform: translateY(10px); }
+        }
+        /* Estrellas en el fondo */
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            width: 2px;
+            height: 2px;
+            animation: twinkle 1.5s infinite alternate;
+        }
+        /* Animación de parpadeo */
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+    <!-- Generar estrellas en el fondo -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const starContainer = document.createElement("div");
+            starContainer.classList.add("fixed", "inset-0", "-z-10");
+            document.body.appendChild(starContainer);
+
+            // Crear estrellas en posiciones aleatorias
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement("div");
+                star.classList.add("star");
+                star.style.top = Math.random() * 100 + "vh";
+                star.style.left = Math.random() * 100 + "vw";
+                star.style.width = `${Math.random() * 3}px`;
+                star.style.height = star.style.width;
+                starContainer.appendChild(star);
+            }
+        });
+    </script>
+
+    <!-- Contenedor principal -->
+    <div class="text-center px-6 md:px-12 relative z-10">
+        <h1 class="text-5xl md:text-7xl font-bold mb-4">404</h1>
+        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Parece que te perdiste en el espacio</h2>
+        <p class="mb-6 text-lg md:text-xl">La página que estás buscando no existe.</p>
+        <button onclick="window.location.href='{% url 'home' %}'" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+            Volver al inicio
+        </button>
+        <div class="astronaut mt-12 mx-auto">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/014/207/855/small_2x/astronaut-floating-flying-cartoon-flat-illustration-png.png" alt="Astronauta perdido" class="w-24 md:w-40 mx-auto">
+        </div>
+    </div>
+</body>
+</html>

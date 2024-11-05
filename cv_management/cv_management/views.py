@@ -22,8 +22,12 @@ def signin(request):
 def signup(request):
     return render(request, 'auth/signup.html')
 
+@login_required
 def dashboard(request):
     return render(request, 'pages/dashboard.html')
 
 def resetpassword(request):
     return render(request, 'pages/reset-password.html')
+
+def custom_404_view(request, exception):
+    return render(request, 'pages/404.html', status=404)
