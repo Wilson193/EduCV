@@ -1,5 +1,7 @@
 # my_project/views.py
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     return render(request, 'pages/index.html')
@@ -10,6 +12,7 @@ def home(request):
 def search(request):
     return render(request, 'pages/search.html')
 
+@login_required
 def settings(request):
     return render(request, 'pages/settings.html')
 

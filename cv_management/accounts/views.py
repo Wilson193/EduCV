@@ -6,6 +6,7 @@ from docente.models import Docente  # Asegúrate de importar tu modelo
 from coordinador_academico.models import  CoordinadorAcademico  # Asegúrate de importar tu modelo
 from accounts.models import User
 from django.contrib.auth.models import Group
+from django.contrib.auth import logout
 
 def signup(request):
     if request.method == 'POST':
@@ -19,11 +20,11 @@ def signup(request):
         if rol == 'Docente':
             group = Group.objects.get(name='Docente')
             user.groups.add(group)
-            Docente.objects.create(user=user)
+            #Docente.objects.create(user=user)
         elif rol == 'Coordinador':
             group = Group.objects.get(name='Coordinador')
             user.groups.add(group)
-            CoordinadorAcademico.objects.create(user=user)
+            #CoordinadorAcademico.objects.create(user=user)
 
         return render(request, 'signup.html')  # O redirigir a otra página
 
@@ -36,12 +37,10 @@ def signin(request):
         
         user = authenticate(request, email=email, password=password)
         
-        print(user)
         if user is not None:
-            login(request, user)        
-            print(user.groups.filter(name='Docente').exists())
+            login(request, user)   
+                 
             if user.groups.filter(name='Docente').exists():
-                print("entra al if")
                 return redirect('settings')
             elif user.groups.filter(name='Coordinador').exists():
                 print("entra al elif")
@@ -50,4 +49,8 @@ def signin(request):
             messages.error(request, 'Credenciales inválidas.')
             print(request, 'Credenciales inválidas.')
 
+    return render(request, 'signin.html')
+
+def signout(request):
+    logout(request) 
     return render(request, 'signin.html')
