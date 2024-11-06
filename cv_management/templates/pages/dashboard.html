@@ -1,10 +1,9 @@
 {%extends 'base.html'%}
 {% block content%}
 {% load static %}
-<div class="px-4 pt-6">
-    <div class="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-      <img src="{% static 'Logo-Modo-Claro.svg' %}" alt="Ejemplo de Imagen" style="width:300px; height:auto;">
-      
-    </div>
+<div class="flex justify-center items-center px-4 pt-6">
+  <div class="max-w-3xl mx-auto">
+      <img src="{% static 'Logo Modo Claro.svg' %}" alt="Ejemplo de Imagen" class="mx-auto" style="width:500px; height:350px">
+  </div>
 </div>
 {% endblock%}
