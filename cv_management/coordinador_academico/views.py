@@ -3,9 +3,10 @@ from django.contrib import messages
 from .models import CoordinadorAcademico
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
+from docente.models import Docente
 
 # Create your views here.
-def register_coordinator(request):
+def update_coordinator(request):
     if request.method == 'POST':
         # Obtén los datos del formulario
         cedula = request.POST.get('cedula')
@@ -15,22 +16,19 @@ def register_coordinator(request):
         universidad = request.POST.get('universidad')
         cargo = request.POST.get('cargo')
         correo = request.POST.get('correo')
-        clave = request.POST.get('clave')
         dependencia = request.POST.get('dependencia')
         telefono_oficina = request.POST.get('telefono_oficina')
         oficina = request.POST.get('oficina')
 
         # Verifica que el correo no esté registrado
-        if User.objects.filter(email=correo).exists():
+        if Docente.objects.filter(correo=correo).exists():
             messages.error(request, "El correo ya está registrado.")
-            return redirect('register_coordinator')
-
-        # Crea un nuevo usuario para el coordinador
-        user = User.objects.create(
-            username=cedula,  # Usamos la cédula como nombre de usuario
-            email=correo,
-            password=make_password(clave),  # Encripta la contraseña
-        )
+            return redirect('settings')
+        
+        user = request.user
+        user.first_name= nombre
+        user.last_name= apellido
+        user.save()
 
         # Crea un nuevo objeto CoordinadorAcademico
         coordinador = CoordinadorAcademico(
@@ -48,9 +46,9 @@ def register_coordinator(request):
         coordinador.save()
 
         messages.success(request, "Coordinador registrado con éxito.")
-        return redirect('login')  # O la vista a donde quieras redirigir
+        return redirect('dashboard')  # O la vista a donde quieras redirigir
 
-    return render(request, 'register_coordinator.html')  # La plantilla del formulario de registro
+    return render(request, 'settings')  # La plantilla del formulario de registro
     
 
 def settings(request):
