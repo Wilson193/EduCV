@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import User
 
 # Create your models here.
 class Persona(models.Model):
@@ -15,6 +16,7 @@ class Persona(models.Model):
         abstract = True
 
 class Docente(Persona):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="docente")
     facultad = models.CharField(max_length=100)
     categoria = models.CharField(max_length=50)
     especialidad = models.CharField(max_length=100)

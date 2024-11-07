@@ -3,9 +3,35 @@ from django.contrib import messages
 from .models import CoordinadorAcademico
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from docente.models import Docente
 
-# Create your views here.
+
+def settings(request):
+    return render(request, 'settings.html')
+from django.contrib.auth.hashers import check_password
+
+def reset_password(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current-password')
+        new_password = request.POST.get('new-password')
+        
+        user = request.user
+        
+        # Verifica si la contraseña actual es correcta utilizando check_password
+        if check_password(current_password, user.password):
+            # Si la contraseña actual es correcta, actualiza la nueva contraseña
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, "Contraseña actualizada con éxito.")
+        else:
+            messages.error(request, "La contraseña actual es incorrecta.")
+        
+        return redirect('settings')
+    
+    return render(request, 'settings.html')  # La plantilla del formulario de registro
+
+            
+        
+        
 def update_coordinator(request):
     if request.method == 'POST':
         # Obtén los datos del formulario
@@ -20,36 +46,62 @@ def update_coordinator(request):
         telefono_oficina = request.POST.get('telefono_oficina')
         oficina = request.POST.get('oficina')
 
-        # Verifica que el correo no esté registrado
-        if Docente.objects.filter(correo=correo).exists():
-            messages.error(request, "El correo ya está registrado.")
-            return redirect('settings')
-        
         user = request.user
-        user.first_name= nombre
-        user.last_name= apellido
-        user.save()
+        # Verifica si el correo ya está registrado en CoordinadorAcademico
+        try:
+            coordinador = CoordinadorAcademico.objects.get(correo=user.email)
+        except CoordinadorAcademico.DoesNotExist:
+            coordinador = None
+        
+        if coordinador:
+            # Si el coordinador ya existe, solo actualizamos sus datos
+            coordinador.cedula = cedula
+            coordinador.nombre = nombre
+            coordinador.apellido = apellido
+            coordinador.num_telefono = num_telefono
+            coordinador.universidad = universidad
+            coordinador.cargo = cargo
+            coordinador.correo = correo
+            coordinador.dependencia = dependencia
+            coordinador.telefono_oficina = telefono_oficina
+            coordinador.oficina = oficina
+            coordinador.save()
 
-        # Crea un nuevo objeto CoordinadorAcademico
-        coordinador = CoordinadorAcademico(
-            user=user,
-            cedula=cedula,
-            nombre=nombre,
-            apellido=apellido,
-            num_telefono=num_telefono,
-            universidad=universidad,
-            cargo=cargo,
-            dependencia=dependencia,
-            telefono_oficina=telefono_oficina,
-            oficina=oficina,
-        )
-        coordinador.save()
+            # Actualizamos también los datos del usuario relacionado
+            user = coordinador.user
+            user.first_name = nombre
+            user.last_name = apellido
+            user.email = correo  # Actualiza el correo si es necesario
+            user.save()
 
-        messages.success(request, "Coordinador registrado con éxito.")
-        return redirect('dashboard')  # O la vista a donde quieras redirigir
+            messages.success(request, "Datos del coordinador actualizados con éxito.")
+        else:
+            # Si no se encuentra el coordinador, creamos uno nuevo
+            user = request.user
+            user.first_name = nombre
+            user.last_name = apellido
+            user.email = correo  # Si es necesario, puedes actualizar el correo del usuario
+            user.save()
 
-    return render(request, 'settings')  # La plantilla del formulario de registro
-    
+            # Crear un nuevo objeto CoordinadorAcademico
+            coordinador = CoordinadorAcademico(
+                user=user,
+                cedula=cedula,
+                nombre=nombre,
+                apellido=apellido,
+                num_telefono=num_telefono,
+                universidad=universidad,
+                cargo=cargo,
+                correo = correo,
+                dependencia=dependencia,
+                telefono_oficina=telefono_oficina,
+                oficina=oficina,
+            )
+            coordinador.save()
 
-def settings(request):
-    return render(request, 'settings.html')
+            messages.success(request, "Coordinador creado con éxito.")
+
+        messages.success(request, "Coordinador modificado con éxito.")
+        return redirect('settings')
+
+    return render(request, 'settings.html')  # La plantilla del formulario de registro
