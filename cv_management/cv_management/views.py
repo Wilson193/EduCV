@@ -2,7 +2,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-
 def index(request):
     return render(request, 'pages/index.html')
 
@@ -20,7 +19,8 @@ def signup(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'pages/dashboard.html')
+    es_coordinador = request.user.groups.filter(name='coordinador').exists()
+    return render(request, 'pages/dashboard.html', {'es_coordinador': es_coordinador})
 
 def resetpassword(request):
     return render(request, 'pages/reset-password.html')

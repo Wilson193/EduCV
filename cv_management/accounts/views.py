@@ -15,7 +15,7 @@ def signup(request):
         rol = request.POST.get('rol')
         
         #Crear el usuario en la base de datos
-        user = User.objects.create_user(email=email, password=password)
+        user = User.objects.create_user(email=email, password=password, rol=rol)
 
         if rol == 'Docente':
             group = Group.objects.get(name='Docente')
@@ -25,7 +25,7 @@ def signup(request):
             group = Group.objects.get(name='Coordinador')
             user.groups.add(group)
             #CoordinadorAcademico.objects.create(user=user)
-
+        
         return render(request, 'signup.html')  # O redirigir a otra página
 
     return render(request, 'signup.html')

@@ -2,12 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import CoordinadorAcademico
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth.hashers import check_password
 
 def settings(request):
     return render(request, 'settings.html')
-from django.contrib.auth.hashers import check_password
 
 def reset_password(request):
     if request.method == 'POST':
@@ -97,6 +95,7 @@ def update_coordinator(request):
                 telefono_oficina=telefono_oficina,
                 oficina=oficina,
             )
+            print("esta intentando crearlo")
             coordinador.save()
 
             messages.success(request, "Coordinador creado con éxito.")

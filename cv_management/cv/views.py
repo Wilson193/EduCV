@@ -7,7 +7,7 @@ def index(request):
   template = loader.get_template('users.html')
   return HttpResponse(template.render())
 
-def create_cv(request):
+def list_cvs(request):
   template = loader.get_template('teachers.html')
   return HttpResponse(template.render())
 
