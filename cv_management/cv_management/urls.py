@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     path('cv/', include('cv.urls')),
     path('academic_coordinator/', include('coordinador_academico.urls')),
+    path('teacher/', include('docente.urls')),
     path('', views.index, name='index'),
     path('home/', views.home, name='home'),
     path('search/', views.search, name='search'),
