@@ -1,34 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
-    <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 max-w-md w-full">
+<div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div class="p-8 bg-white rounded-lg shadow-lg dark:bg-gray-800 max-w-lg w-full">
         <div class="text-center mb-6">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">¿Deseas crear tu CV?</h2>
-            <p class="mt-2 text-gray-600 dark:text-gray-400">
-                Esta es tu primera vez creando un CV en nuestro sistema. Puedes proceder a crear un CV ahora o regresar y explorar otras opciones.
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">¡Bienvenido al Sistema de Currículum Vitae!</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">Aquí podrás crear y gestionar tu currículum profesional de manera eficiente y organizada.</p>
+        </div>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg mb-6">
+            <p class="text-gray-700 dark:text-gray-300 text-center">¿Deseas iniciar la creación de tu CV?</p>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 text-center">
+                Al crear tu CV, podrás añadir experiencia laboral, educación, habilidades y mucho más para construir un perfil profesional completo.
             </p>
         </div>
-        
-        <!-- Botones de acción -->
         <div class="flex justify-center gap-4 mt-6">
             <!-- Botón para crear el CV -->
-            <form method="POST" action="#">
+            <form method="POST" action="{% url 'create'%}">
                 {% csrf_token %}
-                <button type="submit" class="px-6 py-3 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-700">
+                <button type="submit" class="px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-700">
                     Crear CV
                 </button>
             </form>
-            <!-- Botón para regresar sin crear el CV -->
+            <!-- Botón para cancelar y volver al inicio -->
             <a href="{% url 'home' %}" class="px-6 py-3 text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
-                Regresar
+                Cancelar
             </a>
         </div>
-        
-        <!-- Mensaje de información -->
         <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-4">
-            <p class="text-center text-sm text-gray-500 dark:text-gray-400">
-                Puedes crear tu CV ahora o hacerlo en otro momento.
-            </p>
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400">Este es el primer paso para construir tu perfil profesional en nuestra plataforma.</p>
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400">Una vez creado el CV, podrás editarlo y mantenerlo actualizado.</p>
         </div>
     </div>
 </div>

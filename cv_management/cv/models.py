@@ -6,11 +6,11 @@ class ExperienciaLaboral(models.Model):
     lugar_trabajo = models.CharField(max_length=100)
     cargo = models.CharField(max_length=100)
     fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
-    descripcion = models.CharField(max_length=3000)
+    fecha_fin = models.DateField(null=True, blank=True)  # Permitir que sea nulo
+    descripcion = models.CharField(max_length=3000, null=True, blank=True)  # Permitir que sea nulo
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='experiencia_laboral')
 
-class FormaciónAcademica(models.Model):
+class FormacionAcademica(models.Model):
     nivel = models.CharField(max_length=100)
     institucion = models.CharField(max_length=100)
     titulo = models.CharField(max_length=100)
@@ -35,7 +35,8 @@ class ProduccionAcademica(models.Model):
 class CV(models.Model):
     fecha_creacion = models.DateField()
     estado = models.IntegerField()
-    docente = models.OneToOneField(Docente, on_delete=models.CASCADE)
+    docente = models.OneToOneField(Docente, on_delete=models.CASCADE, related_name="cv_docente")
+
     
 
     

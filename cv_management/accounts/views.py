@@ -7,26 +7,44 @@ from coordinador_academico.models import  CoordinadorAcademico  # Asegúrate de 
 from accounts.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
+from django.db import transaction
 
 def signup(request):
     if request.method == 'POST':
+        cedula = request.POST.get('cedula')
         email = request.POST.get('email')
-        password  = request.POST.get('password')
+        password = request.POST.get('password')
         rol = request.POST.get('rol')
         
-        #Crear el usuario en la base de datos
-        user = User.objects.create_user(email=email, password=password, rol=rol)
+        try:
+            with transaction.atomic():
+                # Crear instancia de Docente o Coordinador sin asociar el User aún
+                if rol == 'Docente':
+                    docente = Docente.objects.create(cedula=cedula, correo=email)
+                elif rol == 'Coordinador':
+                    coordinador = CoordinadorAcademico.objects.create(cedula=cedula, correo=email)
 
-        if rol == 'Docente':
-            group = Group.objects.get(name='Docente')
-            user.groups.add(group)
-            #Docente.objects.create(user=user)
-        elif rol == 'Coordinador':
-            group = Group.objects.get(name='Coordinador')
-            user.groups.add(group)
-            #CoordinadorAcademico.objects.create(user=user)
-        
-        return render(request, 'signup.html')  # O redirigir a otra página
+                # Crear el usuario asociado
+                user = User.objects.create_user(email=email, password=password, rol=rol)
+                
+                # Asignar el grupo correspondiente
+                if rol == 'Docente':
+                    group = Group.objects.get(name='Docente')
+                    user.groups.add(group)
+                    docente.user = user
+                    docente.save()  # Guardar la relación del usuario con el docente
+                elif rol == 'Coordinador':
+                    group = Group.objects.get(name='Coordinador')
+                    user.groups.add(group)
+                    coordinador.user = user
+                    coordinador.save()  # Guardar la relación del usuario con el coordinador
+
+            return render(request, 'signup.html')  # O redirigir a otra página
+
+        except Exception as e:
+            # Si ocurre algún error, puedes mostrar un mensaje de error en la página
+            # También puedes usar mensajes de Django o logs para manejar errores
+            print(f"Error al crear el usuario: {e}")
 
     return render(request, 'signup.html')
 
