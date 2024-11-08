@@ -51,18 +51,18 @@
             </div>
         </div>
         <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <h3 class="mb-4 text-xl font-semibold dark:text-white">Formación académica</h3>
-            <div class="col-span-8 sm:col-span-5 mb-10">
-                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académico</label>
+            <h3 class="mb-10 text-xl font-semibold dark:text-white">Formación académica</h3>
+            <div class="col-span-6 sm:col-span-3 mb-4">
+                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académicos</label>
                 <input type="text" name="nivel" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba su nivel académico" required>
             </div>
             <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instituciones académicas</label>
+                <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instituciones Académicas</label>
                 <input type="text" name="institucion" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Instituciones académicas donde estudió" required>
             </div>
             <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="titulos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Títulos académicos</label>
-                <input type="text" name="titulos" id="titulos" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba sus titulos académicos" required>
+                <label for="titulos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Títulos Académicos</label>
+                <input type="text" name="titulos" id="titulos" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba sus títulos académicos" required>
             </div>
             <div class="col-span-6 sm:col-span-3">
                 <label for="fecha_obtencion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención del título</label>
@@ -136,9 +136,8 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 px-4 pt-4 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-8 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex" >
-        <div class="flow-root w-full">
+<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
+    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">        <div class="flow-root w-full">
             <h3 class="text-xl font-semibold dark:text-white">Experiencia Laboral</h3>
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                 <!-- Ejemplo de experiencia laboral -->
@@ -194,14 +193,63 @@
                 </li>
             </ul>
             <div>
-                <button onclick="toggleExperiencia()" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar más Información</button>
+                <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
             </div>
             
         </div>
     </div>
 
-    <!--Agregar experiencia profesional-->
-    <div id="agregar-experiencia" style="display: none;">   
+
+
+
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modal">
+        <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white">
+                        Registrar Experiencia Laboral
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white" data-modal-toggle="edit-user-modal">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <form action="#">
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="empresa" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Empresa</label>
+                                <input type="text" name="empresa" value="Empresa" id="empresa" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Empresa" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cargo Ocupado</label>
+                                <input type="text" name="cargo" value="Cargo" id="cargo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cargo" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="fecha_inicio" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Inicio</label>
+                                <input type="date" id="fecha_inicio" name="fecha_inicio" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="fecha_fin" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Fin</label>
+                                <input type="date" id="fecha_fin" name="fecha_fin" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
+                            </div>
+                            <div class="col-span-6">
+                                <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+                                <textarea id="descripcion" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="👨‍💻Full-stack web developer. Open-source contributor.">👨‍💻Full-stack web developer. Open-source contributor.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+                        <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% comment %} <div id="agregar-experiencia" style="display: none;">   
         <div class="w-full p-8 mb-8 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
             <div class="flow-root w-full">
                 <h3 class="text-xl font-semibold dark:text-white">Agregar Experiencia Laboral</h3>
@@ -233,18 +281,15 @@
                         </div>
         
                         <div class="pt-4">
-                            <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-                                Ver CV
-                            </button>
+                            <button type="submit" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Experiencia</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div> 
+    </div>  {% endcomment %}
     
-    <div class="col-span-full xl:col-auto">
+    {% comment %} <div class="col-span-full xl:col-auto">
         <div class="p-4 mb-4 space-y-6 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
             <div>
@@ -267,29 +312,119 @@
                 <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
             </div>
         </div>
-        <!--
-        <div class="p-4 mb-4 space-y-6 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <div class="px-4 py-2 text-gray-400 border border-gray-200 border-dashed rounded dark:border-gray-600">
-                <h3>Card header</h3>
-            </div>
-            <div class="h-32 px-4 py-2 text-gray-400 border border-gray-200 border-dashed rounded dark:border-gray-600">
-                <h3>Card body</h3>
-            </div>
-            <div class="px-4 py-2 text-gray-400 border border-gray-200 border-dashed rounded dark:border-gray-600">
-                <h3>Card footer</h3>
+
+    </div> {% endcomment %}
+</div>
+
+<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
+    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
+        <div class="flow-root w-full">
+            <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
+            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                <!-- Ejemplo de formación -->
+                <li class="py-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-shrink-0">
+                            <!-- Icono de institución -->
+                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+                                Maestría en Matemáticas en la Universidad Nacional
+                            </p>
+                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                Bogotá, Colombia
+                            </p>
+                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                2016 - 2018
+                            </p>
+                        </div>
+                        <div class="inline-flex items-center">
+                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
+                        </div>
+                    </div>
+                </li>
+    
+                <!-- Otro ejemplo de formación -->
+                <li class="pt-4 pb-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex-shrink-0">
+                            <!-- Icono de institución -->
+                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+                                Licenciatura en Ciencias de la Computación en la Universidad de Cartagena
+                            </p>
+                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                Cartagena, Colombia
+                            </p>
+                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                2010 - 2014
+                            </p>
+                        </div>
+                        <div class="inline-flex items-center">
+                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div>
+                <button type="button" data-modal-target="edit-user-modalTwo" data-modal-toggle="edit-user-modalTwo" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
             </div>
         </div>
-        -->
+    </div>
+
+    <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modalTwo">
+        <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-800">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white">
+                        Registrar Formación Académica
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-700 dark:hover:text-white" data-modal-toggle="edit-user-modalTwo">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <form action="#">
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académicos</label>
+                                <input type="text" name="nivel" value="Escribe tu nivel académico" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nivel" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instituciones Académicas</label>
+                                <input type="text" name="institucion" value="Instituciones académicas donde estudió" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="institucion" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Títulos Académicos</label>
+                                <input type="text" name="titulo" value="Escriba sus títulos académicos" id="titulo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="titulo" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="fecha_obtencion" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención de título</label>
+                                <input type="date" id="fecha_obtencion" name="fecha_obtencion" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+                        <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-<script>
-    function toggleExperiencia() {
-        var experienciaDiv = document.getElementById("agregar-experiencia");
-        if (experienciaDiv.style.display === "none") {
-            experienciaDiv.style.display = "block";
-        } else {
-            experienciaDiv.style.display = "none";
-        }
-    }
-    </script>
+
+
+
+
 {%endblock%}

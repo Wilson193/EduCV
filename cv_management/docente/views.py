@@ -82,4 +82,51 @@ def update_teacher(request):
 
     return render(request, 'register.html')  # La plantilla del formulario de actualización
 
-    
+#wilson   
+
+def generate_curriculum(request, docente_id):
+    docente = get_object_or_404(Docente, id=docente_id)
+
+    # Crear el documento Word
+    doc = Document()
+    doc.add_heading(docente.nombre, level=1)
+
+    # Contacto
+    doc.add_heading("Contacto", level=2)
+    doc.add_paragraph(f"Correo: {docente.correo}")
+    doc.add_paragraph(f"Teléfono: {docente.telefono}")
+    doc.add_paragraph(f"Dirección: {docente.direccion}")
+
+    # Sobre mí
+    doc.add_heading("Sobre mí", level=2)
+    doc.add_paragraph(docente.perfil)
+
+    # Educación
+    doc.add_heading("Educación", level=2)
+    doc.add_paragraph(docente.educacion)
+
+    # Experiencia
+    doc.add_heading("Experiencia", level=2)
+    doc.add_paragraph(docente.experiencia)
+
+    # Habilidades
+    doc.add_heading("Habilidades", level=2)
+    doc.add_paragraph(docente.habilidades)
+
+    # Tecnologías
+    doc.add_heading("Tecnologías", level=2)
+    doc.add_paragraph(docente.tecnologias)
+
+    # Idiomas
+    doc.add_heading("Idiomas", level=2)
+    doc.add_paragraph(docente.idiomas)
+
+    # Referencias
+    doc.add_heading("Referencias", level=2)
+    doc.add_paragraph(docente.referencias)
+
+    # Guardar el documento en la respuesta HTTP
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_curriculum.docx"'
+    doc.save(response)
+    return response

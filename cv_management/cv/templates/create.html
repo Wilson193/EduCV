@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="p-6 bg-white rounded-lg shadow-md dark:bg-gray-800 max-w-md w-full">
+        <div class="text-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-white">¿Deseas crear tu CV?</h2>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+                Esta es tu primera vez creando un CV en nuestro sistema. Puedes proceder a crear un CV ahora o regresar y explorar otras opciones.
+            </p>
+        </div>
+        
+        <!-- Botones de acción -->
+        <div class="flex justify-center gap-4 mt-6">
+            <!-- Botón para crear el CV -->
+            <form method="POST" action="#">
+                {% csrf_token %}
+                <button type="submit" class="px-6 py-3 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 dark:focus:ring-green-700">
+                    Crear CV
+                </button>
+            </form>
+            <!-- Botón para regresar sin crear el CV -->
+            <a href="{% url 'home' %}" class="px-6 py-3 text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
+                Regresar
+            </a>
+        </div>
+        
+        <!-- Mensaje de información -->
+        <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-4">
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+                Puedes crear tu CV ahora o hacerlo en otro momento.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
