@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content%}
 
 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
@@ -32,8 +32,7 @@
     <div class="col-span-full xl:col-auto">
         <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ docente.profile_picture.url}}" 
-                alt="Foto de perfil">
+                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{% static 'android-icon-36x36.png' %}"  alt="Foto de perfil"> 
                 <div>
                     <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -149,70 +148,82 @@
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">        <div class="flow-root w-full">
+    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
+        <div class="flow-root w-full">
             <h3 class="text-xl font-semibold dark:text-white">Experiencia Laboral</h3>
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                <!-- Ejemplo de experiencia laboral -->
-                <li class="py-4">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex-shrink-0">
-                            <!-- Icono de empresa -->
-                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
+                {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
+                    <li class="py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <!-- Icono de empresa -->
+                                <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+                                    {{ experiencia.lugar_trabajo }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ experiencia.cargo }} | {{ experiencia.lugar_trabajo }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ experiencia.fecha_inicio }} - {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center">
+                                <!-- Botón de detalles que abre el modal -->
+                                <button type="button" data-modal-target="details-modal-{{ experiencia.id }}" data-modal-toggle="details-modal-{{ experiencia.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    Detalles
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                Docente en la Universidad Nacional
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Profesor de Matemáticas | Bogotá, Colombia
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Enero 2018 - Presente
-                            </p>
-                        </div>
-                        <div class="inline-flex items-center">
-                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
-                        </div>
-                    </div>
-                </li>
-    
-                <!-- Otro ejemplo de experiencia laboral -->
-                <li class="pt-4 pb-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex-shrink-0">
-                            <!-- Icono de empresa -->
-                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                Jefe de Departamento de Ciencias en la Universidad de Cartagena
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Coordinador Académico | Cartagena, Colombia
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Julio 2015 - Diciembre 2017
-                            </p>
-                        </div>
-                        <div class="inline-flex items-center">
-                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
-                        </div>
-                    </div>
-                </li>
+                    </li>
+                {% empty %}
+                    <li class="py-4 text-sm text-gray-500 dark:text-gray-400">
+                        No se encontraron experiencias laborales.
+                    </li>
+                {% endfor %}
             </ul>
-            <div>
-                <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
+    
+            <!-- Botones para agregar y eliminar experiencia laboral -->
+            <div class="mt-4 flex space-x-4">
+                <!-- Botón de agregar experiencia laboral (Azul) -->
+                <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    +
+                </button>
             </div>
-            
         </div>
     </div>
-
-
-
+    
+    <!-- Modal para Detalles -->
+    {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
+        <div id="details-modal-{{ experiencia.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+                <h2 class="text-2xl font-semibold">Detalles de la experiencia</h2>
+                <div class="mt-4">
+                    <p><strong>Lugar de trabajo:</strong> {{ experiencia.lugar_trabajo }}</p>
+                    <p><strong>Cargo:</strong> {{ experiencia.cargo }}</p>
+                    <p><strong>Fecha de inicio:</strong> {{ experiencia.fecha_inicio }}</p>
+                    <p><strong>Fecha de fin:</strong> {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}</p>
+                    <p><strong>Descripción:</strong> {{ experiencia.descripcion|default:'No disponible' }}</p>
+                </div>
+                <div class="mt-4 flex justify-end space-x-4">
+                    <!-- Botón de eliminar con formulario POST -->
+                    <form action="{% url 'remove_experience' experiencia.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white">
+                            Eliminar
+                        </button>
+                    </form>
+                    <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-{{ experiencia.id }}">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
@@ -335,57 +346,36 @@
         <div class="flow-root w-full">
             <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                <!-- Ejemplo de formación -->
-                <li class="py-4">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex-shrink-0">
-                            <!-- Icono de institución -->
-                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                            </svg>
+                {% for formacion in user.docente.cv_docente.formacion_academica.all %}
+                    <li class="py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <!-- Icono de institución -->
+                                <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+                                    {{ formacion.titulo }} en {{ formacion.institucion }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ formacion.lugar }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ formacion.fecha_obtencion|date:"Y" }} - {{ formacion.fecha_fin|date:"Y" }}
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center">
+                                <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                Maestría en Matemáticas en la Universidad Nacional
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Bogotá, Colombia
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                2016 - 2018
-                            </p>
-                        </div>
-                        <div class="inline-flex items-center">
-                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
-                        </div>
-                    </div>
-                </li>
-    
-                <!-- Otro ejemplo de formación -->
-                <li class="pt-4 pb-6">
-                    <div class="flex items-center space-x-4">
-                        <div class="flex-shrink-0">
-                            <!-- Icono de institución -->
-                            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                Licenciatura en Ciencias de la Computación en la Universidad de Cartagena
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                Cartagena, Colombia
-                            </p>
-                            <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                2010 - 2014
-                            </p>
-                        </div>
-                        <div class="inline-flex items-center">
-                            <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
-                        </div>
-                    </div>
-                </li>
+                    </li>
+                {% empty %}
+                    <li class="py-4">
+                        <p class="text-gray-500 dark:text-gray-400">No hay formaciones académicas registradas.</p>
+                    </li>
+                {% endfor %}
             </ul>
             <div>
                 <button type="button" data-modal-target="edit-user-modalTwo" data-modal-toggle="edit-user-modalTwo" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
@@ -393,6 +383,7 @@
         </div>
     </div>
 
+    <!-- Modal para registrar formación académica -->
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modalTwo">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
             <!-- Modal content -->
@@ -408,31 +399,31 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
-                    <form action="#">
+                    <form action="{% url 'register_academicbackground' %}" method="POST">
+                        {% csrf_token %}
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académicos</label>
-                                <input type="text" name="nivel" value="Escribe tu nivel académico" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nivel" required>
+                                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nivel Académico</label>
+                                <input type="text" name="nivel" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nivel" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instituciones Académicas</label>
-                                <input type="text" name="institucion" value="Instituciones académicas donde estudió" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="institucion" required>
+                                <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Institución</label>
+                                <input type="text" name="institucion" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Institución" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Títulos Académicos</label>
-                                <input type="text" name="titulo" value="Escriba sus títulos académicos" id="titulo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="titulo" required>
+                                <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titulo</label>
+                                <input type="text" name="titulo" id="titulo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Título" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="fecha_obtencion" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención de título</label>
+                                <label for="fecha_obtencion" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención</label>
                                 <input type="date" id="fecha_obtencion" name="fecha_obtencion" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
                             </div>
                         </div>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
-                        <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
-                    </div>
-                </form>
+                        <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+                            <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

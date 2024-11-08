@@ -14,7 +14,6 @@ class FormacionAcademica(models.Model):
     nivel = models.CharField(max_length=100)
     institucion = models.CharField(max_length=100)
     titulo = models.CharField(max_length=100)
-    fecha_obtencion = models.DateField()
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='formacion_academica')
     
 class ProduccionAcademica(models.Model):
