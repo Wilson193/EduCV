@@ -1,9 +1,19 @@
 {%extends 'base.html'%}
 {% block content%}
 {% load static %}
-<div class="flex justify-center items-center px-4 pt-6">
+<div class="flex flex-col justify-center items-center px-4 pt-2">
   <div class="max-w-3xl mx-auto">
       <img src="{% static 'EduCV.svg' %}" alt="Ejemplo de Imagen" class="mx-auto" style="width:600px; height:500px">
   </div>
+  <section>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="p-8 rounded-lg shadow text-center text-gray-500">
+            <h3 class="text-xl font-semibold mb-4">Gestión de la Plataforma Académica</h3>
+            <p class="text-gray-600">
+                Facilita la administración de docentes, publicaciones, y currículums desde una sola interfaz. La plataforma te permite realizar un seguimiento completo de la información académica, mejorando la organización y optimizando el acceso a los datos importantes.
+            </p>
+        </div>
+    </div>
+  </section>
 </div>
 {% endblock%}

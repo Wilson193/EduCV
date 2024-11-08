@@ -1,8 +1,9 @@
-from django.shortcuts import render
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Docente
+from django.shortcuts import get_object_or_404 #wilson
+from django.http import HttpResponse #wilson
+from docx import Document #wilson
 
 def update_teacher(request):
     if request.method == 'POST':
