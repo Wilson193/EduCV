@@ -110,10 +110,6 @@ def update_picture(request):
     # Si no es un POST o no se subió ningún archivo, puedes redirigir o mostrar un mensaje
     return HttpResponse("Método no permitido o no se ha subido una imagen", status=400)
 
-def update_teacher(request):
-    docente = request.user.docente  # Obtén el objeto del docente vinculado al usuario actual
-    return render(request, 'update.html', {'docente': docente})
-
 #wilson
 def generate_curriculum(request, docente_id):
     # Crear el documento en formato Word para edición
