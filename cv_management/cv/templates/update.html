@@ -32,7 +32,7 @@
     <div class="col-span-full xl:col-auto">
         <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ docente.profile_picture.url }}"  alt="Foto de perfil"> 
+                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{% static 'apple-icon-114x114.png'%}"> 
                 <div>
                     <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -190,7 +190,7 @@
             <!-- Botones para agregar y eliminar experiencia laboral -->
             <div class="mt-4 flex space-x-4">
                 <!-- Botón de agregar experiencia laboral (Azul) -->
-                <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <button type="button" data-modal-target="edit-user-modal" data-modal-toggle="edit-user-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     +
                 </button>
             </div>
@@ -303,9 +303,9 @@
                             </div>
                             <div class="inline-flex items-center">
                                 <!-- Botón para abrir el modal de detalles -->
-                                <a href="#details-modal-{{ formacion.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <button type="button" data-modal-target="details-modal-two-{{ formacion.id }}" data-modal-toggle="details-modal-two-{{ formacion.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                     Detalles
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </li>
@@ -316,13 +316,39 @@
                 {% endfor %}
             </ul>
             <div>
-                <button type="button" data-modal-target="edit-user-modalTwo" data-modal-toggle="edit-user-modalTwo" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
+                <button type="button" data-modal-target="edit-user-modalTwo" data-modal-toggle="edit-user-modalTwo" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">+</button>
             </div>
         </div>
     </div>
 
-
-    
+    <!-- Modal para Detalles de Formación Académica -->
+    {% for formacion in user.docente.cv_docente.formacion_academica.all %}
+    <div id="details-modal-two-{{ formacion.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+            <h2 class="text-2xl font-semibold">Detalles de la Formación Académica</h2>
+            <div class="mt-4">
+                <p><strong>Institución:</strong> {{ formacion.institucion }}</p>
+                <p><strong>Título:</strong> {{ formacion.titulo }}</p>
+                <p><strong>Ciudad:</strong> {{ formacion.ciudad }}</p>
+                <p><strong>País:</strong> {{ formacion.pais }}</p>
+                <p><strong>Fecha de inicio:</strong> {{ formacion.fecha_inicio|date:"Y-m-d" }}</p>
+                <p><strong>Fecha de fin:</strong> {% if formacion.fecha_fin %}{{ formacion.fecha_fin|date:"Y-m-d" }}{% else %}Presente{% endif %}</p>
+            </div>
+            <div class="mt-4 flex justify-end space-x-4">
+                <!-- Botón de eliminar con formulario POST -->
+                <form action="{% url 'remove_academic_background' formacion.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white">
+                        Eliminar
+                    </button>
+                </form>
+                <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-two-{{ formacion.id }}">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 
     <!-- Modal para registrar formación académica -->
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modalTwo">
@@ -340,7 +366,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
-                    <form action="{% url 'register_academicbackground' %}" method="POST">
+                    <form action="{% url 'register_academic_background' %}" method="POST">
                         {% csrf_token %}
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
@@ -382,7 +408,176 @@
     </div>
 </div>
 
+<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
+    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="w-full mb-6">
+            <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
+        </div>
 
+        <!-- Contenedor de las producciones académicas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for produccion in user.docente.cv_docente.produccion_academica.all %}
+                <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.autor }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo_produccion }} | {{ produccion.institucion }}</p>
+                    <div class="mt-4 flex justify-between items-center">
+                        <!-- Botón para abrir el modal de detalles -->
+                        <button type="button" data-modal-target="details-modal-{{ produccion.id }}" data-modal-toggle="details-modal-{{ produccion.id }}" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                            Detalles
+                        </button>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de "+" a la izquierda para agregar una nueva producción académica -->
+        <div class="w-full mt-6 flex justify-start">
+            <button type="button" data-modal-target="add-academic-production-modal" data-modal-toggle="add-academic-production-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                +
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalles de Producción Académica -->
+{% for produccion in user.docente.cv_docente.produccion_academica.all %}
+    <div id="details-modal-{{ produccion.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+            <h2 class="text-2xl font-semibold">Detalles de la Producción Académica</h2>
+            <div class="mt-4">
+                <p><strong>Título:</strong> {{ produccion.titulo }}</p>
+                <p><strong>Autor:</strong> {{ produccion.autor }}</p>
+                <p><strong>Fecha de publicación:</strong> {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
+                <p><strong>Tipo de producción:</strong> {{ produccion.tipo_produccion }}</p>
+                <p><strong>Institución:</strong> {{ produccion.institucion }}</p>
+            </div>
+            <div class="mt-4 flex justify-end space-x-4">
+                <!-- Botón de eliminar con formulario POST -->
+                <form action="{% url 'remove_academic_production' produccion.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white">
+                        Eliminar
+                    </button>
+                </form>
+                <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-{{ produccion.id }}">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<!-- Modal para agregar una nueva Producción Académica -->
+<div id="add-academic-production-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+        <h2 class="text-2xl font-semibold">Agregar Producción Académica</h2>
+        <form action="{% url 'register_academic_production' %}" method="post">
+            {% csrf_token %}
+            <div class="mt-4">
+                <label for="titulo" class="block text-sm text-gray-500 dark:text-gray-400">Título</label>
+                <input type="text" name="titulo" id="titulo" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+            </div>
+            <div class="mt-4">
+                <label for="autor" class="block text-sm text-gray-500 dark:text-gray-400">Autor</label>
+                <input type="text" name="autor" id="autor" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+            </div>
+            <div class="mt-4">
+                <label for="fecha_publicacion" class="block text-sm text-gray-500 dark:text-gray-400">Fecha de Publicación</label>
+                <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+            </div>
+            <div class="mt-4">
+                <label for="tipo_produccion" class="block text-sm text-gray-500 dark:text-gray-400">Tipo de Producción</label>
+                <input type="text" name="tipo_produccion" id="tipo_produccion" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+            </div>
+            <div class="mt-4">
+                <label for="institucion" class="block text-sm text-gray-500 dark:text-gray-400">Institución</label>
+                <input type="text" name="institucion" id="institucion" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+            </div>
+            <div class="mt-6 flex justify-end space-x-4">
+                <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white" data-modal-toggle="add-academic-production-modal">
+                    Cancelar
+                </button>
+                <button type="submit" class="px-4 py-2 text-sm text-white bg-blue-500 border border-blue-500 rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:border-blue-600 dark:hover:bg-blue-700">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
+    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="w-full mb-6">
+            <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
+        </div>
+    
+        <!-- Contenedor de las producciones académicas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            
+            <!-- Ejemplo 1: Artículo -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">Artículo sobre Inteligencia Artificial</h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Juan Pérez | 2023-10-15</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Revista *Ciencia y Tecnología*</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <button type="button" data-modal-target="details-modal-two-1" data-modal-toggle="details-modal-two-1" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                        Detalles
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Ejemplo 2: Libro -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">El Futuro de la Computación</h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400">María García | 2022-05-22</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Editorial *Tecnología Avanzada*</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <button type="button" data-modal-target="details-modal-two-2" data-modal-toggle="details-modal-two-2" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                        Detalles
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Ejemplo 3: Conferencia -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">Conferencia sobre Blockchain</h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Laura Martínez | 2023-06-30</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Congreso Internacional de Tecnología</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <button type="button" data-modal-target="details-modal-two-3" data-modal-toggle="details-modal-two-3" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                        Detalles
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Ejemplo 4: Tesis de Maestría -->
+            <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                <h5 class="text-lg font-semibold text-gray-900 dark:text-white">Desarrollo de Algoritmos Cuánticos para Criptografía</h5>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Pedro Díaz | 2021-11-10</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Tesis de Maestría en Informática</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <button type="button" data-modal-target="details-modal-two-4" data-modal-toggle="details-modal-two-4" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                        Detalles
+                    </button>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Botón de "+" a la izquierda para agregar una nueva producción académica -->
+        <div class="w-full mt-6 flex justify-start">
+            <button type="button" data-modal-target="add-academic-production-modal" data-modal-toggle="add-academic-production-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                +
+            </button>
+        </div>
+    </div>
+    
+    
+    
+    
+</div>
 
 
 {%endblock%}

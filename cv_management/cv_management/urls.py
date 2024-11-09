@@ -12,7 +12,6 @@ urlpatterns = [
     path('teacher/', include('docente.urls')),
     path('', views.index, name='index'),
     path('home/', views.home, name='home'),
-    path('search/', views.search, name='search'),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('reset/', views.resetpassword, name='reset-password'),

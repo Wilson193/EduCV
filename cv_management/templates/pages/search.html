@@ -35,22 +35,25 @@
 
         <!-- Campo de búsqueda -->
         <div class="mt-8 flex justify-center">
-            <input 
-                type="text" 
-                id="search" 
-                class="w-1/2 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                placeholder="Buscar docente por nombre o área...">
-            <button 
-                id="searchButton" 
-                class="bg-blue-500 text-white p-3 rounded-r-lg hover:bg-blue-600">
-                Buscar
-            </button>
+            <form action="{% url 'search_teacher' %}" method="get" class="w-1/2 flex">
+                <input 
+                    type="text" 
+                    id="query" 
+                    class="w-1/2 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    placeholder="Buscar docente por nombre o área...">
+                <button 
+                    type="submit"
+                    class="bg-blue-500 text-white p-3 rounded-r-lg hover:bg-blue-600">
+                    Buscar
+                </button>
+            </form>
         </div>
     </section>
 
-    <!-- Resultados de búsqueda -->
-    <section id="searchResults" class="container mx-auto mt-10"></section>
+    <!-- Resultados de búsqueda 
+    <section id="searchResults" class="container mx-auto mt-10"></section>-->
 
+    <!--
     <script>
         // Función para manejar la búsqueda
         document.getElementById('searchButton').addEventListener('click', function() {
@@ -70,6 +73,7 @@
             }
         });
     </script>
+    -->
 
 </body>
 </html>

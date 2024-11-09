@@ -23,7 +23,7 @@ class FormacionAcademica(models.Model):
 class ProduccionAcademica(models.Model):
     tipo = models.CharField(max_length=100)
     titulo = models.CharField(max_length=100)
-    fecha_realizacion = models.DateField()
+    fecha_publicacion = models.DateField()
     descripcion = models.CharField(max_length=3000)
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='produccion_academica')
     
