@@ -12,18 +12,32 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from docx.shared import Pt
+from .models import Docente
 
 
 def index(request):
   template = loader.get_template('users.html')
   return HttpResponse(template.render())
 
+def search_teacher(request): 
+    if request.method == 'GET':
+        query = request.GET.get('query', '')
+        if query:
+            return redirect(f'/cv/teachers/?query={query}')
+        else:
+            return render(request, 'search.html', {'error': 'Por favor, ingresa un término de búsqueda.'})
+    
+def list_teachers(request): 
+    query = request.GET.get('query', '')
+    results = Docente.objects.filter(name__icontains=query) # Ajusta el filtro según tu modelo 
+    return render(request, 'teachers.html', {'query': query, 'results': results})
+
 @login_required
 def teachers(request):
   return render(request, 'teachers.html')
 
 @login_required
-def consult(request, docente_id):
+def consult(request):
     docente = get_object_or_404(Docente, id=docente_id)
     # Pasar el docente_id en el contexto
     context = {
@@ -145,11 +159,10 @@ def remove_academic_background(request, formacion_id):
 @login_required
 def register_academic_production(request):
     if request.method == "POST":
-        titulo = request.POST.get('titulo') 
-        autor = request.POST.get('autor')
+        tipo = request.POST.get('tipo')
+        titulo = request.POST.get('titulo')
         fecha_publicacion = request.POST.get('fecha_publicacion')
-        tipo_produccion = request.POST.get('tipo_produccion')
-        institucion = request.POST.get('institucion')
+        descripcion = request.POST.get('descripcion')
 
         user = request.user
         cv = user.docente.cv_docente  
@@ -158,11 +171,10 @@ def register_academic_production(request):
 
         nueva_produccion = ProduccionAcademica(
             cv=cv, 
+            tipo=tipo,
             titulo=titulo,
-            autor=autor,
             fecha_publicacion=fecha_publicacion,
-            tipo_produccion=tipo_produccion,
-            institucion=institucion,
+            descripcion=descripcion
         )
 
         nueva_produccion.save()
