@@ -90,20 +90,18 @@ def update_teacher(request):
 
 def update_picture(request):
     if request.method == "POST":
-        user = request.user
-        print(f"el valor es:{user.docente.profile_picture}")
+        docente = request.user.docente
+        print(f"Docente: {docente}")
         # Verificamos si se ha subido una imagen
         photo = request.FILES.get('profile_picture')
         if photo:
-            # Aquí debes obtener el objeto del docente actual para actualizar su foto de perfil
-            docente = request.user.docente  # O el método que uses para obtener el docente
+            print(f"Uploading photo: {photo}")
             docente.profile_picture = photo
             docente.save()
             return redirect('update_teacher')  # Redirige a una página de éxito o de actualización
         
         # Lógica para eliminar la imagen de perfil si se envía la solicitud para eliminar
         if request.POST.get('remove_picture') == 'true':
-            docente = request.user.docente  # Cambia según cómo obtienes el docente actual
             docente.profile_picture.delete(save=True)
             return redirect('update_teacher')  # Redirige después de eliminar la imagen
 
@@ -138,17 +136,22 @@ def generate_curriculum(request, docente_id):
     doc.add_paragraph(f"Estado: {docente.estado or 'N/A'}")
     doc.add_paragraph(f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
 
-    # Guardar documento Word temporal
-    temp_word = BytesIO()
-    doc.save(temp_word)
-    temp_word.seek(0)
+     # Guardar documento Word temporal
+    # temp_word = BytesIO()
+    # doc.save(temp_word)
+    # temp_word.seek(0)
 
-    # Convertir el documento en PDF
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
+    # # Convertir el documento en PDF
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
 
-    # Crear el PDF con ReportLab
-    pdf_canvas = canvas.Canvas(response, pagesize=letter)
+    # # Crear el PDF con ReportLab
+    # pdf_canvas = canvas.Canvas(response, pagesize=letter)
+    # pdf_canvas.setFont("Helvetica", 12)
+
+    # Convertir el documento en PDF y almacenarlo en memoria
+    pdf_buffer = BytesIO()
+    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
     pdf_canvas.setFont("Helvetica", 12)
 
     # Añadir contenido al PDF
@@ -185,4 +188,8 @@ def generate_curriculum(request, docente_id):
 
     # Finalizar PDF
     pdf_canvas.save()
+    pdf_buffer.seek(0)
+
+    response = HttpResponse(pdf_buffer, content_type='application/pdf')
     return response
+

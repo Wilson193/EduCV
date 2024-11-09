@@ -32,7 +32,7 @@
     <div class="col-span-full xl:col-auto">
         <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{% static 'android-icon-36x36.png' %}"  alt="Foto de perfil"> 
+                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{{ docente.profile_picture.url }}"  alt="Foto de perfil"> 
                 <div>
                     <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
@@ -274,71 +274,6 @@
             </div>
         </div>
     </div>
-    {% comment %} <div id="agregar-experiencia" style="display: none;">   
-        <div class="w-full p-8 mb-8 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
-            <div class="flow-root w-full">
-                <h3 class="text-xl font-semibold dark:text-white">Agregar Experiencia Laboral</h3>
-                <form action="#" method="POST">
-                    <div class="space-y-6">
-                        <div>
-                            <label for="empresa" class="block text-sm font-medium text-gray-900 dark:text-white">Nombre de la Empresa</label>
-                            <input type="text" id="empresa" name="empresa" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-                        </div>
-                        
-                        <div>
-                            <label for="cargo" class="block text-sm font-medium text-gray-900 dark:text-white">Cargo Ocupado</label>
-                            <input type="text" id="cargo" name="cargo" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-                        </div>
-        
-                        <div>
-                            <label for="fecha_inicio" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Inicio</label>
-                            <input type="date" id="fecha_inicio" name="fecha_inicio" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-                        </div>
-        
-                        <div>
-                            <label for="fecha_fin" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Fin</label>
-                            <input type="date" id="fecha_fin" name="fecha_fin" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-                        </div>
-        
-                        <div>
-                            <label for="descripcion" class="block text-sm font-medium text-gray-900 dark:text-white">Descripción del Trabajo</label>
-                            <textarea id="descripcion" name="descripcion" rows="4" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required></textarea>
-                        </div>
-        
-                        <div class="pt-4">
-                            <button type="submit" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Agregar Experiencia</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>  {% endcomment %}
-    
-    {% comment %} <div class="col-span-full xl:col-auto">
-        <div class="p-4 mb-4 space-y-6 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
-            <div>
-                <label for="titulo" class="block text-sm font-medium text-gray-900 dark:text-white">Título del trabajo</label>
-                <input type="text" id="titulo" name="titulo" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-            </div>
-            <div>
-                <label for="tipo" class="block text-sm font-medium text-gray-900 dark:text-white">Tipo de trabajo</label>
-                <input type="text" id="tipo" name="tipo" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-            </div>
-            <div>
-                <label for="fecha_realizacion" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de publicación</label>
-                <input type="date" id="fecha_realizacion" name="fecha_realizacion" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-            </div>
-            <div>
-                <label for="descripcion" class="block text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
-                <input type="text" id="descripcion" name="descripcion" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
-            </div>
-            <div>
-                <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-            </div>
-        </div>
-
-    </div> {% endcomment %}
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
@@ -360,14 +295,17 @@
                                     {{ formacion.titulo }} en {{ formacion.institucion }}
                                 </p>
                                 <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    {{ formacion.lugar }}
+                                    {{ formacion.ciudad }}, {{ formacion.pais }}
                                 </p>
                                 <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    {{ formacion.fecha_obtencion|date:"Y" }} - {{ formacion.fecha_fin|date:"Y" }}
+                                    Desde {{ formacion.fecha_inicio|date:"Y-m-d" }} hasta {{ formacion.fecha_fin|date:"Y-m-d" }}
                                 </p>
                             </div>
                             <div class="inline-flex items-center">
-                                <a href="#" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Detalles</a>
+                                <!-- Botón para abrir el modal de detalles -->
+                                <a href="#details-modal-{{ formacion.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    Detalles
+                                </a>
                             </div>
                         </div>
                     </li>
@@ -382,6 +320,9 @@
             </div>
         </div>
     </div>
+
+
+    
 
     <!-- Modal para registrar formación académica -->
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modalTwo">
@@ -415,14 +356,26 @@
                                 <input type="text" name="titulo" id="titulo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Título" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="fecha_obtencion" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención</label>
-                                <input type="date" id="fecha_obtencion" name="fecha_obtencion" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
+                                <label for="fecha_inicio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de Inicio</label>
+                                <input type="date" id="fecha_inicio" name="fecha_inicio" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="fecha_fin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de Fin</label>
+                                <input type="date" id="fecha_fin" name="fecha_fin" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500">
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="ciudad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ciudad</label>
+                                <input type="text" id="ciudad" name="ciudad" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Ciudad">
+                            </div>
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="pais" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
+                                <input type="text" id="pais" name="pais" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="País">
                             </div>
                         </div>
                         <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
                             <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
                         </div>
-                    </form>
+                    </form>                    
                 </div>
             </div>
         </div>
