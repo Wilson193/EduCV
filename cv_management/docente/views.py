@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Docente
-from django.shortcuts import get_object_or_404 #wilson
 from django.http import HttpResponse #wilson
 from docx import Document #wilson
 from docx.oxml import OxmlElement#wilson
@@ -9,8 +8,9 @@ from docx.oxml.ns import qn #wilson
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from docx.shared import Pt
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def update_teacher(request):
     if request.method == 'POST':
         # Obtén los datos del formulario
@@ -88,6 +88,7 @@ def update_teacher(request):
 
     return render(request, 'update.html')  # La plantilla del formulario de actualización
 
+@login_required
 def update_picture(request):
     if request.method == "POST":
         docente = request.user.docente
@@ -109,6 +110,7 @@ def update_picture(request):
     return HttpResponse("Método no permitido o no se ha subido una imagen", status=400)
 
 #wilson
+@login_required
 def generate_curriculum(request, docente_id):
     # Crear el documento en formato Word para edición
     docente = get_object_or_404(Docente, id=docente_id)

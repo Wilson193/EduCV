@@ -13,19 +13,57 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from docx.shared import Pt
 from .models import Docente
+from django.http import JsonResponse
 
 
 def index(request):
-  template = loader.get_template('users.html')
-  return HttpResponse(template.render())
+  return render(request ,'users.html')
 
-def search_teacher(request): 
-    if request.method == 'GET':
-        query = request.GET.get('query', '')
-        if query:
-            return redirect(f'/cv/teachers/?query={query}')
-        else:
-            return render(request, 'search.html', {'error': 'Por favor, ingresa un término de búsqueda.'})
+
+def search(request):
+    return render(request, 'search.html')
+
+
+def search_teacher_ajax(request):
+    query = request.GET.get('query', '')
+    if query:
+        # Buscamos por nombre, apellido y especialidad
+        docentes = Docente.objects.filter(
+            nombre__icontains=query
+        ) | Docente.objects.filter(
+            apellido__icontains=query
+        ) | Docente.objects.filter(
+            especialidad__icontains=query
+        )
+        
+        # Creamos una lista de resultados para devolver
+        results = [{
+            'id': docente.id,
+            'nombre': docente.nombre,
+            'apellido': docente.apellido,
+            'especialidad': docente.especialidad,
+            'facultad': docente.facultad,
+            'cargo': docente.cargo,
+            'fecha_contratacion': docente.fecha_contratacion,
+            'correo': docente.correo,
+            'foto': docente.profile_picture.url if docente.profile_picture else None  # Usamos la URL de la imagen si existe
+        } for docente in docentes]
+        print(results)
+    else:
+        results = []
+    
+    return JsonResponse(results, safe=False)
+
+
+
+def docentes_resultados(request):
+    query = request.GET.get('query', '')
+    docentes = Docente.objects.filter(
+        nombre__icontains=query) | Docente.objects.filter(
+        apellido__icontains=query) | Docente.objects.filter(
+        facultad__icontains=query)
+    
+    return render(request, 'teachers.html', {'docentes': docentes, 'query': query})
     
 def list_teachers(request): 
     query = request.GET.get('query', '')
@@ -38,13 +76,96 @@ def teachers(request):
 
 @login_required
 def consult(request):
-    docente = get_object_or_404(Docente, id=docente_id)
-    # Pasar el docente_id en el contexto
-    context = {
-        'docente_id': docente_id
-    }
-    return render(request, 'consult.html', context)
+    return render(request, 'consult.html')
 
+
+#wilson
+def generate_curriculum(request, docente_id):
+    
+    # Crear el documento en formato Word para edición
+    docente = get_object_or_404(Docente, id= docente_id)
+    doc = Document()
+
+    # Títulos y subtítulos
+    doc.add_heading(f'Currículum de {docente.nombre} {docente.apellido}', level=1)
+
+    # Información de contacto
+    doc.add_heading("Información de Contacto", level=2)
+    doc.add_paragraph(f"Cédula: {docente.cedula or 'N/A'}")
+    doc.add_paragraph(f"Correo: {docente.correo or 'N/A'}")
+    doc.add_paragraph(f"Teléfono: {docente.num_telefono or 'N/A'}")
+
+    # Información profesional
+    doc.add_heading("Información Profesional", level=2)
+    doc.add_paragraph(f"Universidad: {docente.universidad or 'N/A'}")
+    doc.add_paragraph(f"Facultad: {docente.facultad or 'N/A'}")
+    doc.add_paragraph(f"Especialidad: {docente.especialidad or 'N/A'}")
+    doc.add_paragraph(f"Categoría: {docente.categoria or 'N/A'}")
+
+    # Detalles del contrato
+    doc.add_heading("Detalles del Contrato", level=2)
+    doc.add_paragraph(f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
+    doc.add_paragraph(f"Estado: {docente.estado or 'N/A'}")
+    doc.add_paragraph(f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
+
+     # Guardar documento Word temporal
+    # temp_word = BytesIO()
+    # doc.save(temp_word)
+    # temp_word.seek(0)
+
+    # # Convertir el documento en PDF
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
+
+    # # Crear el PDF con ReportLab
+    # pdf_canvas = canvas.Canvas(response, pagesize=letter)
+    # pdf_canvas.setFont("Helvetica", 12)
+
+    # Convertir el documento en PDF y almacenarlo en memoria
+    pdf_buffer = BytesIO()
+    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
+    pdf_canvas.setFont("Helvetica", 12)
+
+    # Añadir contenido al PDF
+    y_position = 750  # Posición vertical inicial
+    pdf_canvas.drawString(100, y_position, f"Currículum de {docente.nombre} {docente.apellido}")
+    y_position -= 30
+    pdf_canvas.drawString(100, y_position, "Información de Contacto:")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Cédula: {docente.cedula or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Correo: {docente.correo or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Teléfono: {docente.num_telefono or 'N/A'}")
+    y_position -= 40
+
+    pdf_canvas.drawString(100, y_position, "Información Profesional:")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Universidad: {docente.universidad or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Facultad: {docente.facultad or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Especialidad: {docente.especialidad or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Categoría: {docente.categoria or 'N/A'}")
+    y_position -= 40
+
+    pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
+
+    # Finalizar PDF
+    pdf_canvas.save()
+    pdf_buffer.seek(0)
+
+    response = HttpResponse(pdf_buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
+    return response
+    
 @login_required
 def modify_privacy(request):
     return render(request, 'modify-privacy.html')
@@ -195,91 +316,7 @@ def remove_academic_production(request, produccion_id):
     return redirect('update')  # Cambia 'update' por la URL que desees
 
 
-#wilson
-def generate_curriculum(request, docente_id):
-    # Crear el documento en formato Word para edición
-    docente = get_object_or_404(Docente, id=docente_id)
-    doc = Document()
 
-    # Títulos y subtítulos
-    doc.add_heading(f'Currículum de {docente.nombre} {docente.apellido}', level=1)
-
-    # Información de contacto
-    doc.add_heading("Información de Contacto", level=2)
-    doc.add_paragraph(f"Cédula: {docente.cedula or 'N/A'}")
-    doc.add_paragraph(f"Correo: {docente.correo or 'N/A'}")
-    doc.add_paragraph(f"Teléfono: {docente.num_telefono or 'N/A'}")
-
-    # Información profesional
-    doc.add_heading("Información Profesional", level=2)
-    doc.add_paragraph(f"Universidad: {docente.universidad or 'N/A'}")
-    doc.add_paragraph(f"Facultad: {docente.facultad or 'N/A'}")
-    doc.add_paragraph(f"Especialidad: {docente.especialidad or 'N/A'}")
-    doc.add_paragraph(f"Categoría: {docente.categoria or 'N/A'}")
-
-    # Detalles del contrato
-    doc.add_heading("Detalles del Contrato", level=2)
-    doc.add_paragraph(f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
-    doc.add_paragraph(f"Estado: {docente.estado or 'N/A'}")
-    doc.add_paragraph(f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
-
-     # Guardar documento Word temporal
-    # temp_word = BytesIO()
-    # doc.save(temp_word)
-    # temp_word.seek(0)
-
-    # # Convertir el documento en PDF
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
-
-    # # Crear el PDF con ReportLab
-    # pdf_canvas = canvas.Canvas(response, pagesize=letter)
-    # pdf_canvas.setFont("Helvetica", 12)
-
-    # Convertir el documento en PDF y almacenarlo en memoria
-    pdf_buffer = BytesIO()
-    pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
-    pdf_canvas.setFont("Helvetica", 12)
-
-    # Añadir contenido al PDF
-    y_position = 750  # Posición vertical inicial
-    pdf_canvas.drawString(100, y_position, f"Currículum de {docente.nombre} {docente.apellido}")
-    y_position -= 30
-    pdf_canvas.drawString(100, y_position, "Información de Contacto:")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Cédula: {docente.cedula or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Correo: {docente.correo or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Teléfono: {docente.num_telefono or 'N/A'}")
-    y_position -= 40
-
-    pdf_canvas.drawString(100, y_position, "Información Profesional:")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Universidad: {docente.universidad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Facultad: {docente.facultad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Especialidad: {docente.especialidad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Categoría: {docente.categoria or 'N/A'}")
-    y_position -= 40
-
-    pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
-
-    # Finalizar PDF
-    pdf_canvas.save()
-    pdf_buffer.seek(0)
-
-    response = HttpResponse(pdf_buffer, content_type='application/pdf')
-    return response
-    
 
 
 @login_required

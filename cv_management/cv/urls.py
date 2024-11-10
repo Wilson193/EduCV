@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', index, name='cv'),
+    path('search/', search, name='search'),
     path('create/', create , name='create'),
     path('update/', update, name='update'),
     path('modifyPrivacy/', modify_privacy, name='modify_privacy'),
@@ -14,8 +15,8 @@ urlpatterns = [
     path('remove_academic_background/<int:formacion_id>/', remove_academic_background , name='remove_academic_background'),
     path('register_academic_production/', register_academic_production, name='register_academic_production'),
     path('remove_academic_production/<int:produccion_id>/', remove_academic_production , name='remove_academic_production'),
-    path('search/', search_teacher, name='search_teacher'),
+    path('ajax/search_teacher/', search_teacher_ajax, name='search_teacher_ajax'),
     path('teachers/', list_teachers, name='list_teachers'),
-    path('consult/<int:docente_id>/', consult , name='consult'),
-    
-]
+    path('consult/', generate_curriculum , name='show'),
+    path('docentes/resultados/', docentes_resultados, name='docentes_resultados'),
+] 

@@ -79,7 +79,7 @@
                     </a>
                     <a href="#" class="flex px-4 py-3 border-b hover:bg-gray-100 dark:hover:bg-gray-600 dark:border-gray-600">
                       <div class="flex-shrink-0">
-                        <img class="rounded-full w-11 h-11" src="/images/users/leslie-livingston.png" alt="Leslie image">
+                        <img class="rounded-full w-11 h-11" src="{% if user.docente.profile_picture %}{{ user.docente.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" alt="Leslie image">
                         <div class="absolute flex items-center justify-center w-5 h-5 ml-6 -mt-5 bg-green-400 border border-white rounded-full dark:border-gray-700">
                           <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                         </div>
@@ -172,7 +172,7 @@
                   <div>
                     <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button-2" aria-expanded="false" data-dropdown-toggle="dropdown-2">
                       <span class="sr-only">Open user menu</span>
-                      <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                      <img class="w-8 h-8 rounded-full" src="{% if user.docente.profile_picture %}{{ user.docente.profile_picture.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" alt="user photo">
                     </button>
                   </div>
                   <!-- Dropdown menu -->

@@ -32,14 +32,18 @@
     <div class="col-span-full xl:col-auto">
         <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
             <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0" src="{% static 'apple-icon-114x114.png'%}"> 
+                <!-- Mostrar imagen de perfil o una imagen por defecto -->
+                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
+                     src="{% if user.docente.profile_picture %}{{ user.docente.profile_picture.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}"
+                     alt="Foto de perfil">
+        
                 <div>
                     <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
                     <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                        JPG or PNG.
+                        JPG o PNG.
                     </div>
                     <!-- Formulario para cargar imagen -->
-                    <form action = "{%url 'update_picture'%}" method="POST" enctype="multipart/form-data">
+                    <form action="{% url 'update_picture' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="flex items-center space-x-4">
                             <!-- Campo de carga de imagen -->
@@ -61,8 +65,9 @@
                 </div>
             </div>
         </div>
+        
         <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <h3 class="mb-10 text-xl font-semibold dark:text-white">Formación académica</h3>
+            <h3 class="mb-10 text-xl font-semibold dark:text-white">Habilidades e idiomas</h3>
             <div class="col-span-6 sm:col-span-3 mb-4">
                 <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académicos</label>
                 <input type="text" name="nivel" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba su nivel académico" required>
@@ -123,7 +128,7 @@
                         <input type="text" name="facultad" id="facultad" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ user.docente.facultad }}" required>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
-                        <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoria</label>
+                        <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label>
                         <input type="text" name="categoria" id="categoria" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ user.docente.categoria }}" required>
                     </div>
                     <div class="col-span-6 sm:col-span-3">
@@ -378,7 +383,7 @@
                                 <input type="text" name="institucion" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Institución" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">
-                                <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titulo</label>
+                                <label for="titulo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Título</label>
                                 <input type="text" name="titulo" id="titulo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Título" required>
                             </div>
                             <div class="col-span-6 sm:col-span-3">

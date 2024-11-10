@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCV - Gestión de CV de Docentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    {% load static %}
+    <!-- Header con logo y opciones -->
+    <header class="bg-white shadow-md dark:bg-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-2xl font-bold text-blue-500 dark:text-primary-400">
+                EduCV
+            </div>
+
+            <!-- Opciones de navegación -->
+            <div>
+                <a href="{% url 'signin' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700 focus:ring-2 focus:ring-offset-2">
+                    Inicio de Sesión
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de búsqueda -->
+    <section class="container mx-auto mt-10">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white">Consulta el CV de Docentes</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">Encuentra la información académica de los docentes de manera rápida y eficiente.</p>
+        </div>
+
+        <!-- Campo de búsqueda -->
+        <div class="mt-8 flex justify-center">
+            <form action="{% url 'search_teacher_ajax' %}" method="get" class="w-1/2 flex shadow-lg rounded-lg overflow-hidden" onsubmit="return false;">
+                <input 
+                    type="text" 
+                    id="query" 
+                    name="query"
+                    class="w-5/6 p-3 border-0 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" 
+                    placeholder="Buscar docente por nombre, apellido o especialidad..."
+                    oninput="searchTeachers()">
+                <button 
+                    type="submit"
+                    class="bg-blue-600 text-white p-3 rounded-r-lg font-semibold hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+                    Buscar
+                </button>
+            </form>
+        </div>
+
+        <!-- Resultados de búsqueda -->
+        <div id="searchResults" class="container mx-auto mt-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4" style="display: none;">
+            <!-- Los resultados de la búsqueda aparecerán aquí -->
+        </div>
+    </section>
+
+    <!-- JavaScript para la búsqueda en tiempo real -->
+    <script>
+        function searchTeachers() {
+            const query = document.getElementById('query').value;
+            const resultsContainer = document.getElementById('searchResults');
+    
+            // Verifica si el campo de búsqueda tiene más de 2 caracteres
+            if (query.length > 2) {
+                fetch(`/cv/ajax/search_teacher/?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Muestra el contenedor de resultados solo si hay algo en la búsqueda
+                    resultsContainer.style.display = 'table';  // Asegura que se muestre la tabla de resultados
+            
+                    resultsContainer.innerHTML = '';  // Limpia los resultados previos
+                    if (data.length > 0) {
+                        data.forEach(docente => {
+                            const row = document.createElement('tr');
+                            row.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                            row.innerHTML = `
+                                <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                    <img class="w-10 h-10 rounded-full" 
+                                         src="${docente.foto || '{% static 'android-icon-36x36.png' %}'}"
+                                         alt="${docente.nombre} avatar">
+                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                        <div class="text-base font-semibold text-gray-900 dark:text-white">${docente.nombre} ${docente.apellido}</div>
+                                        <div class="text-sm font-normal text-gray-500 dark:text-gray-400">${docente.correo}</div>
+                                    </div>
+                                </td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.especialidad || 'N/A'}</td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.cargo || 'N/A'}</td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.facultad || 'N/A'}</td>
+                                <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.fecha_contratacion || 'N/A'}</td>
+                                <td class="p-4 space-x-2 whitespace-nowrap">
+                                    <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                        Ver detalles
+                                    </a>
+                                </td>
+                            `;
+            
+                            resultsContainer.appendChild(row);
+                        });
+            
+                        // Al final de los resultados, agregar el enlace "Ver más"
+                        const seeMoreRow = document.createElement('tr');
+                        seeMoreRow.innerHTML = `
+                            <td colspan="7" class="text-center p-4">
+                                <a href="{% url 'docentes_resultados'%}" class="text-blue-500 hover:underline">Ver todos</a>
+                            </td>
+                        `;
+                        resultsContainer.appendChild(seeMoreRow);  // Se agrega la fila "Ver más" al contenedor de resultados
+            
+                    } else {
+                        resultsContainer.innerHTML = '<tr><td colspan="7" class="text-center text-gray-600 dark:text-gray-400">No se encontraron docentes.</td></tr>';
+                    }
+                });
+            } else {
+                // Si el campo de búsqueda está vacío o no tiene más de 2 caracteres, ocultar los resultados
+                resultsContainer.innerHTML = '';  // Limpia los resultados anteriores
+                resultsContainer.style.display = 'none';  // Oculta el contenedor de resultados
+            }
+        }
+    </script>
+    
+    
+    
+    
+
+</body>
+</html>

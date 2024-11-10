@@ -4,9 +4,6 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     return render(request, 'pages/index.html')
 
-def home(request):
-    return render(request, 'pages/search.html')
-
 def signin(request):
     return render(request, 'auth/signin.html')
 
