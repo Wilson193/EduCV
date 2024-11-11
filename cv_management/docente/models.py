@@ -22,5 +22,5 @@ class Docente(Persona):
     tipo_contrato = models.CharField(max_length=50, null=True, blank=True)
     estado = models.CharField(max_length=50, null=True, blank=True)
     fecha_contratacion = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    foto = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     cv = models.OneToOneField('cv.CV', on_delete=models.CASCADE, null=True, blank=True, related_name='docente_cv')

@@ -46,7 +46,7 @@ def search_teacher_ajax(request):
             'cargo': docente.cargo,
             'fecha_contratacion': docente.fecha_contratacion,
             'correo': docente.correo,
-            'foto': docente.profile_picture.url if docente.profile_picture else None  # Usamos la URL de la imagen si existe
+            'foto': docente.foto.url if docente.foto else None  # Usamos la URL de la imagen si existe
         } for docente in docentes]
         print(results)
     else:

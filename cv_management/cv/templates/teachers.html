@@ -96,7 +96,7 @@
                         {% for docente in docentes %}
                         <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                             <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">                                
-                                <img class="w-10 h-10 rounded-full" src="{% if docente.profile_picture %}{{ docente.profile_picture.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" alt="foto de perfil">
+                                <img class="w-10 h-10 rounded-full" src="{% if docente.foto %}{{ docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" alt="foto de perfil">
                                 <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
                                     <div class="text-base font-semibold text-gray-900 dark:text-white">{{ docente.nombre }} {{ docente.apellido }}</div>
                                     <div class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ docente.correo }}</div>

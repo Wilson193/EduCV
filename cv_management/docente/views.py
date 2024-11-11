@@ -97,13 +97,13 @@ def update_picture(request):
         photo = request.FILES.get('profile_picture')
         if photo:
             print(f"Uploading photo: {photo}")
-            docente.profile_picture = photo
+            docente.foto = photo
             docente.save()
             return redirect('update_teacher')  # Redirige a una página de éxito o de actualización
         
         # Lógica para eliminar la imagen de perfil si se envía la solicitud para eliminar
         if request.POST.get('remove_picture') == 'true':
-            docente.profile_picture.delete(save=True)
+            docente.foto.delete(save=True)
             return redirect('update_teacher')  # Redirige después de eliminar la imagen
 
     # Si no es un POST o no se subió ningún archivo, puedes redirigir o mostrar un mensaje
