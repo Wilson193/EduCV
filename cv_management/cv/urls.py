@@ -8,6 +8,7 @@ urlpatterns = [
     path('update/', update, name='update'),
     path('modifyPrivacy/', modify_privacy, name='modify_privacy'),
     path('consult', consult , name='consult'),
+    path('all_teachers/', all_teachers , name='all_teachers'),
     path('teachers/', teachers , name='teachers'),
     path('register_experience/', register_experience , name='register_experience'),
     path('remove_experience/<int:experiencia_id>/', remove_experience , name='remove_experience'),
@@ -17,6 +18,6 @@ urlpatterns = [
     path('remove_academic_production/<int:produccion_id>/', remove_academic_production , name='remove_academic_production'),
     path('ajax/search_teacher/', search_teacher_ajax, name='search_teacher_ajax'),
     path('teachers/', list_teachers, name='list_teachers'),
-    path('consult/', generate_curriculum , name='show'),
+    path('consult/<int:docente_id>/', generate_curriculum , name='generate_curriculum'),
     path('docentes/resultados/', docentes_resultados, name='docentes_resultados'),
 ] 

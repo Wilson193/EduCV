@@ -14,6 +14,14 @@ from reportlab.pdfgen import canvas
 from docx.shared import Pt
 from .models import Docente
 from django.http import JsonResponse
+from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from .models import Docente
+
+
 
 
 def index(request):
@@ -62,8 +70,10 @@ def docentes_resultados(request):
         nombre__icontains=query) | Docente.objects.filter(
         apellido__icontains=query) | Docente.objects.filter(
         facultad__icontains=query)
+        
+    total_docentes = Docente.objects.count()
     
-    return render(request, 'teachers.html', {'docentes': docentes, 'query': query})
+    return render(request, 'teachers.html', {'docentes': docentes, 'query': query, 'total_docentes': total_docentes})
     
 def list_teachers(request): 
     query = request.GET.get('query', '')
@@ -74,6 +84,11 @@ def list_teachers(request):
 def teachers(request):
   return render(request, 'teachers.html')
 
+def all_teachers(request):
+    docentes = Docente.objects.all()
+    total_docentes = Docente.objects.count()
+    return render(request, 'all_teachers.html', {'docentes': docentes, 'total_docentes': total_docentes})
+
 @login_required
 def consult(request):
     return render(request, 'consult.html')
@@ -83,7 +98,12 @@ def consult(request):
 def generate_curriculum(request, docente_id):
     
     # Crear el documento en formato Word para edición
-    docente = get_object_or_404(Docente, id= docente_id)
+    try:
+        docente = get_object_or_404(Docente, id=docente_id)
+    except Docente.DoesNotExist:
+        # Manejo de error, como redirigir o devolver un mensaje adecuado
+        return HttpResponse("Docente no encontrado", status=404)
+    
     doc = Document()
 
     # Títulos y subtítulos
@@ -166,9 +186,11 @@ def generate_curriculum(request, docente_id):
     response['Content-Disposition'] = f'inline; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
     return response
     
+    
 @login_required
 def modify_privacy(request):
     return render(request, 'modify-privacy.html')
+
 
 @login_required
 def create(request):
@@ -184,13 +206,11 @@ def create(request):
         
     return render(request, 'create.html')
 
+
 @login_required
 def update(request):
     return render(request, 'update.html')
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import ExperienciaLaboral
 
 @login_required
 def register_experience(request):
@@ -230,6 +250,7 @@ def register_experience(request):
 
     return render(request, 'update.html')
 
+
 @login_required
 def remove_experience(request, experiencia_id):
     experiencia = get_object_or_404(ExperienciaLaboral, id=experiencia_id)
@@ -237,6 +258,7 @@ def remove_experience(request, experiencia_id):
     experiencia.delete()
 
     return redirect('update') 
+
 
 @login_required
 def register_academic_background(request):
@@ -268,6 +290,7 @@ def register_academic_background(request):
         return redirect('update')  # Cambia 'alguna_vista' por la URL que corresponda
     return render(request, 'update.html')
 
+
 @login_required
 def remove_academic_background(request, formacion_id):
     # Obtener la formación académica que se quiere eliminar
@@ -276,6 +299,7 @@ def remove_academic_background(request, formacion_id):
     # Eliminar la formación académica
     formacion.delete()
     return redirect('update')  
+
 
 @login_required
 def register_academic_production(request):
@@ -305,6 +329,7 @@ def register_academic_production(request):
         return redirect('update')  
     return render(request, 'update.html')
 
+
 @login_required
 def remove_academic_production(request, produccion_id):
     # Obtener la producción académica que se quiere eliminar
@@ -314,9 +339,6 @@ def remove_academic_production(request, produccion_id):
     messages.success(request, "Producción académica eliminada correctamente.")
 
     return redirect('update')  # Cambia 'update' por la URL que desees
-
-
-
 
 
 @login_required
