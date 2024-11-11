@@ -23,4 +23,5 @@ class Docente(Persona):
     estado = models.CharField(max_length=50, null=True, blank=True)
     fecha_contratacion = models.DateField(null=True, blank=True)
     foto = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.OneToOneField('cv.CV', on_delete=models.CASCADE, null=True, blank=True, related_name='docente_cv')
