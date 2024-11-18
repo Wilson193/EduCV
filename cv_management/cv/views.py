@@ -263,6 +263,42 @@ def remove_academic_production(request, produccion_id):
 
 
 @login_required
+def register_competence(request):
+    if request.method == "POST":
+        nombre = request.POST.get('nombre')
+        nivel = request.POST.get('nivel')
+
+        user = request.user
+        cv = user.docente.cv_docente  
+
+        print(f"CV: {cv}")
+
+        nueva_competencias = Competencias(
+            cv=cv, 
+            nombre = nombre,
+            nivel = nivel,
+        )
+
+        nueva_competencias.save()
+
+        messages.success(request, "Competence registered successfully.")
+
+        return redirect('update')  
+    return render(request, 'update.html')  
+
+
+@login_required
+def remove_competence(request, competence_id):
+    # Obtener la producción académica que se quiere eliminar
+    competence = get_object_or_404(Competencias, id=competence_id)
+    competence.delete()
+
+    messages.success(request, "Producción académica eliminada correctamente.")
+
+    return redirect('update')  # Cambia 'update' por la URL que desees
+
+
+@login_required
 def privacidad(request):
     return render(request, 'pages/privacidad.html')
 

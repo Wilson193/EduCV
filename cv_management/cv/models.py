@@ -1,7 +1,11 @@
 from django.db import models
 from docente.models import Docente
 
-# Create your models here.
+class Competencias(models.Model):
+    nombre = models.CharField(max_length=100)
+    nivel = models.CharField(max_length=100)
+    cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='competencias') 
+    
 class ExperienciaLaboral(models.Model):
     lugar_trabajo = models.CharField(max_length=100)
     cargo = models.CharField(max_length=100)
