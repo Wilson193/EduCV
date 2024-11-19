@@ -30,64 +30,112 @@
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
-        <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
-            <div class="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
-                <!-- Mostrar imagen de perfil o una imagen por defecto -->
-                <img class="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
-                     src="{% if user.docente.foto %}{{ user.docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}"
-                     alt="Foto de perfil">
-        
-                <div>
-                    <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
-                    <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                        JPG o PNG.
+        <div class="col-span-full xl:col-auto">
+            <div class="p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-10 dark:bg-gray-800">
+                <div class="flex flex-col items-center justify-center"> <!-- Centrado en todas las pantallas -->
+                    <!-- Mostrar imagen de perfil o una imagen por defecto -->
+                    <div class="flex justify-center mb-4"> <!-- Centrado de la imagen -->
+                        <img class="rounded-full w-40 h-40 mx-auto" 
+                             src="{% if user.docente.foto %}{{ user.docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" 
+                             alt="Foto de perfil">
                     </div>
-                    <!-- Formulario para cargar imagen -->
-                    <form action="{% url 'update_picture' %}" method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="flex items-center space-x-4">
-                            <!-- Campo de carga de imagen -->
-                            <label for="profile_picture" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 cursor-pointer">
-                                <svg class="w-4 h-4 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path>
-                                    <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
-                                </svg>
-                                Subir foto de perfil
-                                <input id="profile_picture" name="profile_picture" type="file" accept="image/*" class="hidden" onchange="this.form.submit()">
-                            </label>
-                            <!-- Botón de eliminación (requiere lógica adicional en views.py para eliminar la imagen) -->
-                            <button type="submit" name="remove_picture" value="true" 
-                                    class="py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                Eliminar
-                            </button>
+                
+                    <div class="text-center"> <!-- Centrado de texto -->
+                        <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Foto de perfil</h3>
+                        <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+                            JPG o PNG.
                         </div>
-                    </form>
+                        <!-- Formulario para cargar imagen -->
+                        <form action="{% url 'update_picture' %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="flex items-center space-x-4 justify-center"> <!-- Centrado de los botones -->
+                                <!-- Campo de carga de imagen -->
+                                <label for="profile_picture" class="flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"></path>
+                                        <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
+                                    </svg>
+                                    Subir foto
+                                    <input id="profile_picture" name="profile_picture" type="file" accept="image/*" class="hidden" onchange="this.form.submit()">
+                                </label>
+                
+                                <!-- Botón de eliminación -->
+                                <button type="submit" name="remove_picture" value="true" 
+                                        class="flex items-center py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z"></path>
+                                    </svg>
+                                    Eliminar
+                                </button>
+                            </div>                        
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <h3 class="mb-4 text-xl font-semibold dark:text-white">Redes Sociales</h3>
+            
+            <div class="col-span-6 sm:col-span-3 mb-4">
+                <label for="linkedin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LinkedIn</label>
+                <input type="url" name="linkedin" id="linkedin" 
+                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                       placeholder="Enlace a tu perfil de LinkedIn">
+            </div>
         
-        {% comment %} <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-            <h3 class="mb-10 text-xl font-semibold dark:text-white">Habilidades e idiomas</h3>
             <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="nivel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Escribe tus niveles académicos</label>
-                <input type="text" name="nivel" id="nivel" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba su nivel académico" required>
+                <label for="twitter" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Twitter</label>
+                <input type="url" name="twitter" id="twitter" 
+                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                       placeholder="Enlace a tu perfil de Twitter">
             </div>
+        
             <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="institucion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instituciones Académicas</label>
-                <input type="text" name="institucion" id="institucion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Instituciones académicas donde estudió" required>
+                <label for="github" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GitHub</label>
+                <input type="url" name="github" id="github" 
+                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                       placeholder="Enlace a tu perfil de GitHub">
             </div>
-            <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="titulos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Títulos Académicos</label>
-                <input type="text" name="titulos" id="titulos" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Escriba sus títulos académicos" required>
-            </div>
-            <div class="col-span-6 sm:col-span-3">
-                <label for="fecha_obtencion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de obtención del título</label>
-                <input type="date" name="fecha_obtencion" id="fecha_obtencion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ CV.fecha_obtencion }}" required>
-            </div>
+        
             <div class="mt-8">
                 <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
             </div>
+        </div> 
+        {% comment %} <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+            <h3 class="mb-10 text-xl font-semibold dark:text-white">Redes Sociales</h3>
+            
+            <div class="flex flex-wrap gap-4">
+                <!-- Botón LinkedIn -->
+                <a href="https://www.linkedin.com" target="_blank" 
+                   class="flex items-center gap-2 px-4 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <i class="fab fa-linkedin"></i>
+                    LinkedIn
+                </a>
+                
+                <!-- Botón Twitter -->
+                <a href="https://twitter.com" target="_blank" 
+                   class="flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-400 dark:hover:bg-blue-500 dark:focus:ring-blue-600">
+                    <i class="fab fa-twitter"></i>
+                    Twitter
+                </a>
+                
+                <!-- Botón Facebook -->
+                <a href="https://facebook.com" target="_blank" 
+                   class="flex items-center gap-2 px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-700">
+                    <i class="fab fa-facebook"></i>
+                    Facebook
+                </a>
+                
+                <!-- Botón GitHub -->
+                <a href="https://github.com" target="_blank" 
+                   class="flex items-center gap-2 px-4 py-2 text-white bg-gray-800 rounded-lg hover:bg-gray-900 focus:ring-4 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-600">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+            </div>
         </div> {% endcomment %}
+        
     </div>
     <div class="col-span-2">
         <div class="p-10 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-15 dark:bg-gray-800">
@@ -213,6 +261,13 @@
                     <p><strong>Fecha de inicio:</strong> {{ experiencia.fecha_inicio }}</p>
                     <p><strong>Fecha de fin:</strong> {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}</p>
                     <p><strong>Descripción:</strong> {{ experiencia.descripcion|default:'No disponible' }}</p>
+
+                    <!-- Enlace para ver el PDF del certificado -->
+                    {% if experiencia.certificado %}
+                        <p><strong>Certificado:</strong> <a href="{{ experiencia.certificado.url }}" target="_blank" class="text-blue-500">Ver Certificado (PDF)</a></p>
+                    {% else %}
+                        <p><strong>Certificado:</strong> No disponible</p>
+                    {% endif %}
                 </div>
                 <div class="mt-4 flex justify-end space-x-4">
                     <!-- Botón de eliminar con formulario POST -->
@@ -230,6 +285,7 @@
         </div>
     {% endfor %}
 
+
     <div class="fixed left-0 right-0 z-50 items-center justify-center hidden overflow-x-hidden overflow-y-auto top-4 md:inset-0 h-modal sm:h-full" id="edit-user-modal">
         <div class="relative w-full h-full max-w-2xl px-4 md:h-auto">
             <!-- Modal content -->
@@ -243,42 +299,55 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                     </button>
                 </div>
+    
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
-                    <form action="{% url 'register_experience'%}" method="POST">
+                    <form action="{% url 'register_experience' %}" method="POST" enctype="multipart/form-data"> <!-- Asegúrate de usar enctype aquí -->
                         {% csrf_token %}
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="empresa" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre de la Empresa</label>
                                 <input type="text" name="empresa" value="Empresa" id="empresa" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Empresa" required>
                             </div>
+    
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="cargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cargo Ocupado</label>
                                 <input type="text" name="cargo" value="Cargo" id="cargo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Cargo" required>
                             </div>
+    
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="fecha_inicio" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Inicio</label>
                                 <input type="date" id="fecha_inicio" name="fecha_inicio" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
                             </div>
+    
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="fecha_fin" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha de Fin</label>
                                 <input type="date" id="fecha_fin" name="fecha_fin" class="mt-1 block w-full px-4 py-2 text-base border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600 focus:ring-primary-500 focus:border-primary-500" required>
                             </div>
+    
                             <div class="col-span-6">
                                 <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
                                 <textarea id="descripcion" name="descripcion" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="👨‍💻Full-stack web developer. Open-source contributor." required></textarea>
                             </div>
-                            
+    
+                            <div class="col-span-6">
+                                <label for="certificado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subir Certificado</label>
+                                <input type="file" name="certificado" id="certificado" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Modal footer -->
-                    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
-                        <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
-                    </div>
-                </form>
+    
+                        <!-- Modal footer -->
+                        <div class="mt-5 items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+                            <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Guardar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </div>    
+    
+    
+    
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
@@ -512,7 +581,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">

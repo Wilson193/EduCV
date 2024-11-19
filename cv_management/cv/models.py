@@ -35,14 +35,6 @@ class ProduccionAcademica(models.Model):
     descripcion = models.CharField(max_length=3000)
     estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='produccion_academica')
-    
-# class Publicacion(models.Model):
-#     tipo = models.CharField(max_length=100)
-#     titulo = models.CharField(max_length=100)
-#     fecha_publicacion = models.DateField()
-#     enlace = models.URLField()
-#     descripcion = models.CharField(max_length=3000)
-#     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='publicaciones')
 
 class CV(models.Model):
     fecha_creacion = models.DateField()

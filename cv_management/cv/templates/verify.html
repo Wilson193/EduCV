@@ -530,6 +530,88 @@
     </div>
 </div>
 
+<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
+    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="w-full mb-6">
+            <h3 class="text-xl font-semibold dark:text-white">Habilidades e Idiomas</h3>
+        </div>
+
+        <!-- Contenedor de las habilidades e idiomas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for competencia in docente.cv_docente.competencias.all %}
+                <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ competencia.nombre }}</h5>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Nivel: {{ competencia.nivel }}</p>
+                    
+                    <!-- Botón para abrir el modal de detalles -->
+                    <div class="mt-4 flex justify-between items-center">
+                        <button type="button" data-modal-target="details-modal-forth-{{ competencia.id }}" data-modal-toggle="details-modal-forth-{{ competencia.id }}" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
+                            Detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal de detalles de competencia -->
+                <div id="details-modal-forth-{{ competencia.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+                        <h2 class="text-2xl font-semibold">Detalles de la Competencia</h2>
+                        <div class="mt-4">
+                            <p><strong>Nombre:</strong> {{ competencia.nombre }}</p>
+                            <p><strong>Nivel:</strong> {{ competencia.nivel }}</p>
+                        </div>
+                        <div class="mt-4 flex justify-end space-x-4">
+                            <!-- Botón de eliminar con formulario POST -->
+                            <form action="{% url 'remove_competence' competencia.id%}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white">
+                                    Eliminar
+                                </button>
+                            </form>
+                            <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-forth-{{ competencia.id }}">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-gray-500 dark:text-gray-400">No hay habilidades o idiomas registrados.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de "+" a la izquierda para agregar una nueva habilidad o idioma -->
+        <div class="w-full mt-6 flex justify-start">
+            <button type="button" data-modal-target="add-skill-language-modal" data-modal-toggle="add-skill-language-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                +
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal para agregar nueva habilidad o idioma -->
+    <div id="add-skill-language-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
+            <h2 class="text-2xl font-semibold">Agregar Habilidad o Idioma</h2>
+            <form action="{% url 'register_competence' %}" method="post">
+                {% csrf_token %}
+                <div class="mt-4">
+                    <label for="nombre" class="block text-sm text-gray-500 dark:text-gray-400">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+                </div>
+                <div class="mt-4">
+                    <label for="nivel" class="block text-sm text-gray-500 dark:text-gray-400">Nivel</label>
+                    <input type="text" name="nivel" id="nivel" class="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-600" required>
+                </div>
+                <div class="mt-6 flex justify-end space-x-4">
+                    <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white" data-modal-toggle="add-skill-language-modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 text-sm text-white bg-blue-500 border border-blue-500 rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:border-blue-600 dark:hover:bg-blue-700">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 

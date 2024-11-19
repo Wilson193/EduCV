@@ -20,8 +20,10 @@ urlpatterns = [
     path('remove_academic_production/<int:produccion_id>/', remove_academic_production , name='remove_academic_production'),
     path('register_competence/', register_competence, name='register_competence'),
     path('remove_competence/<int:competence_id>/', remove_competence , name='remove_competence'),
+    path('search_teacher_main/', search_teacher_main , name='search_teacher_main'),
     path('ajax/search_teacher/', search_teacher_ajax, name='search_teacher_ajax'),
     path('teachers/', list_teachers, name='list_teachers'),
     path('consult/<int:docente_id>/', generate_curriculum , name='generate_curriculum'),
     path('docentes/resultados/', docentes_resultados, name='docentes_resultados'),
+    path('get_document/', get_document, name='get_document'),
 ] 

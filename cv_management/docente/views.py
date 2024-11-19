@@ -109,6 +109,7 @@ def update_picture(request):
     # Si no es un POST o no se subió ningún archivo, puedes redirigir o mostrar un mensaje
     return HttpResponse("Método no permitido o no se ha subido una imagen", status=400)
 
+
 #wilson
 @login_required
 def generate_curriculum(request, docente_id):

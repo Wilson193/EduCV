@@ -32,6 +32,14 @@ def search(request):
     return render(request, 'search.html')
 
 
+def search_teacher_main(request):
+    query = request.GET.get('query', '')
+    docentes = Docente.objects.filter(
+        nombre__icontains=query
+    )
+    return render(request, 'all_teachers.html', {'docentes': docentes, 'query': query})
+
+
 def search_teacher_ajax(request):
     query = request.GET.get('query', '')
     if query:
@@ -137,18 +145,20 @@ def update(request):
 def register_experience(request):
     if request.method == "POST":
         # Recoger los datos del formulario
-        empresa = request.POST.get('empresa')  # 'empresa' es el nombre del campo en el formulario
+        empresa = request.POST.get('empresa')
         cargo = request.POST.get('cargo')
         fecha_inicio = request.POST.get('fecha_inicio')
         fecha_fin = request.POST.get('fecha_fin')
         descripcion = request.POST.get('descripcion')
         
+        # Obtener el archivo
+        certificado = request.FILES.get('certificado')  # Usar request.FILES para manejar archivos
+
         # Obtener el usuario y el CV relacionado con el docente
         user = request.user
         cv = user.docente.cv_docente  # Usando el related_name
 
-        
-        print(f"el valor de cv{cv}")
+        print(f"el valor de cv: {cv}")
         
         # Crear la nueva experiencia laboral
         nueva_experiencia = ExperienciaLaboral(
@@ -158,6 +168,7 @@ def register_experience(request):
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin,
             descripcion=descripcion,
+            certificado=certificado,  # Aquí ya tienes el archivo cargado
         )
         
         # Guardar la nueva experiencia en la base de datos
@@ -173,13 +184,30 @@ def register_experience(request):
 
 
 @login_required
+def get_document(request):
+    if request.method == "POST":
+        cv = request.user.cv
+        document = request.FILES.get('get_certificate')
+        if document:
+            cv.documento = document
+            cv.save()
+            return redirect ('update')
+        if request.POST.get('remove_document') == 'true':
+            cv.documento.delete(save=True)
+            return redirect('update')  # Redirige después de eliminar el documento
+
+    # Si no es un POST o no se subió ningún archivo
+    return HttpResponse("Método no permitido o no se ha subido un documento", status=400)
+        
+            
+
+@login_required
 def remove_experience(request, experiencia_id):
     experiencia = get_object_or_404(ExperienciaLaboral, id=experiencia_id)
 
     experiencia.delete()
 
     return redirect('update') 
-
 
 @login_required
 def register_academic_background(request):
