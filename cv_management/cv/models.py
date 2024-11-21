@@ -38,6 +38,9 @@ class ProduccionAcademica(models.Model):
 
 class CV(models.Model):
     fecha_creacion = models.DateField()
+    linkedin = models.URLField(max_length=200, null=True, blank=True)
+    github = models.URLField(max_length=200, null=True, blank=True)
+    x = models.URLField(max_length=200, null=True, blank=True)
     estado = models.BooleanField(default=False)  # Comienza como False por defecto
     docente = models.OneToOneField(Docente, on_delete=models.CASCADE, related_name="cv_docente")
 

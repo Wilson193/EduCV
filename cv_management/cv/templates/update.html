@@ -76,32 +76,36 @@
 
         <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="mb-4 text-xl font-semibold dark:text-white">Redes Sociales</h3>
+            <form action="{% url 'update_social_links' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="col-span-6 sm:col-span-3 mb-7">
+                    <label for="linkedin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LinkedIn</label>
+                    <input type="url" name="linkedin" id="linkedin" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="Enlace a tu perfil de LinkedIn" value="{{ user.docente.cv_docente.linkedin }}">
+                </div>
             
-            <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="linkedin" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LinkedIn</label>
-                <input type="url" name="linkedin" id="linkedin" 
-                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                       placeholder="Enlace a tu perfil de LinkedIn">
-            </div>
+                <div class="col-span-6 sm:col-span-3 mb-4">
+                    <label for="x" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Twitter</label>
+                    <input type="url" name="x" id="x" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="Enlace a tu perfil de x" value="{{ user.docente.cv_docente.x }}">
+                </div>
         
-            <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="twitter" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Twitter</label>
-                <input type="url" name="twitter" id="twitter" 
-                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                       placeholder="Enlace a tu perfil de Twitter">
-            </div>
+                <div class="col-span-6 sm:col-span-3 mb-4">
+                    <label for="github" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GitHub</label>
+                    <input type="url" name="github" id="github" 
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
+                        placeholder="Enlace a tu perfil de GitHub" value="{{ user.docente.cv_docente.github }}">
+                </div>
+            
+                <div class="mt-8">
+                    <button type="submit" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
+                </div>
+            </form>
+        </div>
         
-            <div class="col-span-6 sm:col-span-3 mb-4">
-                <label for="github" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">GitHub</label>
-                <input type="url" name="github" id="github" 
-                       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" 
-                       placeholder="Enlace a tu perfil de GitHub">
-            </div>
-        
-            <div class="mt-8">
-                <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-            </div>
-        </div> 
         {% comment %} <div class="p-8 mb-5 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="mb-10 text-xl font-semibold dark:text-white">Redes Sociales</h3>
             

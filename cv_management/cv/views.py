@@ -140,6 +140,26 @@ def create(request):
 def update(request):
     return render(request, 'update.html')
 
+@login_required
+def update_social_links(request):
+    user = request.user
+    cv = user.docente.cv_docente  # Usando el related_name
+
+    if request.method == "POST":
+        linkedin = request.POST.get('linkedin')
+        x = request.POST.get('x')
+        github = request.POST.get('github')
+        
+        cv.linkedin = linkedin
+        cv.x = x
+        cv.github = github
+        cv.save()
+        
+        messages.success(request, "Redes sociales guardadas correctamente.")
+        return redirect('update')  # Redirige a una vista de confirmación o detalles del CV
+
+    return render(request, 'update.html')
+
 
 @login_required
 def register_experience(request):

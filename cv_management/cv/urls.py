@@ -12,6 +12,7 @@ urlpatterns = [
     path('verify_personal_data/<int:docente_id>/', verify_personal_data , name='verify_personal_data'),
     path('all_teachers/', all_teachers , name='all_teachers'),
     path('teachers/', teachers , name='teachers'),
+    path('update_social_links/', update_social_links , name='update_social_links'),
     path('register_experience/', register_experience , name='register_experience'),
     path('remove_experience/<int:experiencia_id>/', remove_experience , name='remove_experience'),
     path('register_academic_background/', register_academic_background, name='register_academic_background'),

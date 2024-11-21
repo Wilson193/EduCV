@@ -48,6 +48,30 @@
             <!-- Estado actual -->
             <div class="flex items-center mb-4 space-x-3">
                 <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Estado actual:</span>
+                <div class="flex items-center space-x-4">
+                    <!-- Icono -->
+                    <div 
+                        class="w-8 h-8 flex items-center justify-center rounded-full 
+                               bg-red-500 text-white"
+                        id="status-icon"
+                    >
+                        <!-- Ícono: Cambia según el estado -->
+                        <svg id="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                            <!-- Ícono de pendiente (Cruz) -->
+                            <path id="pending-icon" d="M18 6L6 18M6 6l12 12"></path>
+                            <!-- Ícono de verificado (Exclamación) -->
+                            <path id="verified-icon" d="M12 4.5v7M12 16.5h.01"></path>
+                            <!-- Ícono de validado (Check) -->
+                            <path id="validated-icon" d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                
+                    <!-- Descripción -->
+                    <span id="status-text" class="text-md font-medium text-red-500">
+                        Pendiente
+                    </span>
+                </div>
+                
                 <span 
                     class="px-3 py-1 text-sm font-semibold rounded-lg 
                     {% if docente.cv_activo == 'activo' %}
@@ -64,7 +88,7 @@
                     {{ docente.cv_activo|capfirst }}
                 </span>
             </div>
-        
+            
             <!-- Botón para abrir el modal -->
             <button 
                 type="button" 
@@ -131,7 +155,43 @@
     </div>
     <div class="col-span-2">
         <div class="p-10 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-15 dark:bg-gray-800">
-            <h3 class="mb-4 text-xl font-semibold dark:text-white">Información personal</h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold dark:text-white">Información personal</h3>
+                <!-- Estado de verificación al lado del encabezado -->
+                <div class="flex items-center space-x-2">
+                    <div 
+                        class="w-6 h-6 flex items-center justify-center rounded-full 
+                            {% if docente.estado %}
+                                bg-green-500
+                            {% else %}
+                                bg-red-500
+                            {% endif %} text-white"
+                        id="status-icon"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.estado %}
+                                <!-- Ícono de Verificado (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de No Verificado (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium 
+                        {% if docente.estado %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.estado %}
+                            Verificado
+                        {% else %}
+                            No Verificado
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
             <div class="grid grid-cols-6 gap-9">
                 <div class="col-span-6 sm:col-span-3">
                     <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
@@ -159,7 +219,7 @@
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                     <label for="correo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Correo electrónico</label>
-                    <input type="email" name="correo" id="correo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ docente.email }}" readonly>
+                    <input type="email" name="correo" id="correo" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" value="{{ docente.correo }}" readonly>
                 </div>
                 <div class="col-span-6 sm:col-span-3">
                     <label for="facultad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Facultad</label>
@@ -182,14 +242,16 @@
                     <p id="fecha_contratacion" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         {{ docente.fecha_contratacion|date:"d F Y" }}
                     </p>
-                </div>      
+                </div>
+    
+                <!-- Botón para aceptar -->
                 <div class="col-span-4 sm:col-full">
-                    <!-- Botón para aceptar -->
                     <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" onclick="window.location.href='{% url 'verify_personal_data' docente.id %}'">Aceptar</button>
                 </div>                                                   
             </div>
         </div>
     </div>
+    
     
     
 </div>
@@ -208,7 +270,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
-                            <div class="flex-1 min-w-0">
+                            <div class="flex-1 min-w-0 ">
                                 <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
                                     {{ experiencia.lugar_trabajo }}
                                 </p>
@@ -247,6 +309,39 @@
                     <p><strong>Fecha de inicio:</strong> {{ experiencia.fecha_inicio }}</p>
                     <p><strong>Fecha de fin:</strong> {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}</p>
                     <p><strong>Descripción:</strong> {{ experiencia.descripcion|default:'No disponible' }}</p>
+                    <div class="flex items-center space-x-2">
+                        <div 
+                            class="w-6 h-6 flex items-center justify-center rounded-full 
+                                {% if experiencia.estado %}
+                                    bg-green-500
+                                {% else %}
+                                    bg-red-500
+                                {% endif %} text-white"
+                            id="status-icon"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                                {% if experiencia.estado %}
+                                    <!-- Ícono de Verificado (Check) -->
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                {% else %}
+                                    <!-- Ícono de No Verificado (Cruz) -->
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                {% endif %}
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium 
+                            {% if experiencia.estado %}
+                                text-green-500
+                            {% else %}
+                                text-red-500
+                            {% endif %}">
+                            {% if experiencia.estado %}
+                                Verificado
+                            {% else %}
+                                No Verificado
+                            {% endif %}
+                        </span>
+                    </div>
                 </div>
                 <div class="mt-4 flex justify-end space-x-4">
                     <!-- Botón de eliminar con formulario POST -->
