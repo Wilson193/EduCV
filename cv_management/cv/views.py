@@ -219,7 +219,9 @@ def register_academic_background(request):
         fecha_fin = request.POST.get('fecha_fin')
         ciudad = request.POST.get('ciudad')
         pais = request.POST.get('pais')
-        
+         # Obtener el archivo
+        certificado = request.FILES.get('certificado')  # Usar request.FILES para manejar archivos
+        print(f"este es el certificado {certificado}")
         user = request.user
         cv = user.docente.cv_docente 
         
@@ -232,7 +234,8 @@ def register_academic_background(request):
             fecha_inicio=fecha_inicio,
             fecha_fin=fecha_fin,
             ciudad=ciudad,
-            pais=pais
+            pais=pais,
+            certificado=certificado,
         )
         nueva_formacion.save()
         

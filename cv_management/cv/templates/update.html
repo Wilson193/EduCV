@@ -407,6 +407,12 @@
                 <p><strong>País:</strong> {{ formacion.pais }}</p>
                 <p><strong>Fecha de inicio:</strong> {{ formacion.fecha_inicio|date:"Y-m-d" }}</p>
                 <p><strong>Fecha de fin:</strong> {% if formacion.fecha_fin %}{{ formacion.fecha_fin|date:"Y-m-d" }}{% else %}Presente{% endif %}</p>
+                <!-- Enlace para ver el PDF del certificado -->
+                {% if formacion.certificado %}
+                    <p><strong>Certificado:</strong> <a href="{{ formacion.certificado.url }}" target="_blank" class="text-blue-500">Ver Certificado (PDF)</a></p>
+                {% else %}
+                    <p><strong>Certificado:</strong> No disponible</p>
+                {% endif %}
             </div>
             <div class="mt-4 flex justify-end space-x-4">
                 <!-- Botón de eliminar con formulario POST -->
@@ -440,7 +446,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6 space-y-6">
-                    <form action="{% url 'register_academic_background' %}" method="POST">
+                    <form action="{% url 'register_academic_background' %}" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
@@ -470,6 +476,10 @@
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="pais" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
                                 <input type="text" id="pais" name="pais" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="País">
+                            </div>
+                            <div class="col-span-6 m:col-span-3">
+                                <label for="certificado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subir Certificado</label>
+                                <input type="file" name="certificado" id="certificado" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
                             </div>
                         </div>
                         <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
