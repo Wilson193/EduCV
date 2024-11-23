@@ -119,7 +119,29 @@ def verify_personal_data(request, docente_id):
     return render(request, 'verify.html', {'docente': docente})
     
     
+def verify_item(request, model_name, item_id, docente_id):
+    # Diccionario de modelos
+    model_mapping = {
+        'docente': Docente,
+        'experiencia': ExperienciaLaboral,
+        'formacion': FormacionAcademica,
+        'produccion': ProduccionAcademica,
+        'competencia': Competencia,
+    }
+    
+    # Obtener el modelo dinámicamente
+    model = model_mapping.get(model_name)
+    if not model:
+        # Si el modelo no existe, redirige a una página de error
+        return redirect('error_page')
 
+    # Obtener el objeto y marcarlo como verificado
+    item = get_object_or_404(model, id=item_id)
+    item.estado = True  # Actualizar el estado a 'Verificado'
+    item.save()
+    
+    # Redirigir a la página original o de detalles
+    return redirect('verify', docente_id)
 
 @login_required
 def create(request):

@@ -1,7 +1,7 @@
 from django.db import models
 from docente.models import Docente
 
-class Competencias(models.Model):
+class Competencia(models.Model):
     nombre = models.CharField(max_length=100)
     nivel = models.CharField(max_length=100)
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='competencias') 

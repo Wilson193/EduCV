@@ -10,6 +10,7 @@ urlpatterns = [
     path('consult/', consult , name='consult'),
     path('verify/<int:docente_id>/', verify , name='verify'),
     path('verify_personal_data/<int:docente_id>/', verify_personal_data , name='verify_personal_data'),
+    path('verify/<str:model_name>/<int:item_id>/<int:docente_id>/', verify_item, name='verify_item'),
     path('all_teachers/', all_teachers , name='all_teachers'),
     path('teachers/', teachers , name='teachers'),
     path('update_social_links/', update_social_links , name='update_social_links'),
