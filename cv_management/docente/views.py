@@ -109,6 +109,9 @@ def update_picture(request):
     # Si no es un POST o no se subió ningún archivo, puedes redirigir o mostrar un mensaje
     return HttpResponse("Método no permitido o no se ha subido una imagen", status=400)
 
+@login_required
+def settings_teacher(request):
+    return render(request, 'settings_teacher.html')
 
 #wilson
 @login_required

@@ -4,6 +4,7 @@ from docente.models import Docente
 class Competencia(models.Model):
     nombre = models.CharField(max_length=100)
     nivel = models.CharField(max_length=100)
+    estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='competencias') 
     
 class ExperienciaLaboral(models.Model):
@@ -42,8 +43,23 @@ class CV(models.Model):
     github = models.URLField(max_length=200, null=True, blank=True)
     x = models.URLField(max_length=200, null=True, blank=True)
     estado = models.BooleanField(default=False)  # Comienza como False por defecto
+    
+    # Definición de estados de verificación
+    ESTADOS_VERIFICACION = (
+        (0, 'Pendiente'),
+        (1, 'Verificado'),
+        (2, 'Validado'),
+    )
+    
+    estado_verificacion = models.IntegerField(choices=ESTADOS_VERIFICACION, default=0)
     docente = models.OneToOneField(Docente, on_delete=models.CASCADE, related_name="cv_docente")
 
-    
-
-    
+# class PrivacidaDatos(models.Model):
+#     # numero
+#     # cedula
+#     # correo 
+#     # ciudad
+#     # postal 
+#     # experiencia 
+#     # formacion 
+#     # produccion 

@@ -15,7 +15,7 @@
               <li>
                 <div class="flex items-center">
                   <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                  <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Curriculum Vitae</a>
+                  <a href="{% url 'consult' %}" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Curriculum Vitae</a>
                 </div>
               </li>
               <li>
@@ -26,7 +26,10 @@
               </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Configuración de Privacidad</h1>
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Configuración de Privacidad</h1>
+            <button type="submit" class="px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar cambios</button>
+        </div>
     </div>
     <!-- Right Content -->
     <!--
@@ -445,8 +448,8 @@
                 <!-- Item 1 -->
                 <div class="flex items-center justify-between py-5">
                     <div class="flex flex-col flex-grow">
-                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Número de teléfono</div>
-                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra un número de teléfono de contacto</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Cédula</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Número de identificación</div>
                     </div>
                     <label for="company-news" class="relative flex items-center cursor-pointer">
                         <input type="checkbox" id="company-news" class="sr-only">
@@ -456,8 +459,8 @@
                 <!-- Item 2 -->
                 <div class="flex items-center justify-between py-3">
                     <div class="flex flex-col flex-grow">
-                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Cédula</div>
-                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Número de identificación</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Número de teléfono</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra un número de teléfono de contacto</div>
                     </div>
                     <label for="account-activity" class="relative flex items-center cursor-pointer">
                         <input type="checkbox" id="account-activity" class="sr-only">
@@ -478,8 +481,8 @@
                 <!-- Item 4 -->
                 <div class="flex items-center justify-between mb-4 pt-3">
                     <div class="flex flex-col flex-grow">
-                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Ciudad</div>
-                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra tu residencia</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Categoria</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra que tipo de docente eres</div>
                     </div>
                     <label for="new-messages" class="relative flex items-center cursor-pointer">
                         <input type="checkbox" id="new-messages" class="sr-only">
@@ -487,19 +490,27 @@
                     </label>
                 </div>
                 <!-- Item 5 -->
-                <div class="flex items-center justify-between pt-3">
+                <div class="flex items-center justify-between mb-4 pt-3">
                     <div class="flex flex-col flex-grow">
-                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Código postal</div>
-                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Información adicional de su residencia</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Tipo de contrato</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Información referente a tu contratación</div>
                     </div>
                     <label for="new-messages" class="relative flex items-center cursor-pointer">
                         <input type="checkbox" id="new-messages" class="sr-only">
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
-            </div>
-            <div class="mt-5">
-                <button class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Guardar cambios</button>
+                <!-- Item 6 -->
+                <div class="flex items-center justify-between pt-3">
+                    <div class="flex flex-col flex-grow">
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Fecha de contratación</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Información referente a tu contratación</div>
+                    </div>
+                    <label for="new-messages" class="relative flex items-center cursor-pointer">
+                        <input type="checkbox" id="new-messages" class="sr-only">
+                        <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -563,13 +574,13 @@
 
     <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
         <div class="flow-root">
-            <h3 class="text-xl font-semibold dark:text-white">Información docente</h3>
-            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Experiencias laborales, formación académica y producción académica</p>
+            <h3 class="text-xl font-semibold dark:text-white">Redes Sociales</h3>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Permite visualizar tus redes sociales a personas interesadas</p>
             <div class="divide-y divide-gray-200 dark:divide-gray-700">
                 <!-- Item 1 -->
                 <div class="flex items-center justify-between py-9">
                     <div class="flex flex-col flex-grow">
-                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Experiencias laborales</div>
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Linkedln</div>
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Certificados y cualquier otro contenido relacionado</div>
                     </div>
                     <label for="rating-reminders" class="relative flex items-center cursor-pointer">

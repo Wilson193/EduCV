@@ -13,6 +13,7 @@ urlpatterns = [
     path('verify/<str:model_name>/<int:item_id>/<int:docente_id>/', verify_item, name='verify_item'),
     path('all_teachers/', all_teachers , name='all_teachers'),
     path('teachers/', teachers , name='teachers'),
+    path('update_status/<int:docente_id>/', update_status , name='update_status'), 
     path('update_social_links/', update_social_links , name='update_social_links'),
     path('register_experience/', register_experience , name='register_experience'),
     path('remove_experience/<int:experiencia_id>/', remove_experience , name='remove_experience'),

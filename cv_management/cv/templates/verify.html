@@ -41,118 +41,127 @@
                 </div>
             </div>
         </div>
-        <div class="p-6 mt-8 mb-5 bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 dark:bg-gray-800">
+
+        <div class="p-6 mt-8 mb-4 bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700 dark:bg-gray-800">
             <!-- Título -->
             <h3 class="mb-4 text-lg font-bold text-gray-900 dark:text-white">Modificar Estado del CV</h3>
         
-            <!-- Estado actual -->
-            <div class="flex items-center mb-4 space-x-3">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Estado actual:</span>
-                <div class="flex items-center space-x-4">
-                    <!-- Icono -->
-                    <div 
-                        class="w-8 h-8 flex items-center justify-center rounded-full 
-                               bg-red-500 text-white"
-                        id="status-icon"
-                    >
-                        <!-- Ícono: Cambia según el estado -->
-                        <svg id="icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
-                            <!-- Ícono de pendiente (Cruz) -->
-                            <path id="pending-icon" d="M18 6L6 18M6 6l12 12"></path>
-                            <!-- Ícono de verificado (Exclamación) -->
-                            <path id="verified-icon" d="M12 4.5v7M12 16.5h.01"></path>
-                            <!-- Ícono de validado (Check) -->
-                            <path id="validated-icon" d="M9 12l2 2 4-4"></path>
+            <!-- Estado -->
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-md font-semibold text-gray-900 dark:text-white">Estado</h4>
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if docente.cv_docente.estado %} 
+                            bg-green-500  <!-- Activo -->
+                        {% else %}
+                            bg-red-500    <!-- Inactivo -->
+                        {% endif %} text-white" id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.cv_docente.estado %}
+                                <!-- Ícono de Activo (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de Inactivo (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
                         </svg>
                     </div>
-                
-                    <!-- Descripción -->
-                    <span id="status-text" class="text-md font-medium text-red-500">
-                        Pendiente
+                    <span class="text-sm font-medium
+                        {% if docente.cv_docente.estado %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.cv_docente.estado %}
+                            Activo
+                        {% else %}
+                            Inactivo
+                        {% endif %}
                     </span>
                 </div>
-                
-                <span 
-                    class="px-3 py-1 text-sm font-semibold rounded-lg 
-                    {% if docente.cv_activo == 'activo' %}
-                        bg-green-500 text-white
-                    {% elif docente.cv_activo == 'inactivo' %}
-                        bg-red-500 text-white
-                    {% elif docente.cv_activo == 'verificado' %}
-                        bg-blue-500 text-white
-                    {% elif docente.cv_activo == 'validado' %}
-                        bg-yellow-500 text-white
-                    {% elif docente.cv_activo == 'pendiente' %}
-                        bg-gray-500 text-white
-                    {% endif %}">
-                    {{ docente.cv_activo|capfirst }}
-                </span>
             </div>
-            
-            <!-- Botón para abrir el modal -->
-            <button 
-                type="button" 
-                data-modal-target="stateModal" 
-                data-modal-toggle="stateModal" 
-                class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900">
-                Cambiar Estado del CV
-            </button>
-        </div>
         
-        <!-- Modal -->
-        <div id="stateModal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 hidden w-full p-4 overflow-y-auto bg-black bg-opacity-50">
-            <div class="relative w-full max-w-md mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800">
-                <div class="p-6">
-                    <!-- Título del modal -->
-                    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Seleccionar Estado</h2>
-        
-                    <!-- Opciones -->
-                    <form action="#" method="POST" class="mt-4 space-y-3">
-                        {% csrf_token %}
-                        <div class="grid grid-cols-1 gap-3">
-                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
-                                <input type="radio" name="estado_cv" value="activo" class="w-4 h-4 mr-2 text-green-500 focus:ring-green-500" {% if docente.cv_activo == 'activo' %}checked{% endif %}>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Activo</span>
-                            </label>
-                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
-                                <input type="radio" name="estado_cv" value="inactivo" class="w-4 h-4 mr-2 text-red-500 focus:ring-red-500" {% if docente.cv_activo == 'inactivo' %}checked{% endif %}>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Inactivo</span>
-                            </label>
-                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
-                                <input type="radio" name="estado_cv" value="verificado" class="w-4 h-4 mr-2 text-blue-500 focus:ring-blue-500" {% if docente.cv_activo == 'verificado' %}checked{% endif %}>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Verificado</span>
-                            </label>
-                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
-                                <input type="radio" name="estado_cv" value="validado" class="w-4 h-4 mr-2 text-yellow-500 focus:ring-yellow-500" {% if docente.cv_activo == 'validado' %}checked{% endif %}>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Validado</span>
-                            </label>
-                            <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:border-gray-600">
-                                <input type="radio" name="estado_cv" value="pendiente" class="w-4 h-4 mr-2 text-gray-500 focus:ring-gray-500" {% if docente.cv_activo == 'pendiente' %}checked{% endif %}>
-                                <span class="text-sm font-medium text-gray-900 dark:text-gray-300">Pendiente</span>
-                            </label>
-                        </div>
-        
-                        <!-- Botones -->
-                        <div class="flex justify-end mt-5 space-x-3">
-                            <button 
-                                type="button" 
-                                data-modal-hide="stateModal" 
-                                class="px-3 py-2 text-sm font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                                Cancelar
-                            </button>
-                            <button 
-                                type="submit" 
-                                class="px-3 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
-                                Guardar
-                            </button>
-                        </div>
-                    </form>
+            <!-- Estado de Verificación -->
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-md font-semibold text-gray-900 dark:text-white">Estado de verificación</h4>
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full
+                        {% if docente.cv_docente.estado_verificacion == 2 %}
+                            bg-green-500  <!-- Validado -->
+                        {% elif docente.cv_docente.estado_verificacion == 1 %}
+                            bg-yellow-500 <!-- Verificado -->
+                        {% else %}
+                            bg-red-500    <!-- Pendiente -->
+                        {% endif %} text-white" id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.cv_docente.estado_verificacion == 2 %}
+                                <!-- Ícono de Validado (Check Completo) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% elif docente.cv_docente.estado_verificacion == 1 %}
+                                <!-- Ícono de Verificado (Check Parcial) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+                            {% else %}
+                                <!-- Ícono de Pendiente (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium
+                        {% if docente.cv_docente.estado_verificacion == 2 %}
+                            text-green-500
+                        {% elif docente.cv_docente.estado_verificacion == 1 %}
+                            text-yellow-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.cv_docente.estado_verificacion == 2 %}
+                            Validado
+                        {% elif docente.cv_docente.estado_verificacion == 1 %}
+                            Verificado
+                        {% else %}
+                            Pendiente
+                        {% endif %}
+                    </span>
                 </div>
             </div>
+        
+            <!-- Nuevo componente: Cambiar Estado de Activo/Inactivo -->
+            <div class="mt-6">
+                <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Cambiar Estado</h4>
+                <form method="POST" action="{% url 'update_status' docente_id=docente.id %}">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <!-- Botón para activar el estado -->
+                        <button 
+                            type="submit"
+                            name="activar"
+                            class="w-full px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg shadow hover:bg-green-600 focus:ring-4 focus:ring-green-300 dark:bg-green-700 dark:hover:bg-green-800 dark:focus:ring-green-900">
+                            Cambiar a Activo
+                        </button>
+                        
+                        <!-- Botón para desactivar el estado -->
+                        <button 
+                            type="submit"
+                            name="desactivar"
+                            class="w-full px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow hover:bg-red-600 focus:ring-4 focus:ring-red-300 dark:bg-red-700 dark:hover:bg-red-800 dark:focus:ring-red-900">
+                            Cambiar a Inactivo
+                        </button>
+                    </div>
+                </form>
+            </div>
+        
+            <!-- Nuevo componente: Cambiar Estado a Validado -->
+            <div class="mt-6">
+                <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Cambiar Estado de Verificación</h4>
+                <button type="button" class="w-full px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-700 dark:hover:bg-yellow-800 dark:focus:ring-yellow-900">
+                    Cambiar a Validado
+                </button>
+            </div>
         </div>
         
-        
     </div>
+
+
     <div class="col-span-2">
         <div class="p-10 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-15 dark:bg-gray-800">
             <div class="flex justify-between items-center mb-4">
@@ -263,17 +272,15 @@
                 <h3 class="text-xl font-semibold dark:text-white">Experiencia Laboral</h3>
                 <!-- Estado de verificación al lado del encabezado -->
                 <div class="flex items-center space-x-2">
-                    <div 
-                        class="w-6 h-6 flex items-center justify-center rounded-full 
-                            {% if docente.estado %}
-                                bg-green-500
-                            {% else %}
-                                bg-red-500
-                            {% endif %} text-white"
-                        id="status-icon"
-                    >
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
+                            bg-green-500
+                        {% else %}
+                            bg-red-500
+                        {% endif %} text-white"
+                        id="status-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
-                            {% if docente.estado %}
+                            {% if docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
                                 <!-- Ícono de Verificado (Check) -->
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             {% else %}
@@ -283,12 +290,12 @@
                         </svg>
                     </div>
                     <span class="text-sm font-medium 
-                        {% if docente.estado %}
+                        {% if docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
                             text-green-500
                         {% else %}
                             text-red-500
                         {% endif %}">
-                        {% if docente.estado %}
+                        {% if docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
                             Verificado
                         {% else %}
                             No Verificado
@@ -296,6 +303,7 @@
                     </span>
                 </div>
             </div>            
+            <!-- Lista de experiencias laborales -->
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                 {% for experiencia in docente.cv_docente.experiencia_laboral.all %}
                     <li class="py-4">
@@ -306,7 +314,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
                             </div>
-                            <div class="flex-1 min-w-0 ">
+                            <div class="flex-1 min-w-0">
                                 <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
                                     {{ experiencia.lugar_trabajo }}
                                 </p>
@@ -326,13 +334,14 @@
                         </div>
                     </li>
                 {% empty %}
-                <li class="py-4">
-                    <p class="text-gray-500 dark:text-gray-400">No hay experiencias profesionales registradas.</p>
-                </li>
+                    <li class="py-4">
+                        <p class="text-gray-500 dark:text-gray-400">No hay experiencias profesionales registradas.</p>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
+    
     
     <!-- Modal para Detalles de la Experiencia Laboral -->
     {% for experiencia in docente.cv_docente.experiencia_laboral.all %}
@@ -491,9 +500,45 @@
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
+    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
         <div class="flow-root w-full">
-            <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
+                <!-- Estado de verificación -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            bg-green-500
+                        {% else %}
+                            bg-red-500
+                        {% endif %} text-white"
+                        id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                                <!-- Ícono de Verificado (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de No Verificado (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium 
+                        {% if docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            Verificado
+                        {% else %}
+                            No Verificado
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            
+    
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                 {% for formacion in docente.cv_docente.formacion_academica.all %}
                     <li class="py-4">
@@ -516,7 +561,7 @@
                                 </p>
                             </div>
                             <div class="inline-flex items-center">
-                                <!-- Botón para abrir el modal de detalles -->
+                                <!-- Botón de detalles que abre el modal -->
                                 <button type="button" data-modal-target="details-modal-two-{{ formacion.id }}" data-modal-toggle="details-modal-two-{{ formacion.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                     Detalles
                                 </button>
@@ -531,6 +576,7 @@
             </ul>
         </div>
     </div>
+    
 
     <!-- Modal para Detalles de Formación Académica -->
     {% for formacion in docente.cv_docente.formacion_academica.all %}
@@ -700,20 +746,52 @@
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full mb-6">
+    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
+            <!-- Estado de verificación -->
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        bg-green-500
+                    {% else %}
+                        bg-red-500
+                    {% endif %} text-white"
+                    id="status-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                        {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                            <!-- Ícono de Verificado (Check) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        {% else %}
+                            <!-- Ícono de No Verificado (Cruz) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        {% endif %}
+                    </svg>
+                </div>
+                <span class="text-sm font-medium 
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        text-green-500
+                    {% else %}
+                        text-red-500
+                    {% endif %}">
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        Verificado
+                    {% else %}
+                        No Verificado
+                    {% endif %}
+                </span>
+            </div>
         </div>
-
+    
         <!-- Contenedor de las producciones académicas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for produccion in docente.cv_docente.produccion_academica.all %}
                 <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
                     <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p> <!-- Descripción agregada -->
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p>
                     <div class="mt-4 flex justify-between items-center">
-                        <!-- Botón para abrir el modal de detalles -->
+                        <!-- Botón de detalles que abre el modal -->
                         <button type="button" data-modal-target="details-modal-three-{{ produccion.id }}" data-modal-toggle="details-modal-three-{{ produccion.id }}" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
                             Detalles
                         </button>
@@ -724,6 +802,7 @@
             {% endfor %}
         </div>
     </div>
+    
     
     <!-- Modal de Detalles de Producción Académica -->
     {% for produccion in docente.cv_docente.produccion_academica.all %}
@@ -850,11 +929,43 @@
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full mb-6">
+    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-semibold dark:text-white">Habilidades e Idiomas</h3>
+            <!-- Estado de verificación -->
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        bg-green-500
+                    {% else %}
+                        bg-red-500
+                    {% endif %} text-white"
+                    id="status-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                        {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                            <!-- Ícono de Verificado (Check) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        {% else %}
+                            <!-- Ícono de No Verificado (Cruz) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        {% endif %}
+                    </svg>
+                </div>
+                <span class="text-sm font-medium 
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        text-green-500
+                    {% else %}
+                        text-red-500
+                    {% endif %}">
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        Verificado
+                    {% else %}
+                        No Verificado
+                    {% endif %}
+                </span>
+            </div>
         </div>
-
+    
         <!-- Contenedor de las habilidades e idiomas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {% for competencia in docente.cv_docente.competencias.all %}
@@ -869,24 +980,75 @@
                         </button>
                     </div>
                 </div>
-
+    
                 <!-- Modal de detalles de competencia -->
                 <div id="details-modal-forth-{{ competencia.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
-                        <h2 class="text-2xl font-semibold">Detalles de la Competencia</h2>
-                        <div class="mt-4">
-                            <p><strong>Nombre:</strong> {{ competencia.nombre }}</p>
-                            <p><strong>Nivel:</strong> {{ competencia.nivel }}</p>
+                    <div class="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white max-w-md w-full">
+                        <!-- Título del modal -->
+                        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Detalles de la Competencia</h2>
+
+                        <!-- Contenido del Modal -->
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Nombre:</strong></p>
+                                <p class="text-gray-600 dark:text-gray-400">{{ competencia.nombre }}</p>
+                            </div>
+                            <div>
+                                <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Nivel:</strong></p>
+                                <p class="text-gray-600 dark:text-gray-400">{{ competencia.nivel }}</p>
+                            </div>
+                             <!-- Estado de verificación -->
+                            <div class="flex items-center justify-start space-x-4 mt-6">
+                                <div class="w-8 h-8 flex items-center justify-center rounded-full 
+                                    {% if competencia.estado %}
+                                        bg-green-500
+                                    {% else %}
+                                        bg-red-500
+                                    {% endif %} text-white">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                    {% if competencia.estado %}
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    {% else %}
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    {% endif %}
+                                    </svg>
+                                </div>
+                                <p class="text-lg font-semibold 
+                                    {% if competencia.estado %}
+                                        text-green-500
+                                    {% else %}
+                                        text-red-500
+                                    {% endif %}">
+                                    {% if competencia.estado %}
+                                        Verificado
+                                    {% else %}
+                                        No Verificado
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
-                        <div class="mt-4 flex justify-end space-x-4">
-                            <!-- Botón de eliminar con formulario POST -->
-                            <form action="{% url 'remove_competence' competencia.id%}" method="post">
+
+                        <!-- Botones de Acción -->
+                        <div class="mt-6 flex justify-between items-center space-x-4">
+                            <!-- Botón Aceptar -->
+                            <form action="{% url 'verify_item' model_name='competencia' item_id=competencia.id docente_id=docente.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white">
-                                    Eliminar
+                                <button type="submit" class="px-4 py-2 text-sm text-green-600 border border-green-600 rounded-lg hover:bg-green-100 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-700 dark:hover:text-white transition duration-200">
+                                    Aceptar
                                 </button>
                             </form>
-                            <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-forth-{{ competencia.id }}">
+
+                            <!-- Botón Rechazar -->
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="px-4 py-2 text-sm text-red-600 border border-red-600 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white transition duration-200">
+                                    Rechazar
+                                </button>
+                            </form>
+
+
+                            <!-- Botón Cerrar -->
+                            <button type="button" class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white transition duration-200" data-modal-toggle="details-modal-forth-{{ competencia.id }}">
                                 Cerrar
                             </button>
                         </div>
@@ -896,14 +1058,8 @@
                 <p class="text-gray-500 dark:text-gray-400">No hay habilidades o idiomas registrados.</p>
             {% endfor %}
         </div>
-
-        <!-- Botón de "+" a la izquierda para agregar una nueva habilidad o idioma -->
-        <div class="w-full mt-6 flex justify-start">
-            <button type="button" data-modal-target="add-skill-language-modal" data-modal-toggle="add-skill-language-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                +
-            </button>
-        </div>
     </div>
+    
 
     <!-- Modal para agregar nueva habilidad o idioma -->
     <div id="add-skill-language-modal" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

@@ -22,8 +22,6 @@ from reportlab.lib.pagesizes import letter
 from .models import Docente
 
 
-
-
 def index(request):
   return render(request ,'users.html')
 
@@ -98,6 +96,20 @@ def all_teachers(request):
     return render(request, 'all_teachers.html', {'docentes': docentes, 'total_docentes': total_docentes})
 
 @login_required
+def create(request):
+    if request.method == "POST":  # Corregido a comillas simples
+        user = request.user
+        docente = user.docente
+        
+        # Crear el CV asociado al docente
+        nuevo_cv = CV.objects.create(docente=docente, fecha_creacion=timezone.now(), estado=1)
+        
+        # Redirige a la página de actualización del CV
+        return redirect('update')  # Asegúrate de tener esta URL en urls.py
+        
+    return render(request, 'create.html')
+
+@login_required
 def consult(request):
     return render(request, 'consult.html')
 
@@ -106,19 +118,34 @@ def consult(request):
 def modify_privacy(request):
     return render(request, 'modify-privacy.html')
 
+@login_required
 def verify(request, docente_id):
     docente = get_object_or_404(Docente, id=docente_id)
+    experiencias_verificadas = all(experiencia.estado for experiencia in docente.cv_docente.experiencia_laboral.all())
+    formaciones_verificadas = all(formacion.estado for formacion in docente.cv_docente.formacion_academica.all())
+    producciones_verificadas = all(produccion.estado for produccion in docente.cv_docente.produccion_academica.all())
+    competencias_verificadas = all(competencia.estado for competencia in docente.cv_docente.competencias.all())
     # Renderiza la plantilla con el docente en el contexto
-    return render(request, 'verify.html', {'docente': docente})
+    
+    contexto = {
+        'docente': docente,
+        'experiencias_verificadas': experiencias_verificadas,
+        'formaciones_verificadas': formaciones_verificadas,
+        'producciones_verificadas': producciones_verificadas,
+        'competencias_verificadas': competencias_verificadas,
+    }
+    
+    return render(request, 'verify.html', contexto)
 
 
+@login_required
 def verify_personal_data(request, docente_id):
     docente = get_object_or_404(Docente, id=docente_id)
     docente.estado = True
     docente.save()
     return render(request, 'verify.html', {'docente': docente})
     
-    
+@login_required
 def verify_item(request, model_name, item_id, docente_id):
     # Diccionario de modelos
     model_mapping = {
@@ -144,23 +171,35 @@ def verify_item(request, model_name, item_id, docente_id):
     return redirect('verify', docente_id)
 
 @login_required
-def create(request):
-    if request.method == "POST":  # Corregido a comillas simples
-        user = request.user
-        docente = user.docente
-        
-        # Crear el CV asociado al docente
-        nuevo_cv = CV.objects.create(docente=docente, fecha_creacion=timezone.now(), estado=1)
-        
-        # Redirige a la página de actualización del CV
-        return redirect('update')  # Asegúrate de tener esta URL en urls.py
-        
-    return render(request, 'create.html')
+def update(request):
+    return render(request, 'update.html')
+
 
 
 @login_required
-def update(request):
-    return render(request, 'update.html')
+def update_status(request, docente_id):
+    # Obtén el docente correspondiente por su ID
+    docente = get_object_or_404(Docente, id=docente_id)
+
+    # Accede al objeto CV asociado al docente
+    cv = docente.cv_docente  # Relación del docente con su CV
+
+    # Si el formulario fue enviado
+    if request.method == 'POST':
+        # Cambiar el estado de activo a inactivo o viceversa según el botón presionado
+        if 'activar' in request.POST:
+            cv.estado = True  # Cambiar a 'Activo'
+            cv.save()  # Guardar cambios en el CV
+        elif 'desactivar' in request.POST:
+            cv.estado = False  # Cambiar a 'Inactivo'
+            cv.save()  # Guardar cambios en el CV
+
+        # Redirige a la misma página o a la página deseada después de la acción
+        return redirect('update_status', docente_id=docente.id)
+
+    # Renderiza la plantilla con los datos del docente y su CV
+    return render(request, 'verify.html', {'docente': docente})
+
 
 @login_required
 def update_social_links(request):
@@ -185,6 +224,7 @@ def update_social_links(request):
 
 @login_required
 def register_experience(request):
+    """Función para registrar una nueva experiencia laboral"""
     if request.method == "POST":
         # Recoger los datos del formulario
         empresa = request.POST.get('empresa')
@@ -224,24 +264,6 @@ def register_experience(request):
 
     return render(request, 'update.html')
 
-
-@login_required
-def get_document(request):
-    if request.method == "POST":
-        cv = request.user.cv
-        document = request.FILES.get('get_certificate')
-        if document:
-            cv.documento = document
-            cv.save()
-            return redirect ('update')
-        if request.POST.get('remove_document') == 'true':
-            cv.documento.delete(save=True)
-            return redirect('update')  # Redirige después de eliminar el documento
-
-    # Si no es un POST o no se subió ningún archivo
-    return HttpResponse("Método no permitido o no se ha subido un documento", status=400)
-        
-            
 
 @login_required
 def remove_experience(request, experiencia_id):
@@ -376,50 +398,30 @@ def privacidad(request):
     return render(request, 'pages/privacidad.html')
 
 
+@login_required
+def get_document(request):
+    if request.method == "POST":
+        cv = request.user.cv
+        document = request.FILES.get('get_certificate')
+        if document:
+            cv.documento = document
+            cv.save()
+            return redirect ('update')
+        if request.POST.get('remove_document') == 'true':
+            cv.documento.delete(save=True)
+            return redirect('update')  # Redirige después de eliminar el documento
+
+    # Si no es un POST o no se subió ningún archivo
+    return HttpResponse("Método no permitido o no se ha subido un documento", status=400)
+
+
 def generate_curriculum(request, docente_id):
-    
-    # Crear el documento en formato Word para edición
     try:
         docente = get_object_or_404(Docente, id=docente_id)
     except Docente.DoesNotExist:
         # Manejo de error, como redirigir o devolver un mensaje adecuado
         return HttpResponse("Docente no encontrado", status=404)
     
-    doc = Document()
-
-    # Títulos y subtítulos
-    doc.add_heading(f'Currículum de {docente.nombre} {docente.apellido}', level=1)
-
-    # Información de contacto
-    doc.add_heading("Información de Contacto", level=2)
-    doc.add_paragraph(f"Cédula: {docente.cedula or 'N/A'}")
-    doc.add_paragraph(f"Correo: {docente.correo or 'N/A'}")
-    doc.add_paragraph(f"Teléfono: {docente.num_telefono or 'N/A'}")
-
-    # Información profesional
-    doc.add_heading("Información Profesional", level=2)
-    doc.add_paragraph(f"Universidad: {docente.universidad or 'N/A'}")
-    doc.add_paragraph(f"Facultad: {docente.facultad or 'N/A'}")
-    doc.add_paragraph(f"Especialidad: {docente.especialidad or 'N/A'}")
-    doc.add_paragraph(f"Categoría: {docente.categoria or 'N/A'}")
-
-    # Detalles del contrato
-    doc.add_heading("Detalles del Contrato", level=2)
-    doc.add_paragraph(f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
-    doc.add_paragraph(f"Estado: {docente.estado or 'N/A'}")
-    doc.add_paragraph(f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
-
-     # Guardar documento Word temporal
-    # temp_word = BytesIO()
-    # doc.save(temp_word)
-    # temp_word.seek(0)
-
-    # # Convertir el documento en PDF
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = f'attachment; filename="{docente.nombre}_{docente.apellido}_curriculum.pdf"'
-
-    # # Crear el PDF con ReportLab
-    # pdf_canvas = canvas.Canvas(response, pagesize=letter)
     # pdf_canvas.setFont("Helvetica", 12)
 
     # Convertir el documento en PDF y almacenarlo en memoria
@@ -450,6 +452,14 @@ def generate_curriculum(request, docente_id):
     y_position -= 20
     pdf_canvas.drawString(120, y_position, f"Categoría: {docente.categoria or 'N/A'}")
     y_position -= 40
+
+    pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
+    y_position -= 20
+    pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
 
     pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
     y_position -= 20
