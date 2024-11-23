@@ -346,7 +346,7 @@ def register_competence(request):
 
         print(f"CV: {cv}")
 
-        nueva_competencias = Competencias(
+        nueva_competencias = Competencia(
             cv=cv, 
             nombre = nombre,
             nivel = nivel,
@@ -363,7 +363,7 @@ def register_competence(request):
 @login_required
 def remove_competence(request, competence_id):
     # Obtener la producción académica que se quiere eliminar
-    competence = get_object_or_404(Competencias, id=competence_id)
+    competence = get_object_or_404(Competencia, id=competence_id)
     competence.delete()
 
     messages.success(request, "Producción académica eliminada correctamente.")
