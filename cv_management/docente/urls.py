@@ -8,4 +8,5 @@ urlpatterns = [
     path('update_picture', update_picture, name= 'update_picture'),
     path('<int:docente_id>/curriculum/',generate_curriculum, name='generate_curriculum_editable'),
     path('settings_teacher/', settings_teacher, name='settings_teacher'),
+    path('reset_password_teacher/', reset_password_teacher, name='reset_password_teacher'),
 ]

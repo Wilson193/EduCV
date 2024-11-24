@@ -9,6 +9,8 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate, login
 
 @login_required
 def update_teacher(request):
@@ -48,6 +50,7 @@ def update_teacher(request):
             docente.especialidad = especialidad
             docente.tipo_contrato = tipo_contrato
             docente.fecha_contratacion = fecha_contratacion
+            docente.estado = 0
             docente.save()
 
             # Actualizamos también los datos del usuario relacionado
@@ -57,33 +60,6 @@ def update_teacher(request):
             user.save()
 
             messages.success(request, "Datos del docente actualizados con éxito.")
-        else:
-            # Si no se encuentra el docente, creamos uno nuevo
-            user.first_name = nombre
-            user.last_name = apellido
-            user.email = correo  # Actualiza el correo del usuario
-            user.save()
-
-            # Crear un nuevo objeto Docente
-            docente = Docente(
-                user=user,
-                nombre=nombre,
-                apellido=apellido,
-                cedula=cedula,
-                num_telefono=num_telefono,
-                universidad=universidad,
-                cargo=cargo,
-                correo=correo,
-                facultad=facultad,
-                categoria=categoria,
-                especialidad=especialidad,
-                tipo_contrato=tipo_contrato,
-                fecha_contratacion=fecha_contratacion,
-            )
-            docente.save()
-
-            messages.success(request, "Docente creado con éxito.")
-
         return redirect('update')
 
     return render(request, 'update.html')  # La plantilla del formulario de actualización
@@ -112,6 +88,28 @@ def update_picture(request):
 @login_required
 def settings_teacher(request):
     return render(request, 'settings_teacher.html')
+
+@login_required
+def reset_password_teacher(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('current-password')
+        new_password = request.POST.get('new-password')
+        
+        user = request.user
+        
+        # Verifica si la contraseña actual es correcta utilizando check_password
+        if check_password(current_password, user.password):
+            # Si la contraseña actual es correcta, actualiza la nueva contraseña
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, "Contraseña actualizada con éxito.")
+            login(request, user)   
+        else:
+            messages.error(request, "La contraseña actual es incorrecta.")
+        
+        return redirect('settings_teacher')
+    
+    return render(request, 'settings_teacher.html')  # La plantilla del formulario de registro
 
 #wilson
 @login_required

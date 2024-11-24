@@ -32,7 +32,7 @@
     <div class="col-span-6">
         <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
             <h3 class="mb-4 text-xl font-semibold dark:text-white">Contraseña</h3>
-            <form method="POST" action="{% url 'reset_password' %}">
+            <form method="POST" action="{% url 'reset_password_teacher' %}">
                 {% csrf_token %}
                 <div class="grid grid-cols-6 gap-6">
                     <div class="col-span-6 sm:col-span-3">

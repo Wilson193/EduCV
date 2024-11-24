@@ -121,12 +121,30 @@ def modify_privacy(request):
 @login_required
 def verify(request, docente_id):
     docente = get_object_or_404(Docente, id=docente_id)
-    experiencias_verificadas = all(experiencia.estado for experiencia in docente.cv_docente.experiencia_laboral.all())
-    formaciones_verificadas = all(formacion.estado for formacion in docente.cv_docente.formacion_academica.all())
-    producciones_verificadas = all(produccion.estado for produccion in docente.cv_docente.produccion_academica.all())
-    competencias_verificadas = all(competencia.estado for competencia in docente.cv_docente.competencias.all())
-    # Renderiza la plantilla con el docente en el contexto
     
+    experiencias = docente.cv_docente.experiencia_laboral.all()
+    formaciones = docente.cv_docente.formacion_academica.all()
+    producciones = docente.cv_docente.produccion_academica.all()
+    competencias = docente.cv_docente.competencias.all()
+
+    # Verificar si las listas están vacías antes de aplicar all()
+    experiencias_verificadas = all(experiencia.estado for experiencia in experiencias) if experiencias else False
+    formaciones_verificadas = all(formacion.estado for formacion in formaciones) if formaciones else False
+    producciones_verificadas = all(produccion.estado for produccion in producciones) if producciones else False
+    competencias_verificadas = all(competencia.estado for competencia in competencias) if competencias else False
+    
+    if (experiencias_verificadas and formaciones_verificadas and 
+        producciones_verificadas and competencias_verificadas and docente.estado):
+        # Solo actualizamos el estado a 'verificado' si no está ya validado
+        if docente.cv_docente.estado_verificacion != 2:
+            docente.cv_docente.estado_verificacion = 1  # Estado 'verificado'
+            docente.cv_docente.save()
+    else:
+        docente.cv_docente.estado_verificacion = 0  # Estado 'verificado'
+        docente.cv_docente.save()
+        
+
+    # Renderiza la plantilla con los datos del docente y el estado de verificación
     contexto = {
         'docente': docente,
         'experiencias_verificadas': experiencias_verificadas,
@@ -134,8 +152,9 @@ def verify(request, docente_id):
         'producciones_verificadas': producciones_verificadas,
         'competencias_verificadas': competencias_verificadas,
     }
-    
+
     return render(request, 'verify.html', contexto)
+
 
 
 @login_required
@@ -143,7 +162,7 @@ def verify_personal_data(request, docente_id):
     docente = get_object_or_404(Docente, id=docente_id)
     docente.estado = True
     docente.save()
-    return render(request, 'verify.html', {'docente': docente})
+    return redirect('verify', docente_id)
     
 @login_required
 def verify_item(request, model_name, item_id, docente_id):
@@ -194,8 +213,19 @@ def update_status(request, docente_id):
             cv.estado = False  # Cambiar a 'Inactivo'
             cv.save()  # Guardar cambios en el CV
 
+        # Cambiar el estado de verificación a validado
+        elif 'validar' in request.POST:
+            if cv.estado_verificacion == 1:  # Si el estado actual es "Verificado" (suponiendo que 1 es 'Verificado')
+                cv.estado_verificacion = 2  # Cambiar a 'Validado'
+                cv.save()  # Guardar cambios en el CV
+                messages.success(request, 'El CV ha sido marcado como validado.')  # Mensaje de éxito
+            else: 
+                # cv.estado_verificacion = 0  # Cambiar a 'Validado'
+                # cv.save()  # Guardar cambios en el CV
+                messages.error(request, 'El CV debe estar en estado "Verificado" para ser validado.')  # Mensaje de error
+
         # Redirige a la misma página o a la página deseada después de la acción
-        return redirect('update_status', docente_id=docente.id)
+        return redirect('verify', docente_id=docente.id)
 
     # Renderiza la plantilla con los datos del docente y su CV
     return render(request, 'verify.html', {'docente': docente})
