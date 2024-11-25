@@ -65,7 +65,7 @@ def update_teacher(request):
     return render(request, 'update.html')  # La plantilla del formulario de actualización
 
 @login_required
-def update_picture(request):
+def update_picture_teacher(request):
     if request.method == "POST":
         docente = request.user.docente
         print(f"Docente: {docente}")

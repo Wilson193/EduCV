@@ -3,6 +3,9 @@ from django.contrib import messages
 from .models import CoordinadorAcademico
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
 
 def settings(request):
     return render(request, 'settings.html')
@@ -27,7 +30,19 @@ def reset_password(request):
     
     return render(request, 'settings.html')  # La plantilla del formulario de registro
 
-            
+@login_required
+def update_picture_coordinator(request):
+    if request.method == "POST":
+        coordinador = request.user.coordinador_academico
+        photo = request.FILES.get('profile_picture_coordinator')
+        if photo: 
+            coordinador.foto = photo
+            coordinador.save()
+            return redirect('settings')  # Cambia el nombre según la vista deseada
+        if request.POST.get('remove_picture_coordinator') == 'true':
+            coordinador.foto.delete(save=True)
+            return redirect('settings')
+    return HttpResponse("Método no permitido o no se ha subido una imagen", status=400)    
         
         
 def update_coordinator(request):

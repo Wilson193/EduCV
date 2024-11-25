@@ -21,6 +21,23 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from .models import Docente
 
+@login_required
+def notification_view(request):
+    # Obtener el docente actual y las observaciones no leídas
+    docente = request.user.docente  # Asumiendo que tienes la relación con el docente
+    unread_notifications = docente.cv_docente.observaciones.filter(leido=False).count()
+    return unread_notifications
+
+
+@login_required
+def dashboard(request):
+    # es_coordinador = request.user.groups.filter(name='coordinador').exists()
+    user = request.user
+    if user.rol == 'Docente':
+        unread_notifications = notification_view(request)
+        return render(request, 'pages/dashboard.html', {'unread_notifications': unread_notifications})
+    return render(request, 'pages/dashboard.html')
+
 
 def index(request):
   return render(request ,'users.html')
@@ -111,7 +128,8 @@ def create(request):
 
 @login_required
 def consult(request):
-    return render(request, 'consult.html')
+    unread_notifications = notification_view(request)
+    return render(request, 'consult.html', {'unread_notifications': unread_notifications})
 
 
 @login_required
@@ -191,8 +209,35 @@ def verify_item(request, model_name, item_id, docente_id):
 
 @login_required
 def update(request):
-    return render(request, 'update.html')
+    """Llama a la vista update para poder ver los datos que se pueden modificar"""
+    unread_notifications = notification_view(request)
+    return render(request, 'update.html', {'unread_notifications': unread_notifications})
 
+
+@login_required
+def create_observation(request, docente_id):
+    if request.method == 'POST':
+        contenido = request.POST.get('correction')
+        
+        if contenido:
+            docente = get_object_or_404(Docente, id=docente_id)
+            cv = docente.cv_docente  # Suponiendo que cada docente tiene un CV relacionado
+            
+            # Verifica si el usuario actual es un coordinador académico
+            coordinador = get_object_or_404(CoordinadorAcademico, user=request.user)
+            
+            # Crea la observación
+            Observacion.objects.create(
+                cv=cv,
+                autor=coordinador,
+                contenido=contenido
+            )
+            
+            # Redirecciona a la página de verificación del CV del docente
+            return redirect('verify', docente_id=docente.id)
+    
+    # Si algo falla o no hay datos, redirige a la misma página o a una página de error
+    return redirect('verify', docente_id=docente_id)
 
 
 @login_required
@@ -490,14 +535,54 @@ def generate_curriculum(request, docente_id):
     pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
     y_position -= 20
     pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
+    y_position -= 40
 
-    pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
+
+    # Añadir competencias al PDF
+    pdf_canvas.drawString(100, y_position, "Competencias:")
     y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
+    competencias = docente.cv_docente.competencias.all()
+    for competencia in competencias:
+        pdf_canvas.drawString(120, y_position, f"Nombre: {competencia.nombre or 'N/A'}, Nivel: {competencia.nivel or 'N/A'}")
+        y_position -= 40
+
+    # Añadir experiencias laborales al PDF
+    pdf_canvas.drawString(100, y_position, "Experiencia Laboral:")
     y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
+    experiencias = docente.cv_docente.experiencia_laboral.all()
+    for experiencia in experiencias:
+        pdf_canvas.drawString(120, y_position, f"Empresa: {experiencia.lugar_trabajo}, Cargo: {experiencia.cargo}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Desde: {experiencia.fecha_inicio} Hasta: {experiencia.fecha_fin}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Descripción: {experiencia.descripcion}")
+        y_position -= 40
+
+    # Añadir formación académica al PDF
+    pdf_canvas.drawString(100, y_position, "Formación Académica:")
     y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
+    formaciones = docente.cv_docente.formacion_academica.all()
+    for formacion in formaciones:
+        pdf_canvas.drawString(120, y_position, f"Nivel: {formacion.nivel}, Institución: {formacion.institucion}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Título: {formacion.titulo}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Desde: {formacion.fecha_inicio} Hasta: {formacion.fecha_fin}")
+        y_position -= 40
+
+    # Añadir producción académica al PDF
+    pdf_canvas.drawString(100, y_position, "Producción Académica:")
+    y_position -= 20
+    producciones = docente.cv_docente.produccion_academica.all()
+    for produccion in producciones:
+        pdf_canvas.drawString(120, y_position, f"Tipo: {produccion.tipo}, Título: {produccion.titulo}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Fecha de Publicación: {produccion.fecha_publicacion}")
+        y_position -= 20
+        pdf_canvas.drawString(120, y_position, f"Descripción: {produccion.descripcion}")
+        y_position -= 40
+
+        
 
     # Finalizar PDF
     pdf_canvas.save()

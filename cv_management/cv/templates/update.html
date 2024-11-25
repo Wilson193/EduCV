@@ -15,18 +15,18 @@
               <li>
                 <div class="flex items-center">
                   <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                  <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Curriculum Vitae</a>
+                  <a class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Curriculum Vitae</a>
                 </div>
               </li>
               <li>
                 <div class="flex items-center">
                   <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                  <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Registrar</span>
+                  <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Actualizar</span>
                 </div>
               </li>
             </ol>
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Registrar Curriculum Vitae</h1>
+        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Actualizar Curriculum Vitae</h1>
     </div>
     <!-- Right Content -->
     <div class="col-span-full xl:col-auto">
@@ -45,8 +45,8 @@
                         <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
                             JPG o PNG.
                         </div>
-                        <!-- Formulario para cargar imagen -->
-                        <form action="{% url 'update_picture' %}" method="POST" enctype="multipart/form-data">
+                        <!-- Formulario para cargar imagen --> <!-- Hice cambio aquí -->
+                        <form action="{% url 'update_picture_teacher' %}" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="flex items-center space-x-4 justify-center"> <!-- Centrado de los botones -->
                                 <!-- Campo de carga de imagen -->
@@ -570,18 +570,41 @@
 
         <!-- Contenedor de las habilidades e idiomas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {% for competencia in user.docente.cv_docente.competencias.all %}
-                <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
-                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ competencia.nombre }}</h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Nivel: {{ competencia.nivel }}</p>
-                    
-                    <!-- Botón para abrir el modal de detalles -->
-                    <div class="mt-4 flex justify-between items-center">
-                        <button type="button" data-modal-target="details-modal-forth-{{ competencia.id }}" data-modal-toggle="details-modal-forth-{{ competencia.id }}" class="px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700">
-                            Detalles
-                        </button>
-                    </div>
-                </div>
+            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
+                    <li class="py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <!-- Icono de empresa -->
+                                <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
+                                    {{ experiencia.lugar_trabajo }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ experiencia.cargo }} | {{ experiencia.lugar_trabajo }}
+                                </p>
+                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
+                                    {{ experiencia.fecha_inicio }} - {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}
+                                </p>
+                            </div>
+                            <div class="inline-flex items-center">
+                                <!-- Botón de detalles que abre el modal -->
+                                <button type="button" data-modal-target="details-modal-{{ experiencia.id }}" data-modal-toggle="details-modal-{{ experiencia.id }}" class="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    Detalles
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                {% empty %}
+                <li class="py-4">
+                    <p class="text-gray-500 dark:text-gray-400">No hay experiencias profesionales registradas.</p>
+                </li>
+                {% endfor %}
+            </ul>
 
                 <!-- Modal de detalles de competencia -->
                 <div id="details-modal-forth-{{ competencia.id }}" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">

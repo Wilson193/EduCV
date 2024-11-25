@@ -1,5 +1,13 @@
 from django.db import models
 from docente.models import Docente
+from coordinador_academico.models import CoordinadorAcademico
+
+class Observacion(models.Model):
+    cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='observaciones')
+    autor = models.ForeignKey(CoordinadorAcademico, on_delete=models.CASCADE)  # Relación actualizada
+    contenido = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    leido = models.BooleanField(default=False)  # Para que el docente marque como leído
 
 class Competencia(models.Model):
     nombre = models.CharField(max_length=100)
