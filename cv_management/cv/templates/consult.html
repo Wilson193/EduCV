@@ -30,14 +30,31 @@
                     </div>
                 </li>
             </ol>
+            
         </nav>
+        <button id="show-pdf" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 float-right">Abrir PDF</button>
         <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Consultar CV</h1>
-    </div>    
+
+        <div>
+        
+
+
+
+        {% comment %} <button id="show-pdf" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Mostrar PDF</button>
+        <div id="pdf-container" class="flow-root w-full hidden">
+            <div class="pdf-container w-full">
+                <!-- Aquí insertamos el iframe -->
+                <iframe id="pdf-viewer" class="w-full h-[600px] border-none" src=""></iframe>
+            </div>
+        </div> {% endcomment %}
+    </div> 
+    </div> 
+      
 </div>
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex flex-col items-center">
-        <section class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
+        <section class="py-8 px-4 bg-white md:py-16 dark:bg-gray-900 antialiased">
             <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
                 <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
                     <div class="flex justify-center mb-4"> <!-- Centrado de la imagen -->
@@ -101,7 +118,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 
                 {% for produccion in user.docente.cv_docente.produccion_academica.all %}
-                    <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-6 flex flex-col justify-between">
+                    <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-2 flex flex-col justify-between break-words">
                         <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
                         <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
                         <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p> <!-- Descripción agregada -->
@@ -123,12 +140,20 @@
                         Competencias
                         </h1>
 
-                 <p class="name: descripcion text-gray-500 dark:text-gray-400">
-                 Aqui van las formaciones del docente
+                 <p class="name: descripcion2 mb-6 text-gray-500 dark:text-gray-400">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for produccion in user.docente.cv_docente.produccion_academica.all %}
+                <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-2 flex flex-col justify-between break-words">
+                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p> <!-- Descripción agregada -->
+                </div>
+            {% empty %}
+                <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
+            {% endfor %}
+        </div>
           </p>       
             </div>
-
-          
 
           <div class="mt-6 sm:mt-8 lg:mt-0">
                         
@@ -224,19 +249,8 @@
     </div>
 </div>
 
-<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex flex-col items-center">
-        <button id="show-pdf" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Mostrar PDF</button>
-        <div id="pdf-container" class="flow-root w-full hidden">
-            <div class="pdf-container w-full">
-                <!-- Aquí insertamos el iframe -->
-                <iframe id="pdf-viewer" class="w-full h-[600px] border-none" src=""></iframe>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script>
+{% comment %} <script>
     document.getElementById('show-pdf').addEventListener('click', function() {
         const pdfContainer = document.getElementById('pdf-container');
         const pdfViewer = document.getElementById('pdf-viewer');
@@ -254,6 +268,15 @@
             pdfContainer.classList.add('hidden');
             button.textContent = "Mostrar PDF"; // Cambiar texto del botón
         }
+    });
+</script> {% endcomment %}
+
+<script>
+    document.getElementById('show-pdf').addEventListener('click', function() {
+        const url = "{% url 'generate_curriculum' docente_id=user.docente.id %}";
+
+        // Abre el PDF en una nueva pestaña
+        window.open(url, '_blank');
     });
 </script>
 

@@ -42,6 +42,8 @@ def dashboard(request):
 def index(request):
   return render(request ,'users.html')
 
+def consultdocentes(request):
+  return render(request ,'consultdocentes.html')
 
 def search(request):
     return render(request, 'search.html')
