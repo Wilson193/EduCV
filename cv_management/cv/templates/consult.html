@@ -37,217 +37,117 @@
 
         <div>
         
-
-
-
-        {% comment %} <button id="show-pdf" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Mostrar PDF</button>
-        <div id="pdf-container" class="flow-root w-full hidden">
-            <div class="pdf-container w-full">
-                <!-- Aquí insertamos el iframe -->
-                <iframe id="pdf-viewer" class="w-full h-[600px] border-none" src=""></iframe>
-            </div>
-        </div> {% endcomment %}
     </div> 
     </div> 
       
 </div>
 
-<div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
-    <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex flex-col items-center">
-        <section class="py-8 px-4 bg-white md:py-16 dark:bg-gray-900 antialiased">
-            <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
-                <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
-                    <div class="flex justify-center mb-4"> <!-- Centrado de la imagen -->
-                        <img class="rounded-full w-67 h-67 mx-auto" 
-                             src="{% if user.docente.foto %}{{ user.docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" 
-                             alt="Foto de perfil">
-                    </div>
-
-                    <div class="mt-6 sm:mt-8 lg:mt-0">
-                        
-                        <h1
-                         class="text-4xl font-bold text-gray-900 sm:text-5xl dark:text-white"
-                        >
-                        {{ user.docente.nombre }} {{ user.docente.apellido}}
-                        </h1>
-                    <div class="mt-4 sm:flex sm:items-center sm:gap-4">
-                    <h1 class="text-4xl  text-gray-900 sm:text-base dark:text-white">
-                        Docente {{ user.docente.tipo_contrato }} de {{ user.docente.especialidad }} programa de {{ user.docente.facultad }} en {{ user.docente.universidad }} (desde {{ user.docente.fecha_contratacion }})
-                    </h1>
-                    </div>
-
-
-                    <div class="mt-3 sm:gap-4 sm:items-center sm:flex sm:mt-5">
-                        <div class="flex justify-center space-x-4">
-                            {% if docente.cv_docente.linkedin != 'None' %}
-                                <a href="{{ docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500">
-                                    <!-- Icono de LinkedIn con FontAwesome -->
-                                    <i class="fab fa-linkedin fa-1x"></i>
-                                </a>
-                            {% endif %}
-        
-                            {% if docente.cv_docente.x != 'None' %}
-                                <a href="{{ docente.cv_docente.x }}" target="_blank" class="text-blue-500 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-400">
-                                <!-- Icono de X (anteriormente Twitter) con FontAwesome -->
-                                <i class="fab fa-x fa-1x"></i>
-                                </a>
-                            {% endif %}
-        
-                            {% if docente.cv_docente.github != 'None' %}
-                                <a href="{{ docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">
-                                    <!-- Icono de GitHub con FontAwesome -->
-                                    <i class="fab fa-github fa-1x"></i>
-                                </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    
-
-          <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
-
-          <div class="mt-6 sm:mt-8 lg:mt-0">
-                        
-                        <h1
-                         class="text-4xl font-bold text-gray-900 sm:text-3xl dark:text-white"
-                        >
-                        Producción Academica
-                        </h1>
+<div class="container mx-auto px-4 py-6">
+    <!-- Header Principal -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center justify-between dark:border-gray-700 dark:bg-gray-800">
+        <div class="flex items-center">
+            <img
+                class="w-24 h-24 rounded-full shadow-md border-4 border-white"
+                src="{% if user.docente.foto %}{{ user.docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}"
+                alt="Foto de perfil"
+            />
+            <div class="ml-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ user.docente.nombre }} {{ user.docente.apellido }}</h1>
+                <p class="text-base md:text-lg mt-1 text-gray-700 dark:text-gray-300">Docente {{ user.docente.tipo_contrato }} de {{ user.docente.especialidad }}</p>
+                <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Facultad: {{ user.docente.facultad }} - {{ user.docente.universidad }}</p>
             </div>
-
-          <p class="name: descripcion2 mb-6 text-gray-500 dark:text-gray-400">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                
-                {% for produccion in user.docente.cv_docente.produccion_academica.all %}
-                    <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-2 flex flex-col justify-between break-words">
-                        <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
-                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p> <!-- Descripción agregada -->
-                    </div>
-                 {% empty %}
-                        <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
-                {% endfor %}
-            </div>
-          </p>
-
-          
         </div>
-
-            <div class="mt-6 sm:mt-8 lg:mt-0">
-                        
-                        <h1
-                         class="text-4xl font-bold text-gray-900 sm:text-3xl dark:text-white"
-                        >
-                        Competencias
-                        </h1>
-
-                 <p class="name: descripcion2 mb-6 text-gray-500 dark:text-gray-400">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {% for produccion in user.docente.cv_docente.produccion_academica.all %}
-                <div class="bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 p-2 flex flex-col justify-between break-words">
-                    <h5 class="text-lg font-semibold text-gray-900 dark:text-white">{{ produccion.titulo }}</h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{{ produccion.descripcion }}</p> <!-- Descripción agregada -->
-                </div>
-            {% empty %}
-                <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
-            {% endfor %}
+        <div class="mt-4 md:mt-0 flex space-x-4">
+            {% if docente.cv_docente.linkedin != 'None' %}
+            <a href="{{ docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
+                <i class="fab fa-linkedin fa-2x"></i>
+            </a>
+            {% endif %}
+            {% if docente.cv_docente.x != 'None' %}
+            <a href="{{ docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
+                <i class="fab fa-twitter fa-2x"></i>
+            </a>
+            {% endif %}
+            {% if docente.cv_docente.github != 'None' %}
+            <a href="{{ docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
+                <i class="fab fa-github fa-2x"></i>
+            </a>
+            {% endif %}
         </div>
-          </p>       
-            </div>
-
-          <div class="mt-6 sm:mt-8 lg:mt-0">
-                        
-                        <h1
-                         class="text-4xl font-bold text-gray-900 sm:text-3xl dark:text-white"
-                        >
-                        Experencia Laboral
-                        </h1>
-
-                     <p class="name: descripcion text-gray-500 dark:text-gray-400">
-            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
-                    <li class="py-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-shrink-0">
-                                <!-- Icono de empresa -->
-                                <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                    {{ experiencia.lugar_trabajo }}
-                                </p>
-                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    {{ experiencia.cargo }} | {{ experiencia.lugar_trabajo }}
-                                </p>
-                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    {{ experiencia.fecha_inicio }} - {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}
-                                </p>
-                            </div>
-                            
-                        </div>
-                    </li>
-                {% empty %}
-                <li class="py-4">
-                    <p class="text-gray-500 dark:text-gray-400">No hay experiencias profesionales registradas.</p>
-                </li>
-                {% endfor %}
-            </ul>
-          </p>   
-            </div>
-
-            
-
-          <div class="mt-6 sm:mt-8 lg:mt-0">
-                        
-                        <h1
-                         class="text-4xl font-bold text-gray-900 sm:text-3xl dark:text-white"
-                        >
-                        Formación Academica
-                        </h1>
-
-                    <p class="name: descripcion text-gray-500 dark:text-gray-400">
-                    <ul class="divide-y divide-gray-200 dark:divide-gray-700">
-                {% for formacion in user.docente.cv_docente.formacion_academica.all %}
-                    <li class="py-4">
-                        <div class="flex items-center space-x-4">
-                            <div class="flex-shrink-0">
-                                <!-- Icono de institución -->
-                                <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-base font-semibold text-gray-900 truncate dark:text-white">
-                                    {{ formacion.titulo }} en {{ formacion.institucion }}
-                                </p>
-                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    {{ formacion.ciudad }}, {{ formacion.pais }}
-                                </p>
-                                <p class="text-sm font-normal text-gray-500 truncate dark:text-gray-400">
-                                    Desde {{ formacion.fecha_inicio|date:"Y-m-d" }} hasta {{ formacion.fecha_fin|date:"Y-m-d" }}
-                                </p>
-                            </div>
-                            
-                        </div>
-                    </li>
-                {% empty %}
-                    <li class="py-4">
-                        <p class="text-gray-500 dark:text-gray-400">No hay formaciones académicas registradas.</p>
-                    </li>
-                {% endfor %}
-            </ul>
-          </p>    
-            </div>
-
-            
-
-      </div>
     </div>
-  </section>
+
+    <!-- Contenido Principal -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <!-- Producción Académica -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Producción Académica</h2>
+            <div class="space-y-4">
+                {% for produccion in user.docente.cv_docente.produccion_academica.all %}
+                <div class="bg-gray-50 p-3 rounded-md shadow">
+                    <h3 class="text-lg font-semibold text-gray-700">{{ produccion.titulo }}</h3>
+                    <p class="text-sm text-gray-600">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
+                    <p class="text-sm mt-2">{{ produccion.descripcion }}</p>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No hay producciones académicas registradas.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Competencias -->
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h2 class="text-xl font-bold text-gray-900 mb-4">Competencias</h2>
+            <div class="space-y-4">
+                {% for competencia in user.docente.cv_docente.competencias.all %}
+                <div class="bg-gray-50 p-3 rounded-md shadow">
+                    <h3 class="text-lg font-semibold text-gray-700">{{ competencia.nombre }}</h3>
+                    <p class="text-sm text-gray-600">{{ competencia.descripcion }}</p>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No hay competencias registradas.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección en Acordeón -->
+    <div class="mt-8 space-y-6">
+        <!-- Experiencia Laboral -->
+        <div class="bg-white shadow-md rounded-lg">
+            <button class="w-full text-left bg-gray-100 px-4 py-3 text-gray-800 font-bold focus:outline-none dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                Experiencia Laboral
+            </button>
+            <div class="p-4 space-y-4">
+                {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
+                <div class="bg-gray-50 p-3 rounded-md shadow">
+                    <h3 class="text-lg font-semibold">{{ experiencia.cargo }}</h3>
+                    <p class="text-sm">{{ experiencia.lugar_trabajo }} | {{ experiencia.fecha_inicio }} - {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}</p>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No hay experiencias laborales registradas.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Formación Académica -->
+        <div class="bg-white shadow-md rounded-lg">
+            <button class="w-full text-left bg-gray-100 px-4 py-3 text-gray-800 font-bold focus:outline-none dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
+                Formación Académica
+            </button>
+            <div class="p-4 space-y-4">
+                {% for formacion in user.docente.cv_docente.formacion_academica.all %}
+                <div class="bg-gray-50 p-3 rounded-md shadow">
+                    <h3 class="text-lg font-semibold">{{ formacion.titulo }}</h3>
+                    <p class="text-sm">{{ formacion.institucion }} | {{ formacion.fecha_inicio|date:"Y-m-d" }} - {{ formacion.fecha_fin|date:"Y-m-d" }}</p>
+                </div>
+                {% empty %}
+                <p class="text-gray-500">No hay formación académica registrada.</p>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 {% comment %} <script>

@@ -152,7 +152,7 @@
         
             <!-- Nuevo componente: Cambiar Estado a Validado -->
             <div class="mt-6">
-                <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Cambiar Estado de Verificación</h4>
+                <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">Cambiar Estado de Validación</h4>
                 <form method="POST" action="{% url 'update_status' docente_id=docente.id %}">
                     {% csrf_token %}
                     <button 
