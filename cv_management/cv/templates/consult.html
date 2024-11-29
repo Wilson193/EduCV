@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+ {% extends 'base.html' %}
 {% load static %}
 {% block content %}
 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
@@ -58,53 +58,83 @@
             </div>
         </div>
         <div class="mt-4 md:mt-0 flex space-x-4">
-            {% if docente.cv_docente.linkedin != 'None' %}
-            <a href="{{ docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
+            {% if user.docente.cv_docente.linkedin != 'None' %}
+            <a href="{{ user.docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
                 <i class="fab fa-linkedin fa-2x"></i>
             </a>
             {% endif %}
-            {% if docente.cv_docente.x != 'None' %}
-            <a href="{{ docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
+            {% if user.docente.cv_docente.x != 'None' %}
+            <a href="{{ user.docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
                 <i class="fab fa-twitter fa-2x"></i>
             </a>
             {% endif %}
-            {% if docente.cv_docente.github != 'None' %}
-            <a href="{{ docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
+            {% if user.docente.cv_docente.github != 'None' %}
+            <a href="{{ user.docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
                 <i class="fab fa-github fa-2x"></i>
             </a>
             {% endif %}
         </div>
     </div>
+    <!-- Sección de Contacto -->
+    <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 mt-8">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Contacto</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <p class="text-gray-600 dark:text-gray-400"><strong>Email:</strong> {{ user.docente.correo }}</p>
+                <p class="text-gray-600 dark:text-gray-400"><strong>Teléfono:</strong> {{ user.docente.num_telefono }}</p>
+            </div>
+            <div class="flex space-x-4">
+                <!-- Botón de Gmail -->
+                <a href="https://mail.google.com/mail/?view=cm&to={{ user.docente.correo }}" 
+                target="_blank" 
+                class="flex items-center space-x-2 text-red-600 hover:text-red-500 dark:hover:text-red-400">
+                    <i class="fab fa-google fa-2x"></i>
+                    <span class="text-sm font-semibold">Gmail</span>
+                </a>
+                
+                <!-- Botón de Outlook -->
+                <a href="https://outlook.office.com/mail/deeplink/compose?to={{ user.docente.correo }}" 
+                target="_blank" 
+                class="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:hover:text-blue-400">
+                    <i class="fab fa-microsoft fa-2x"></i>
+                    <span class="text-sm font-semibold">Outlook</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Contenido Principal -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <!-- Producción Académica -->
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Producción Académica</h2>
+        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Producción Académica</h2>
             <div class="space-y-4">
                 {% for produccion in user.docente.cv_docente.produccion_academica.all %}
-                <div class="bg-gray-50 p-3 rounded-md shadow">
-                    <h3 class="text-lg font-semibold text-gray-700">{{ produccion.titulo }}</h3>
-                    <p class="text-sm text-gray-600">{{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}</p>
-                    <p class="text-sm mt-2">{{ produccion.descripcion }}</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ produccion.titulo }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}
+                    </p>
+                    <p class="text-sm mt-1 text-gray-700 dark:text-gray-300">{{ produccion.descripcion }}</p>
                 </div>
                 {% empty %}
-                <p class="text-gray-500">No hay producciones académicas registradas.</p>
+                <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Competencias -->
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Competencias</h2>
+        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Competencias</h2>
             <div class="space-y-4">
                 {% for competencia in user.docente.cv_docente.competencias.all %}
-                <div class="bg-gray-50 p-3 rounded-md shadow">
-                    <h3 class="text-lg font-semibold text-gray-700">{{ competencia.nombre }}</h3>
-                    <p class="text-sm text-gray-600">{{ competencia.descripcion }}</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ competencia.nombre }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ competencia.descripcion }}</p>
                 </div>
                 {% empty %}
-                <p class="text-gray-500">No hay competencias registradas.</p>
+                <p class="text-gray-500 dark:text-gray-400">No hay competencias registradas.</p>
                 {% endfor %}
             </div>
         </div>
@@ -113,63 +143,52 @@
     <!-- Sección en Acordeón -->
     <div class="mt-8 space-y-6">
         <!-- Experiencia Laboral -->
-        <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-white shadow-md rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
             <button class="w-full text-left bg-gray-100 px-4 py-3 text-gray-800 font-bold focus:outline-none dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
                 Experiencia Laboral
             </button>
-            <div class="p-4 space-y-4">
+            <div class="p-6 space-y-4">
                 {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
-                <div class="bg-gray-50 p-3 rounded-md shadow">
-                    <h3 class="text-lg font-semibold">{{ experiencia.cargo }}</h3>
-                    <p class="text-sm">{{ experiencia.lugar_trabajo }} | {{ experiencia.fecha_inicio }} - {% if experiencia.fecha_fin %}{{ experiencia.fecha_fin }}{% else %}Presente{% endif %}</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ experiencia.cargo }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ experiencia.lugar_trabajo }} | {{ experiencia.fecha_inicio }} - 
+                        {% if experiencia.fecha_fin %}
+                            {{ experiencia.fecha_fin }}
+                        {% else %}
+                            Presente
+                        {% endif %}
+                    </p>
                 </div>
                 {% empty %}
-                <p class="text-gray-500">No hay experiencias laborales registradas.</p>
+                <p class="text-gray-500 dark:text-gray-400">No hay experiencias laborales registradas.</p>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Formación Académica -->
-        <div class="bg-white shadow-md rounded-lg">
+        <div class="bg-white shadow-md rounded-lg border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
             <button class="w-full text-left bg-gray-100 px-4 py-3 text-gray-800 font-bold focus:outline-none dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
                 Formación Académica
             </button>
-            <div class="p-4 space-y-4">
+            <div class="p-6 space-y-4">
                 {% for formacion in user.docente.cv_docente.formacion_academica.all %}
-                <div class="bg-gray-50 p-3 rounded-md shadow">
-                    <h3 class="text-lg font-semibold">{{ formacion.titulo }}</h3>
-                    <p class="text-sm">{{ formacion.institucion }} | {{ formacion.fecha_inicio|date:"Y-m-d" }} - {{ formacion.fecha_fin|date:"Y-m-d" }}</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ formacion.titulo }}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ formacion.institucion }} | {{ formacion.fecha_inicio|date:"Y-m-d" }} - 
+                        {{ formacion.fecha_fin|date:"Y-m-d" }}
+                    </p>
                 </div>
                 {% empty %}
-                <p class="text-gray-500">No hay formación académica registrada.</p>
+                <p class="text-gray-500 dark:text-gray-400">No hay formación académica registrada.</p>
                 {% endfor %}
             </div>
         </div>
-    </div>
+
 </div>
 
 
-
-{% comment %} <script>
-    document.getElementById('show-pdf').addEventListener('click', function() {
-        const pdfContainer = document.getElementById('pdf-container');
-        const pdfViewer = document.getElementById('pdf-viewer');
-        const button = this;
-
-        if (pdfContainer.classList.contains('hidden')) {
-            // Mostrar PDF
-            const url = "{% url 'generate_curriculum' docente_id=user.docente.id %}";
-            pdfViewer.src = url;
-            pdfContainer.classList.remove('hidden');
-            button.textContent = "Ocultar PDF"; // Cambiar texto del botón
-        } else {
-            // Ocultar PDF
-            pdfViewer.src = ""; // Limpia el iframe
-            pdfContainer.classList.add('hidden');
-            button.textContent = "Mostrar PDF"; // Cambiar texto del botón
-        }
-    });
-</script> {% endcomment %}
 
 <script>
     document.getElementById('show-pdf').addEventListener('click', function() {
