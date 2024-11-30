@@ -2,6 +2,14 @@ from django.db import models
 from docente.models import Docente
 from coordinador_academico.models import CoordinadorAcademico
 
+class PrivacidadCV():
+    cv = models.OneToOneField('CV', on_delete=models.CASCADE, related_name="privacidad")
+    linkedin_visible = models.BooleanField(default=True)
+    x_visible = models.BooleanField(default=True)
+    github_visible = models.BooleanField(default=True)
+    gmail_enviable = models.BooleanField(default=True)
+    outlook_enviable = models.BooleanField(default=True)
+
 class Observacion(models.Model):
     cv = models.ForeignKey('CV', on_delete=models.CASCADE, related_name='observaciones')
     autor = models.ForeignKey(CoordinadorAcademico, on_delete=models.CASCADE)  # Relación actualizada
@@ -61,13 +69,3 @@ class CV(models.Model):
     
     estado_verificacion = models.IntegerField(choices=ESTADOS_VERIFICACION, default=0)
     docente = models.OneToOneField(Docente, on_delete=models.CASCADE, related_name="cv_docente")
-
-# class PrivacidaDatos(models.Model):
-#     # numero
-#     # cedula
-#     # correo 
-#     # ciudad
-#     # postal 
-#     # experiencia 
-#     # formacion 
-#     # produccion 

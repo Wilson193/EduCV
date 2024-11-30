@@ -25,3 +25,15 @@ class Docente(Persona):
     fecha_contratacion = models.DateField(null=True, blank=True)
     estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.OneToOneField('cv.CV', on_delete=models.CASCADE, null=True, blank=True, related_name='docente_cv')
+
+class PrivacidadDocente(models.Model):
+    docente = models.OneToOneField(Docente, on_delete=models.CASCADE)
+    cedula_visible = models.BooleanField(default=True)
+    num_telefono_visible = models.BooleanField(default=True)
+    correo_visible = models.BooleanField(default=True)
+    categoria_visible = models.BooleanField(default=True)
+    tipo_contrato_visible = models.BooleanField(default=True)
+    fecha_contratacion_visible = models.BooleanField(default=True)
+
+    
+
