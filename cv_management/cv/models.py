@@ -2,7 +2,7 @@ from django.db import models
 from docente.models import Docente
 from coordinador_academico.models import CoordinadorAcademico
 
-class PrivacidadCV():
+class PrivacidadCV(models.Model):
     cv = models.OneToOneField('CV', on_delete=models.CASCADE, related_name="privacidad")
     linkedin_visible = models.BooleanField(default=True)
     x_visible = models.BooleanField(default=True)

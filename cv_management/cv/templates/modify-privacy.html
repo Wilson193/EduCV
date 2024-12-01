@@ -27,9 +27,7 @@
             </ol>
         </nav>
         <div class="flex items-center justify-between">
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Configuración de Privacidad</h1>
-            <button type="submit" class="px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar cambios</button>
-        </div>
+            <h1 class="mb-2 text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Configuración de Privacidad</h1>        </div>
     </div>
     
 </div>
@@ -48,7 +46,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Número de identificación</div>
                     </div>
                     <label for="company-news" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="company-news" class="sr-only">
+                        <input type="checkbox" id="company-news" name="cedula_visible" class="sr-only" 
+                        {% if user.docente.privacidad.cedula_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -59,7 +58,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra un número de teléfono de contacto</div>
                     </div>
                     <label for="account-activity" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="account-activity" class="sr-only">
+                        <input type="checkbox" id="account-activity" name="num_telefono_visible" class="sr-only" 
+                        {% if user.docente.privacidad.num_telefono_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -70,7 +70,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra algún correo disponible</div>
                     </div>
                     <label for="meetups" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="meetups" class="sr-only" checked>
+                        <input type="checkbox" id="meetups" name="correo_visible" class="sr-only" 
+                        {% if user.docente.privacidad.correo_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -81,7 +82,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra que tipo de docente eres</div>
                     </div>
                     <label for="new-messages" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="new-messages" class="sr-only">
+                        <input type="checkbox" id="new-messages" name="categoria_visible" class="sr-only" 
+                        {% if user.docente.privacidad.categoria_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -91,8 +93,9 @@
                         <div class="text-lg font-semibold text-gray-900 dark:text-white">Tipo de contrato</div>
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Información referente a tu contratación</div>
                     </div>
-                    <label for="new-messages" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="new-messages" class="sr-only">
+                    <label for="new-contract" class="relative flex items-center cursor-pointer">
+                        <input type="checkbox" id="new-contract" name="tipo_contrato_visible" class="sr-only" 
+                        {% if user.docente.privacidad.tipo_contrato_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -102,8 +105,9 @@
                         <div class="text-lg font-semibold text-gray-900 dark:text-white">Fecha de contratación</div>
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Información referente a tu contratación</div>
                     </div>
-                    <label for="new-messages" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="new-messages" class="sr-only">
+                    <label for="new-date" class="relative flex items-center cursor-pointer">
+                        <input type="checkbox" id="new-date" name="fecha_contratacion_visible" class="sr-only" 
+                        {% if user.docente.privacidad.fecha_contratacion_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -123,7 +127,7 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra tu red social orientada a tu identidad profesional, negocios y empleo</div>
                     </div>
                     <label for="rating-reminders" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="rating-reminders" class="sr-only">
+                        <input type="checkbox" id="rating-reminders"  class="sr-only" checked>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -155,4 +159,59 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const data = {
+                field: checkbox.name,  // El nombre del campo (cedula, telefono, etc.)
+                value: checkbox.checked // El valor del checkbox (true o false)
+            };
+
+            fetch("{% url 'update_privacy_teacher' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Incluye el token CSRF para seguridad
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const data = {
+                field: checkbox.name,  // El nombre del campo (cedula, telefono, etc.)
+                value: checkbox.checked // El valor del checkbox (true o false)
+            };
+
+            fetch("{% url 'update_privacy_cv' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Incluye el token CSRF para seguridad
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
 {%endblock%}

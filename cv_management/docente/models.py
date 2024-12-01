@@ -21,13 +21,13 @@ class Docente(Persona):
     categoria = models.CharField(max_length=50, null=True, blank=True)
     especialidad = models.CharField(max_length=100, null=True, blank=True)
     tipo_contrato = models.CharField(max_length=50, null=True, blank=True)
-    estado = models.CharField(max_length=50, null=True, blank=True)
+    estado = models.CharField(max_length=50, null=True, blank=True) # eliminar alguno de los dos más tarde para que no afecte
     fecha_contratacion = models.DateField(null=True, blank=True)
     estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.OneToOneField('cv.CV', on_delete=models.CASCADE, null=True, blank=True, related_name='docente_cv')
 
 class PrivacidadDocente(models.Model):
-    docente = models.OneToOneField(Docente, on_delete=models.CASCADE)
+    docente = models.OneToOneField(Docente, on_delete=models.CASCADE, related_name='privacidad')
     cedula_visible = models.BooleanField(default=True)
     num_telefono_visible = models.BooleanField(default=True)
     correo_visible = models.BooleanField(default=True)

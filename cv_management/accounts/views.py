@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from docente.models import Docente  # Asegúrate de importar tu modelo
+from docente.models import Docente, PrivacidadDocente
+  # Asegúrate de importar tu modelo
 from coordinador_academico.models import  CoordinadorAcademico  # Asegúrate de importar tu modelo
 from accounts.models import User
 from django.contrib.auth.models import Group
@@ -33,6 +34,19 @@ def signup(request):
                     user.groups.add(group)
                     docente.user = user
                     docente.save()  # Guardar la relación del usuario con el docente
+                    
+                     # Inicializar los valores de privacidad para el docente
+                    privacidad_docente = PrivacidadDocente.objects.create(
+                        docente=docente,
+                        cedula_visible=True,  # La cédula será visible por defecto
+                        num_telefono_visible=True,  # El número de teléfono será visible por defecto
+                        correo_visible=True,  # El correo será visible por defecto
+                        categoria_visible=True,  # La categoría será visible por defecto
+                        tipo_contrato_visible=True,  # El tipo de contrato será visible por defecto
+                        fecha_contratacion_visible=True  # La fecha de contratación será visible por defecto
+                    )
+                    privacidad_docente.save()
+                    
                 elif rol == 'Coordinador':
                     group = Group.objects.get(name='Coordinador')
                     user.groups.add(group)

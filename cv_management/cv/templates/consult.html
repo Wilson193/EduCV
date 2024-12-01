@@ -74,39 +74,53 @@
             {% endif %}
         </div>
     </div>
+    <!--posible if-->
     <!-- Sección de Contacto -->
     <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 mt-8">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Información de Contacto</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Información Personal -->
             <div>
+                {% if user.docente.privacidad.cedula_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Cédula:</strong> {{ user.docente.cedula }}
                 </p>
+                {% endif%}
+                {% if user.docente.privacidad.num_telefono_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Teléfono:</strong> {{ user.docente.num_telefono }}
                 </p>
+                {% endif%}
+                {% if user.docente.privacidad.correo_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Correo Electrónico:</strong> {{ user.docente.correo }}
                 </p>
+                {% endif%}
             </div>
 
             <!-- Información Profesional -->
             <div>
+                {% if user.docente.privacidad.categoria_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Categoría:</strong> {{ user.docente.categoria }}
                 </p>
+                {% endif%}
+                {% if user.docente.privacidad.fecha_contratacion_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Tipo de Contrato:</strong> {{ user.docente.tipo_contrato }}
                 </p>
+                {% endif%}
+                {% if user.docente.privacidad.tipo_contrato_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
                     <strong class="font-semibold dark:text-white">Fecha de Contratación:</strong> {{ user.docente.fecha_contratacion }}
                 </p>
+                {% endif%}
             </div>
         </div>
 
         <!-- Botones de Enlace de Contacto -->
         <div class="flex space-x-4 mt-6">
+            {% if user.docente.cv_docente.privacidad.gmail_enviable %}
             <!-- Botón de Gmail -->
             <a href="https://mail.google.com/mail/?view=cm&to={{ user.docente.correo }}" 
             target="_blank" 
@@ -114,7 +128,9 @@
                 <i class="fab fa-google fa-2x"></i>
                 <span class="text-sm font-semibold">Gmail</span>
             </a>
+            {% endif %}
             
+            {% if user.docente.cv_docente.privacidad.outlook_enviable %}
             <!-- Botón de Outlook -->
             <a href="https://outlook.office.com/mail/deeplink/compose?to={{ user.docente.correo }}" 
             target="_blank" 
@@ -122,6 +138,7 @@
                 <i class="fab fa-microsoft fa-2x"></i>
                 <span class="text-sm font-semibold">Outlook</span>
             </a>
+            {% endif %}
             <!-- Botón de PDF -->
             <a 
                 href="{% url 'generate_curriculum' docente_id=user.docente.id %}" 
@@ -130,13 +147,9 @@
                 <i class="fas fa-file-pdf fa-2x"></i>
                 <span class="text-sm font-semibold">PDF</span>
             </a>
-
-        
-        
-        
-
         </div>
     </div>
+    <!--posible endif-->
 
 
 

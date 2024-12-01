@@ -9,4 +9,5 @@ urlpatterns = [
     path('settings_teacher/', settings_teacher, name='settings_teacher'),
     path('reset_password_teacher/', reset_password_teacher, name='reset_password_teacher'),
     path('update_picture_teacher/', update_picture_teacher, name='update_picture_teacher'),
+    path('update_privacy_teacher/', update_privacy_teacher, name='update_privacy_teacher'),
 ]

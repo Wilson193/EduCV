@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
+import json
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.http import HttpResponse #wilson
@@ -20,6 +21,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from .models import Docente
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def notification_view(request):
@@ -31,12 +33,19 @@ def notification_view(request):
 
 @login_required
 def dashboard(request):
-    # es_coordinador = request.user.groups.filter(name='coordinador').exists()
     user = request.user
     if user.rol == 'Docente':
-        unread_notifications = notification_view(request)
-        return render(request, 'pages/dashboard.html', {'unread_notifications': unread_notifications})
+        # Verificar si el Docente tiene un CV asociado
+        if hasattr(user.docente, 'cv_docente'):
+            cv_docente = user.docente.cv_docente
+            if cv_docente.observaciones:
+                unread_notifications = notification_view(request)
+                return render(request, 'pages/dashboard.html')
+        # Si el Docente no tiene un CV o no hay observaciones, puedes redirigir o mostrar otro mensaje
+        return render(request, 'pages/dashboard.html', {'message': 'No tienes un CV asociado o no hay observaciones.'})
+    
     return render(request, 'pages/dashboard.html')
+
 
 
 def index(request):
@@ -116,13 +125,25 @@ def all_teachers(request):
 
 @login_required
 def create(request):
-    if request.method == "POST":  # Corregido a comillas simples
+    if request.method == "POST":
         user = request.user
         docente = user.docente
         
-        # Crear el CV asociado al docente
-        nuevo_cv = CV.objects.create(docente=docente, fecha_creacion=timezone.now(), estado=1)
-        
+        # Crear el CV asociado al docente con los valores predeterminados
+        cv = CV.objects.create(
+            docente=docente, 
+            fecha_creacion=timezone.now(), 
+            estado=1,  # Estado activo por defecto
+        )
+
+        # Crear el objeto de privacidad del CV asociado
+        privacidad_cv = PrivacidadCV.objects.create(
+            cv=cv,  # Asociamos el CV recién creado
+            linkedin_visible=True,  # Inicializamos con privacidad oculta
+            x_visible=True,  # Inicializamos con privacidad oculta
+            github_visible=True  # Inicializamos con privacidad oculta
+        )
+
         # Redirige a la página de actualización del CV
         return redirect('update')  # Asegúrate de tener esta URL en urls.py
         
@@ -133,10 +154,57 @@ def consult(request):
     unread_notifications = notification_view(request)
     return render(request, 'consult.html', {'unread_notifications': unread_notifications})
 
-
+        
 @login_required
 def modify_privacy(request):
     return render(request, 'modify-privacy.html')
+
+
+@csrf_exempt  # Desactiva la verificación CSRF solo para este punto
+def update_privacy_teacher(request):
+    if request.method == 'POST':
+        print("si entra")
+        # Obtener los datos del cuerpo de la solicitud
+        data = json.loads(request.body)
+        field = data.get('field')  # El campo que se quiere actualizar
+        value = data.get('value')  # El nuevo valor para el campo
+        
+        # Obtener el docente asociado al usuario logueado
+        docente = request.user.docente  # Suponiendo que tienes una relación uno a uno con el modelo Docente
+
+        # Obtener la instancia de PrivacidadDocente asociada al docente
+        privacidad_docente = docente.privacidad  # Ya que el docente tiene una relación con PrivacidadDocente
+
+        # Verificar que el campo que se desea actualizar es uno de los definidos en PrivacidadDocente
+        privacidad_fields = [
+            'cedula_visible', 
+            'num_telefono_visible', 
+            'correo_visible', 
+            'categoria_visible', 
+            'tipo_contrato_visible', 
+            'fecha_contratacion_visible'
+        ]
+        print(f"valor del {field} y {value}")
+        if field in privacidad_fields:  # Solo actualizar si el campo existe en la lista
+            # Verificar si el valor es un booleano
+            if value is True:  # Si el valor es True
+                privacidad_value = True
+            elif value is False:  # Si el valor es False
+                privacidad_value = False
+            else:
+                return JsonResponse({'status': 'error', 'message': 'Valor inválido para el campo'}, status=400)
+
+
+            # Actualizar el campo correspondiente
+            setattr(privacidad_docente, field, privacidad_value)
+            privacidad_docente.save()
+
+            return JsonResponse({'status': 'success', 'message': f'{field} actualizado correctamente'}, status=200)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Campo no válido'}, status=400)
+
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
 
 @login_required
 def verify(request, docente_id):
