@@ -36,7 +36,7 @@
 
     <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
         <div class="flow-root">
-            <h3 class="text-xl font-semibold dark:text-white">Privacidad de Datos</h3>
+            <h3 class="text-xl font-semibold dark:text-white">Información Personal</h3>
             <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Selecciona que datos quieres que sean visibles para la consulta</p>
             <div class="divide-y divide-gray-200 dark:divide-gray-700">
                 <!-- Item 1 -->
@@ -127,7 +127,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra tu red social orientada a tu identidad profesional, negocios y empleo</div>
                     </div>
                     <label for="rating-reminders" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="rating-reminders"  class="sr-only" checked>
+                        <input type="checkbox" id="rating-reminders" name="linkedin_visible"  class="sr-only" 
+                        {% if user.docente.cv_docente.privacidad.linkedin_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -138,7 +139,8 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Muestra contenido asociado a grupos de amigos, familiares o compañeros de trabajo</div>
                     </div>
                     <label for="item-update" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="item-update" class="sr-only" checked>
+                        <input type="checkbox" id="item-update" name="x_visible" class="sr-only" 
+                        {% if user.docente.cv_docente.privacidad.x_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
@@ -149,12 +151,45 @@
                         <div class="text-base font-normal text-gray-500 dark:text-gray-400">Comparte tu plataforma donde almacenas todos los proyectos guardados en tus repositorios</div>
                     </div>
                     <label for="item-comment" class="relative flex items-center cursor-pointer">
-                        <input type="checkbox" id="item-comment" class="sr-only" checked>
+                        <input type="checkbox" id="item-comment" name="github_visible" class="sr-only" 
+                        {% if user.docente.cv_docente.privacidad.github_visible %} checked {% endif %}>
                         <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
                     </label>
                 </div>
             </div>
             <div class="mt-10">
+            </div>
+        </div>
+    </div>
+    <div class="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800 xl:mb-0">
+        <div class="flow-root">
+            <h3 class="text-xl font-semibold dark:text-white">Comunicación</h3>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Selecciona como deseas que te envien un correo</p>
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                <!-- Item 1 -->
+                <div class="flex items-center justify-between py-9">
+                    <div class="flex flex-col flex-grow">
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Gmail</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Permite que te envien correos electrónicos y te contacten mediante Gmail</div>
+                    </div>
+                    <label for="item-gmail" class="relative flex items-center cursor-pointer">
+                        <input type="checkbox" id="item-gmail" name="gmail_enviable" class="sr-only" 
+                        {% if user.docente.cv_docente.privacidad.gmail_enviable %} checked {% endif %}>
+                        <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
+                    </label>
+                </div>
+                <!-- Item 2 -->
+                <div class="flex items-center justify-between py-9">
+                    <div class="flex flex-col flex-grow">
+                        <div class="text-lg font-semibold text-gray-900 dark:text-white">Outlook</div>
+                        <div class="text-base font-normal text-gray-500 dark:text-gray-400">Permite que te envien correos electrónicos y te contacten mediante Gmail</div>
+                    </div>
+                    <label for="item-outlook" class="relative flex items-center cursor-pointer">
+                        <input type="checkbox" id="item-outlook" name="outlook_enviable" class="sr-only" 
+                        {% if user.docente.cv_docente.privacidad.outlook_enviable %} checked {% endif %}>
+                        <span class="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg dark:bg-gray-700 dark:border-gray-600"></span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

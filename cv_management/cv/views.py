@@ -161,29 +161,28 @@ def modify_privacy(request):
 
 
 @csrf_exempt  # Desactiva la verificación CSRF solo para este punto
-def update_privacy_teacher(request):
+def update_privacy_cv(request):
     if request.method == 'POST':
-        print("si entra")
         # Obtener los datos del cuerpo de la solicitud
         data = json.loads(request.body)
         field = data.get('field')  # El campo que se quiere actualizar
         value = data.get('value')  # El nuevo valor para el campo
         
         # Obtener el docente asociado al usuario logueado
-        docente = request.user.docente  # Suponiendo que tienes una relación uno a uno con el modelo Docente
+        cv = request.user.docente.cv_docente  # Suponiendo que tienes una relación uno a uno con el modelo Docente
 
         # Obtener la instancia de PrivacidadDocente asociada al docente
-        privacidad_docente = docente.privacidad  # Ya que el docente tiene una relación con PrivacidadDocente
+        privacidad_cv = cv.privacidad  # Ya que el docente tiene una relación con PrivacidadDocente
 
         # Verificar que el campo que se desea actualizar es uno de los definidos en PrivacidadDocente
         privacidad_fields = [
-            'cedula_visible', 
-            'num_telefono_visible', 
-            'correo_visible', 
-            'categoria_visible', 
-            'tipo_contrato_visible', 
-            'fecha_contratacion_visible'
+            'linkedin_visible', 
+            'x_visible', 
+            'github_visible', 
+            'gmail_enviable', 
+            'outlook_enviable', 
         ]
+        
         print(f"valor del {field} y {value}")
         if field in privacidad_fields:  # Solo actualizar si el campo existe en la lista
             # Verificar si el valor es un booleano
@@ -196,8 +195,8 @@ def update_privacy_teacher(request):
 
 
             # Actualizar el campo correspondiente
-            setattr(privacidad_docente, field, privacidad_value)
-            privacidad_docente.save()
+            setattr(privacidad_cv, field, privacidad_value)
+            privacidad_cv.save()
 
             return JsonResponse({'status': 'success', 'message': f'{field} actualizado correctamente'}, status=200)
         else:

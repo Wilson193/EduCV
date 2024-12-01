@@ -57,21 +57,29 @@
             </div>
         </div>
         <div class="mt-4 md:mt-0 flex space-x-4">
-            {% if user.docente.cv_docente.linkedin != 'None' %}
-            <a href="{{ user.docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
-                <i class="fab fa-linkedin fa-2x"></i>
-            </a>
-            {% endif %}
-            {% if user.docente.cv_docente.x != 'None' %}
-            <a href="{{ user.docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
-                <i class="fab fa-twitter fa-2x"></i>
-            </a>
-            {% endif %}
-            {% if user.docente.cv_docente.github != 'None' %}
-            <a href="{{ user.docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
-                <i class="fab fa-github fa-2x"></i>
-            </a>
-            {% endif %}
+            {% if user.docente.cv_docente.privacidad.linkedin_visible %}
+                {% if user.docente.cv_docente.linkedin != None %}
+                <a href="{{ user.docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
+                    <i class="fab fa-linkedin fa-2x"></i>
+                </a>
+                {% endif %}
+            {% endif%}
+
+            {% if user.docente.cv_docente.privacidad.x_visible %}
+                {% if user.docente.cv_docente.x != 'None' %}
+                <a href="{{ user.docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+                {% endif %}
+            {% endif%}
+
+            {% if user.docente.cv_docente.privacidad.github_visible %}
+                {% if user.docente.cv_docente.github != 'None' %}
+                <a href="{{ user.docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
+                    <i class="fab fa-github fa-2x"></i>
+                </a>
+                {% endif %}
+            {% endif%}
         </div>
     </div>
     <!--posible if-->
@@ -124,7 +132,7 @@
             <!-- Botón de Gmail -->
             <a href="https://mail.google.com/mail/?view=cm&to={{ user.docente.correo }}" 
             target="_blank" 
-            class="flex items-center space-x-2 text-white hover:text-gray-300">
+            class="flex items-center space-x-2 text-[#DB4437] hover:text-[#C1351D] dark:text-white dark:hover:text-gray-400">
                 <i class="fab fa-google fa-2x"></i>
                 <span class="text-sm font-semibold">Gmail</span>
             </a>
@@ -134,20 +142,22 @@
             <!-- Botón de Outlook -->
             <a href="https://outlook.office.com/mail/deeplink/compose?to={{ user.docente.correo }}" 
             target="_blank" 
-            class="flex items-center space-x-2 text-white hover:text-gray-300">
+            class="flex items-center space-x-2 text-[#0078D4] hover:text-[#005A9E] dark:text-white dark:hover:text-gray-400">
                 <i class="fab fa-microsoft fa-2x"></i>
                 <span class="text-sm font-semibold">Outlook</span>
             </a>
             {% endif %}
+            
             <!-- Botón de PDF -->
-            <a 
-                href="{% url 'generate_curriculum' docente_id=user.docente.id %}" 
-                target="_blank" 
-                class="flex items-center space-x-2 text-white hover:text-gray-300">
+            <a href="{% url 'generate_curriculum' docente_id=user.docente.id %}" 
+            target="_blank" 
+            class="flex items-center space-x-2 text-[#E63E42] hover:text-[#C32F2F] dark:text-white dark:hover:text-gray-400">
                 <i class="fas fa-file-pdf fa-2x"></i>
                 <span class="text-sm font-semibold">PDF</span>
             </a>
         </div>
+
+
     </div>
     <!--posible endif-->
 
