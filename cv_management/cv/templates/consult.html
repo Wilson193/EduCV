@@ -177,10 +177,6 @@
                     {{ produccion.tipo }} | {{ produccion.fecha_publicacion|date:"Y-m-d" }}
                 </p>
                 <p class="text-sm mt-1 text-gray-700 dark:text-gray-300">{{ produccion.descripcion }}</p>
-                <!-- Botón para abrir el modal de detalles -->
-                <button type="button" data-modal-target="details-modal-two-{{ formacion.id }}" data-modal-toggle="details-modal-two-{{ formacion.id }}" class="mt-5 px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    Detalles
-                </button>
             </div>
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400">No hay producciones académicas registradas.</p>
@@ -225,6 +221,9 @@
                         Presente
                     {% endif %}
                 </p>
+                {% if experiencia.certificado %}
+                <p><strong>Certificado:</strong> <a href="{{ experiencia.certificado.url }}" target="_blank" class="text-blue-500">Ver Certificado (PDF)</a></p>
+                {% endif %}
             </div>
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400">No hay experiencias laborales registradas.</p>
@@ -245,6 +244,9 @@
                     {{ formacion.institucion }} | {{ formacion.fecha_inicio|date:"Y-m-d" }} - 
                     {{ formacion.fecha_fin|date:"Y-m-d" }}
                 </p>
+                {% if formacion.certificado %}
+                    <p><strong>Certificado:</strong> <a href="{{ formacion.certificado.url }}" target="_blank" class="text-blue-500">Ver Certificado (PDF)</a></p>
+                {% endif %}
             </div>
             {% empty %}
             <p class="text-gray-500 dark:text-gray-400">No hay formación académica registrada.</p>

@@ -65,7 +65,7 @@ def dashboard(request):
             cv_docente = user.docente.cv_docente
             if cv_docente.observaciones:
                 unread_notifications = notification_view(request)
-                return render(request, 'pages/dashboard.html')
+                return render(request, 'pages/dashboard.html', {'unread_notifications': unread_notifications})
         # Si el Docente no tiene un CV o no hay observaciones, puedes redirigir o mostrar otro mensaje
         return render(request, 'pages/dashboard.html', {'message': 'No tienes un CV asociado o no hay observaciones.'})
     
@@ -211,7 +211,8 @@ def consult(request):
         
 @login_required
 def modify_privacy(request):
-    return render(request, 'modify-privacy.html')
+    unread_notifications = notification_view(request)
+    return render(request, 'modify-privacy.html', {'unread_notifications': unread_notifications})
 
 
 @csrf_exempt  # Desactiva la verificación CSRF solo para este punto
@@ -617,7 +618,8 @@ def remove_competence(request, competence_id):
 
 @login_required
 def privacidad(request):
-    return render(request, 'pages/privacidad.html')
+    unread_notifications = notification_view(request)
+    return render(request, 'pages/privacidad.html', {'unread_notifications': unread_notifications})
 
 
 @login_required
