@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   db:
     image: postgres
@@ -10,16 +12,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
 
-  migration:
-    build: ./cv_management
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py shell -c 'from django.contrib.auth import get_user_model; User = get_user_model();  User.objects.filter(email=\"admin@gmail.com\").exists() or User.objects.create_superuser(\"admin@example.com\", \"password1234\")'"
-    depends_on:
-      - db
-    environment:
-      - DATABASE_URL=postgres://postgres:1234@db:5432/EduCV
-
   web:
     build: ./cv_management
     ports:
@@ -31,4 +23,7 @@ services:
       - DATABASE_URL=postgres://postgres:1234@db:5432/EduCV
     depends_on:
       - db
-      - migration
+    command: >
+        sh -c "python manage.py migrate &&
+              python manage.py shell -c 'from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(email=\"admin@example.com\").exists() or User.objects.create_superuser(email=\"admin@example.com\", password=\"password1234\")' &&
+              python manage.py runserver 0.0.0.0:8000"
