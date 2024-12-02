@@ -22,6 +22,31 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from .models import Docente
 from django.views.decorators.csrf import csrf_exempt
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph
+from reportlab.lib.utils import simpleSplit
+
+def consultant_view_consult_cv(request, docente_id):
+    docente = get_object_or_404(Docente, id=docente_id)
+    
+    # Inicializar las variables para evitar el error de referencia antes de asignar
+    conjunto_visible = True  # Valor predeterminado
+    conjunto_dos_visible = True  # Valor predeterminado
+
+    if not docente.privacidad.cedula_visible and not docente.privacidad.num_telefono_visible and not docente.privacidad.correo_visible:
+         conjunto_visible = False
+    
+    if not docente.privacidad.categoria_visible and not docente.privacidad.tipo_contrato_visible and not docente.privacidad.fecha_contratacion_visible:
+        conjunto_dos_visible = False
+    
+    contexto = {
+        'docente': docente,
+        'conjunto_visible': conjunto_visible,
+        'conjunto_dos_visible': conjunto_dos_visible,
+    }
+    
+    return render(request, 'consultant-view.html', contexto)
+
 
 @login_required
 def notification_view(request):
@@ -60,9 +85,19 @@ def search(request):
 
 def search_teacher_main(request):
     query = request.GET.get('query', '')
-    docentes = Docente.objects.filter(
-        nombre__icontains=query
-    )
+    user = request.user
+    if user.rol == "Docente":
+        docentes = (Docente.objects.filter(nombre__icontains=query) |
+                    Docente.objects.filter(apellido__icontains=query) |
+                    Docente.objects.filter(facultad__icontains=query)
+                    ).filter(cv_docente__estado_verificacion=2)
+    elif user.rol == "Coordinador":
+        docentes = (Docente.objects.filter(nombre__icontains=query) |
+                    Docente.objects.filter(apellido__icontains=query) |
+                    Docente.objects.filter(facultad__icontains=query)
+                    )
+        
+
     return render(request, 'all_teachers.html', {'docentes': docentes, 'query': query})
 
 
@@ -70,13 +105,10 @@ def search_teacher_ajax(request):
     query = request.GET.get('query', '')
     if query:
         # Buscamos por nombre, apellido y especialidad
-        docentes = Docente.objects.filter(
-            nombre__icontains=query
-        ) | Docente.objects.filter(
-            apellido__icontains=query
-        ) | Docente.objects.filter(
-            especialidad__icontains=query
-        )
+        docentes = (Docente.objects.filter(nombre__icontains=query) |
+        Docente.objects.filter(apellido__icontains=query) |
+        Docente.objects.filter(especialidad__icontains=query)
+        ).filter(cv_docente__estado_verificacion=2)
         
         # Creamos una lista de resultados para devolver
         results = [{
@@ -100,18 +132,35 @@ def search_teacher_ajax(request):
 
 def docentes_resultados(request):
     query = request.GET.get('query', '')
-    docentes = Docente.objects.filter(
-        nombre__icontains=query) | Docente.objects.filter(
-        apellido__icontains=query) | Docente.objects.filter(
-        facultad__icontains=query)
-        
-    total_docentes = Docente.objects.count()
     
-    return render(request, 'teachers.html', {'docentes': docentes, 'query': query, 'total_docentes': total_docentes})
+    # Aplicamos el filtro de búsqueda y luego el filtro del estado de verificación
+    docentes = (Docente.objects.filter(nombre__icontains=query) |
+                Docente.objects.filter(apellido__icontains=query) |
+                Docente.objects.filter(facultad__icontains=query)
+               ).filter(cv_docente__estado_verificacion=2)  # Filtro de CV validado
+    
+    total_docentes = docentes.count()  # Contamos solo los resultados filtrados
+    
+    return render(request, 'teachers.html', {
+        'docentes': docentes,
+        'query': query,
+        'total_docentes': total_docentes
+    })
+
     
 def list_teachers(request): 
     query = request.GET.get('query', '')
-    results = Docente.objects.filter(name__icontains=query) # Ajusta el filtro según tu modelo 
+    user = request.user
+    if user.rol == "Docente":
+        results = (Docente.objects.filter(nombre__icontains=query) |
+                    Docente.objects.filter(apellido__icontains=query) |
+                    Docente.objects.filter(facultad__icontains=query)
+                    ).filter(cv_docente__estado_verificacion=2)
+    elif user.rol == "Coordinador":
+        results = (Docente.objects.filter(nombre__icontains=query) |
+                    Docente.objects.filter(apellido__icontains=query) |
+                    Docente.objects.filter(facultad__icontains=query)
+                    )
     return render(request, 'teachers.html', {'query': query, 'results': results})
 
 @login_required
@@ -148,6 +197,11 @@ def create(request):
         return redirect('update')  # Asegúrate de tener esta URL en urls.py
         
     return render(request, 'create.html')
+
+@login_required
+def curriculumia(request):
+
+    return render(request, 'ia.html')
 
 @login_required
 def consult(request):
@@ -280,7 +334,31 @@ def verify_item(request, model_name, item_id, docente_id):
 def update(request):
     """Llama a la vista update para poder ver los datos que se pueden modificar"""
     unread_notifications = notification_view(request)
-    return render(request, 'update.html', {'unread_notifications': unread_notifications})
+    
+    docente = request.user.docente
+    
+    experiencias = docente.cv_docente.experiencia_laboral.all()
+    formaciones = docente.cv_docente.formacion_academica.all()
+    producciones = docente.cv_docente.produccion_academica.all()
+    competencias = docente.cv_docente.competencias.all()
+
+    # Verificar si las listas están vacías antes de aplicar all()
+    experiencias_verificadas = all(experiencia.estado for experiencia in experiencias) if experiencias else False
+    formaciones_verificadas = all(formacion.estado for formacion in formaciones) if formaciones else False
+    producciones_verificadas = all(produccion.estado for produccion in producciones) if producciones else False
+    competencias_verificadas = all(competencia.estado for competencia in competencias) if competencias else False
+        
+    # Renderiza la plantilla con los datos del docente y el estado de verificación
+    contexto = {
+        'docente': docente,
+        'experiencias_verificadas': experiencias_verificadas,
+        'formaciones_verificadas': formaciones_verificadas,
+        'producciones_verificadas': producciones_verificadas,
+        'competencias_verificadas': competencias_verificadas,
+        'unread_notifications': unread_notifications,
+    }
+    
+    return render(request, 'update.html', contexto)
 
 
 @login_required
@@ -559,99 +637,126 @@ def get_document(request):
     return HttpResponse("Método no permitido o no se ha subido un documento", status=400)
 
 
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import simpleSplit
+from io import BytesIO
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from django.shortcuts import get_object_or_404
+
 def generate_curriculum(request, docente_id):
     try:
         docente = get_object_or_404(Docente, id=docente_id)
     except Docente.DoesNotExist:
-        # Manejo de error, como redirigir o devolver un mensaje adecuado
         return HttpResponse("Docente no encontrado", status=404)
-    
-    # pdf_canvas.setFont("Helvetica", 12)
 
-    # Convertir el documento en PDF y almacenarlo en memoria
+    # Configuración inicial
     pdf_buffer = BytesIO()
     pdf_canvas = canvas.Canvas(pdf_buffer, pagesize=letter)
     pdf_canvas.setFont("Helvetica", 12)
+    y_position = 750  # Posición vertical inicial
+    margin_bottom = 50  # Margen inferior mínimo antes de pasar a la siguiente página
+    page_width = 500  # Ancho de la página para el texto
+    margin_right = 50  # Margen derecho
+
+    def check_page_end(pdf_canvas, y_position, margin_bottom):
+        """ Verifica si es necesario agregar una nueva página. """
+        if y_position <= margin_bottom:
+            pdf_canvas.showPage()
+            pdf_canvas.setFont("Helvetica", 12)
+            return 750  # Reiniciar posición vertical
+        return y_position
+
+    def draw_wrapped_text(canvas, text, x, y, max_width, font_size=12):
+        """ Divide el texto largo en líneas y las dibuja. """
+        adjusted_width = max_width - margin_right  # Ajustar el ancho disponible considerando el margen derecho
+        lines = simpleSplit(text, "Helvetica", font_size, adjusted_width)
+        for line in lines:
+            canvas.drawString(x, y, line)
+            y -= font_size + 5  # Ajustar el espacio entre líneas
+        return y
 
     # Añadir contenido al PDF
-    y_position = 750  # Posición vertical inicial
     pdf_canvas.drawString(100, y_position, f"Currículum de {docente.nombre} {docente.apellido}")
     y_position -= 30
     pdf_canvas.drawString(100, y_position, "Información de Contacto:")
     y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Cédula: {docente.cedula or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Correo: {docente.correo or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Teléfono: {docente.num_telefono or 'N/A'}")
-    y_position -= 40
+    y_position = draw_wrapped_text(pdf_canvas, f"Cédula: {docente.cedula or 'N/A'}", 120, y_position, page_width)
+    y_position = draw_wrapped_text(pdf_canvas, f"Correo: {docente.correo or 'N/A'}", 120, y_position, page_width)
+    y_position = draw_wrapped_text(pdf_canvas, f"Teléfono: {docente.num_telefono or 'N/A'}", 120, y_position, page_width)
+    y_position -= 25
 
+    y_position = check_page_end(pdf_canvas, y_position, margin_bottom)
+
+    # Información profesional
     pdf_canvas.drawString(100, y_position, "Información Profesional:")
     y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Universidad: {docente.universidad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Facultad: {docente.facultad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Especialidad: {docente.especialidad or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Categoría: {docente.categoria or 'N/A'}")
-    y_position -= 40
+    y_position = draw_wrapped_text(pdf_canvas, f"Universidad: {docente.universidad or 'N/A'}", 120, y_position, page_width)
+    y_position = draw_wrapped_text(pdf_canvas, f"Facultad: {docente.facultad or 'N/A'}", 120, y_position, page_width)
+    y_position = draw_wrapped_text(pdf_canvas, f"Especialidad: {docente.especialidad or 'N/A'}", 120, y_position, page_width)
+    y_position -= 25
 
-    pdf_canvas.drawString(100, y_position, "Detalles del Contrato:")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Tipo de Contrato: {docente.tipo_contrato or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Estado: {docente.estado or 'N/A'}")
-    y_position -= 20
-    pdf_canvas.drawString(120, y_position, f"Fecha de Contratación: {docente.fecha_contratacion.strftime('%d/%m/%Y') if docente.fecha_contratacion else 'N/A'}")
-    y_position -= 40
+    y_position = check_page_end(pdf_canvas, y_position, margin_bottom)
 
-
-    # Añadir competencias al PDF
-    pdf_canvas.drawString(100, y_position, "Competencias:")
-    y_position -= 20
-    competencias = docente.cv_docente.competencias.all()
-    for competencia in competencias:
-        pdf_canvas.drawString(120, y_position, f"Nombre: {competencia.nombre or 'N/A'}, Nivel: {competencia.nivel or 'N/A'}")
-        y_position -= 40
-
-    # Añadir experiencias laborales al PDF
+    # Experiencia laboral
     pdf_canvas.drawString(100, y_position, "Experiencia Laboral:")
     y_position -= 20
     experiencias = docente.cv_docente.experiencia_laboral.all()
     for experiencia in experiencias:
-        pdf_canvas.drawString(120, y_position, f"Empresa: {experiencia.lugar_trabajo}, Cargo: {experiencia.cargo}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Desde: {experiencia.fecha_inicio} Hasta: {experiencia.fecha_fin}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Descripción: {experiencia.descripcion}")
-        y_position -= 40
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Empresa: {experiencia.lugar_trabajo}, Cargo: {experiencia.cargo}",
+            120, y_position, page_width
+        )
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Desde: {experiencia.fecha_inicio} Hasta: {experiencia.fecha_fin}",
+            120, y_position, page_width
+        )
+        y_position = draw_wrapped_text(pdf_canvas, f"Descripción: {experiencia.descripcion}", 120, y_position, page_width)
+        y_position -= 25
 
-    # Añadir formación académica al PDF
+        y_position = check_page_end(pdf_canvas, y_position, margin_bottom)
+
+    # Formación académica
     pdf_canvas.drawString(100, y_position, "Formación Académica:")
     y_position -= 20
     formaciones = docente.cv_docente.formacion_academica.all()
     for formacion in formaciones:
-        pdf_canvas.drawString(120, y_position, f"Nivel: {formacion.nivel}, Institución: {formacion.institucion}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Título: {formacion.titulo}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Desde: {formacion.fecha_inicio} Hasta: {formacion.fecha_fin}")
-        y_position -= 40
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Nivel: {formacion.nivel}, Institución: {formacion.institucion}",
+            120, y_position, page_width
+        )
+        y_position = draw_wrapped_text(pdf_canvas, f"Título: {formacion.titulo}", 120, y_position, page_width)
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Desde: {formacion.fecha_inicio} Hasta: {formacion.fecha_fin}",
+            120, y_position, page_width
+        )
+        y_position -= 25
 
-    # Añadir producción académica al PDF
+        y_position = check_page_end(pdf_canvas, y_position, margin_bottom)
+
+    # Producción académica
     pdf_canvas.drawString(100, y_position, "Producción Académica:")
     y_position -= 20
     producciones = docente.cv_docente.produccion_academica.all()
     for produccion in producciones:
-        pdf_canvas.drawString(120, y_position, f"Tipo: {produccion.tipo}, Título: {produccion.titulo}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Fecha de Publicación: {produccion.fecha_publicacion}")
-        y_position -= 20
-        pdf_canvas.drawString(120, y_position, f"Descripción: {produccion.descripcion}")
-        y_position -= 40
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Tipo: {produccion.tipo}, Título: {produccion.titulo}",
+            120, y_position, page_width
+        )
+        y_position = draw_wrapped_text(
+            pdf_canvas,
+            f"Fecha de Publicación: {produccion.fecha_publicacion}",
+            120, y_position, page_width
+        )
+        y_position = draw_wrapped_text(pdf_canvas, f"Descripción: {produccion.descripcion}", 120, y_position, page_width)
+        y_position -= 25
 
-        
+        y_position = check_page_end(pdf_canvas, y_position, margin_bottom)
 
     # Finalizar PDF
     pdf_canvas.save()

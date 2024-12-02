@@ -1,147 +1,97 @@
-{%extends 'stacked-layout.html'%}
-{% load static %}
-{%block content%}
-<div class="p-4 bg-white block sm:flex items-center justify-between border-b border-gray-200 lg:mt-1.5 dark:bg-gray-800 dark:border-gray-700">
-    <div class="w-full mb-1">
-        <div class="mb-4">
-            <nav class="flex mb-5" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
-                  <li class="inline-flex items-center">
-                    <a href="{% url 'search'%}" class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
-                      <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
-                      Inicio
-                    </a>
-                  </li>
-                  <li>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduCV - Gestión de CV de Docentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; /* Aplicar la tipografía Inter */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    {% load static %}
+
+        <!-- Header con logo y opciones -->
+        <header class="bg-gray-800 shadow">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                      <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                      <a href="#" class="ml-1 text-gray-700 hover:text-primary-600 md:ml-2 dark:text-gray-300 dark:hover:text-white">Consulta</a>
+                        <a href="{% url 'search'%}" class="text-2xl font-bold text-white">EduCV</a>
                     </div>
-                  </li>
-                  <li>
-                    <div class="flex items-center">
-                      <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                      <span class="ml-1 text-gray-400 md:ml-2 dark:text-gray-500" aria-current="page">Docentes</span>
+                    <div class="flex items-center space-x-4">
+                        <a href="{% url 'signin' %}" class="text-white font-semibold hover:text-blue-400 flex items-center">
+                            <img src="https://img.icons8.com/ios-filled/20/ffffff/login-rounded-right.png" class="mr-2" alt="Iniciar Sesión"/>
+                            Iniciar Sesión
+                        </a>
+                        <a href="{% url 'signup' %}" class="text-white font-semibold hover:text-blue-400 flex items-center">
+                            <img src="https://img.icons8.com/ios-filled/20/ffffff/add-user-male.png" class="mr-2" alt="Registrarse"/>
+                            Registrarse
+                        </a>
                     </div>
-                  </li>
-                </ol>
-            </nav>
-            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Docentes</h1>
-        </div>
-        <div class="sm:flex">
-            <div class="items-center hidden mb-3 sm:flex sm:divide-x sm:divide-gray-100 sm:mb-0 dark:divide-gray-700">
-                <form class="lg:pr-3" action="#" method="GET">
-                <label for="users-search" class="sr-only">Search</label>
-                <div class="relative mt-1 lg:w-64 xl:w-96">
-                    <input type="text" name="email" id="search-input" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Buscar docente">
                 </div>
-                </form>
             </div>
-        </div>
-    </div>
-</div>
+        </header>
+
+    <!-- Sección de búsqueda -->
+    <section class="container mx-auto mt-5">
+        <div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-10">
+        <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Docentes</h2>
+        <p class="font-light text-gray-500 lg:mb-4 sm:text-xl dark:text-gray-400">Accede a la informacion Profesional de Docentes de diferentes Universidades que podrian llegar a ser tus Docentes</p>
+        <a href="{% url 'search'%}" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <!-- Icono de flecha a la izquierda -->
+            <svg class="inline w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M11.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L8.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+            </svg>
+            Regresar
+        </a>
+        <p class="font-light text-gray-500 lg:mb-16 mt-4 sm:text-xl dark:text-gray-400">¡Creemos en la Calidad Academica!</p>
+      </div>
+
 <div class="flex flex-col">
     <div class="overflow-x-auto">
         <div class="inline-block min-w-full align-middle">
             <div class="overflow-hidden shadow">
                 <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600">
-                    <thead class="bg-gray-100 dark:bg-gray-700">
-                        <tr>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Nombre
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Facultad
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Especialidad
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Categoria
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Fecha de contratación
-                            </th>
-                            <th scope="col" class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Acciones
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                        {% for docente in docentes %}
-                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">                                
-                                <img class="w-10 h-10 rounded-full" src="{% if docente.foto %}{{ docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" alt="foto de perfil">
-                                <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                    <div class="text-base font-semibold text-gray-900 dark:text-white">{% if docente.nombre %}{{ docente.nombre }} {{ docente.apellido }} {% else %}{{'Completar registro'}}{%endif%}</div>
-                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ docente.correo }}</div>
+                    <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"> 
+                        <div class="container mx-auto px-4 py-6">
+                            <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                                {% for docente in docentes %}
+                                <div class="bg-white rounded-lg shadow-md dark:bg-gray-800 p-4">
+                                    <div class="flex flex-col items-center">
+                                        <img class="w-24 h-24 rounded-full mb-4" src="{% if docente.foto %}{{ docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}" alt="Foto de perfil">
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                            {% if docente.nombre %}{{ docente.nombre }} {{ docente.apellido }}{% else %}Completar registro{% endif %}
+                                        </h3>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            {% if docente.especialidad %}{{ docente.especialidad }}{% else %}Especialidad N/A{% endif %}
+                                        </p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                            Facultad: {% if docente.facultad %}{{ docente.facultad }}{% else %}N/A{% endif %}
+                                        </p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                            Contratado desde: {% if docente.fecha_contratacion %}{{ docente.fecha_contratacion }}{% else %}N/A{% endif %}
+                                        </p>
+                                        <a href="{% url 'consultant_view_consult_cv' docente.id%}" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 mt-3">
+                                            Ver CV
+                                        </a>
+                                    </div>
                                 </div>
-                            </td>
-                            <td class="p-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                                {% if docente.facultad%}{{ docente.facultad }} {% else%}{{'N/A'}}{%endif%}
-                            </td>
-                            <td class="p-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                                {% if docente.especialidad%}{{ docente.especialidad }} {% else%}{{'N/A'}}{%endif%}
-                            </td>
-                            <td class="p-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                                {% if docente.categoria%}{{ docente.categoria }} {% else%}{{'N/A'}}{%endif%}
-                            </td>
-                            <td class="p-4 text-base font-normal text-gray-500 dark:text-gray-400">
-                                {% if docente.fecha_contratacion%}{{ docente.fecha_contratacion }} {% else%}{{'N/A'}}{%endif%}
-                            </td>
-                            <td class="p-4 space-x-2 whitespace-nowrap">
-                                <a href="/docentes/resultados/{{ docente.id }}/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                    Ver CV
-                                </a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center text-gray-600 dark:text-gray-400">No se encontraron resultados para "{{ query }}"</td>
-                        </tr>
-                        {% endfor %}
+                                {% empty %}
+                                <div class="col-span-full text-center text-gray-600 dark:text-gray-400">
+                                    No se encontraron resultados para "{{ query }}"
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
-<div class="sticky bottom-0 right-0 items-center w-full p-4 bg-white border-t border-gray-200 sm:flex sm:justify-between dark:bg-gray-800 dark:border-gray-700">
-    <div class="flex items-center mb-4 sm:mb-0">
-        <a href="#" id="top-prev-btn" class="inline-flex justify-center p-1 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-            </svg>
-        </a>
-        <a href="#" id="top-next-btn" class="inline-flex justify-center p-1 mr-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-            </svg>
-        </a>
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Mostrando 
-            <span id="start-record" class="font-semibold text-gray-900 dark:text-white">1</span> a 
-            <span id="end-record" class="font-semibold text-gray-900 dark:text-white">10</span> de 
-            <span id="total-records" class="font-semibold text-gray-900 dark:text-white">{{total_docentes}}</span>
-        </span>
-    </div>
-    <div class="flex items-center space-x-3">
-        <a href="#" id="bottom-prev-btn" class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            <svg class="w-5 h-5 mr-1 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-            </svg>
-            Anterior
-        </a>
-        <a href="#" id="bottom-next-btn" class="inline-flex items-center justify-center flex-1 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-            Siguiente
-            <svg class="w-5 h-5 ml-1 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-            </svg>
-        </a>
-    </div>
-</div>
-
-
 
 <script>
     document.getElementById('search-input').addEventListener('input', function() {
@@ -228,4 +178,67 @@
     updateTable();
 </script>
 
-{% endblock %}
+
+<script>
+    function searchTeachers() {
+        const query = document.getElementById('query').value;
+        const resultsContainer = document.getElementById('searchResults');
+
+        // Verifica si el campo de búsqueda tiene más de 2 caracteres
+        if (query.length > 2) {
+            fetch(`/cv/ajax/search_teacher/?query=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                // Muestra el contenedor de resultados solo si hay algo en la búsqueda
+                resultsContainer.style.display = 'table';  // Asegura que se muestre la tabla de resultados
+                resultsContainer.innerHTML = '';  // Limpia los resultados previos
+                if (data.length > 0) {
+                    data.forEach(docente => {
+                        const row = document.createElement('tr');
+                        row.classList.add('hover:bg-gray-100', 'dark:hover:bg-gray-700');
+                        row.innerHTML = `
+                            <td class="flex items-center p-4 mr-12 space-x-6 whitespace-nowrap">
+                                <img class="w-10 h-10 rounded-full" 
+                                     src="${docente.foto || '{% static 'android-icon-36x36.png' %}'}"
+                                     alt="${docente.nombre} avatar">
+                                <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+                                    <div class="text-base font-semibold text-gray-900 dark:text-white">${docente.nombre} ${docente.apellido}</div>
+                                    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">${docente.correo}</div>
+                                </div>
+                            </td>
+                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.especialidad || 'N/A'}</td>
+                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.cargo || 'N/A'}</td>
+                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.facultad || 'N/A'}</td>
+                            <td class="p-4 text-base font-medium text-gray-900 whitespace-nowrap dark:text-white">${docente.fecha_contratacion || 'N/A'}</td>
+                            <td class="p-4 space-x-2 whitespace-nowrap">
+                                <!-- Enlace corregido con comillas para el ID -->
+                                <a href="consultant_view_consult_cv/${docente.id}/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                    Ver detalles
+                                </a>
+                            </td>
+                        `;
+
+                        resultsContainer.appendChild(row);
+                    });
+
+                    // Al final de los resultados, agregar el enlace "Ver más"
+                    const seeMoreRow = document.createElement('tr');
+                    seeMoreRow.innerHTML = `
+                        <td colspan="7" class="text-center p-4">
+                            <a href="{% url 'docentes_resultados'%}" class="text-blue-500 hover:underline">Ver todos</a>
+                        </td>
+                    `;
+                    resultsContainer.appendChild(seeMoreRow);  // Se agrega la fila "Ver más" al contenedor de resultados
+
+                } else {
+                    resultsContainer.innerHTML = '<tr><td colspan="7" class="text-center text-gray-600 dark:text-gray-400">No se encontraron docentes.</td></tr>';
+                }
+            });
+        } else {
+            // Si el campo de búsqueda está vacío o no tiene más de 2 caracteres, ocultar los resultados
+            resultsContainer.innerHTML = '';  // Limpia los resultados anteriores
+            resultsContainer.style.display = 'none';  // Oculta el contenedor de resultados
+        }
+    }
+</script>
+

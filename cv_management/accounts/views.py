@@ -52,13 +52,11 @@ def signup(request):
                     user.groups.add(group)
                     coordinador.user = user
                     coordinador.save()  # Guardar la relación del usuario con el coordinador
-
+            messages.success(request, 'Usuario creado exitosamente.')  # Mensaje de éxito
             return render(request, 'signup.html')  # O redirigir a otra página
 
         except Exception as e:
-            # Si ocurre algún error, puedes mostrar un mensaje de error en la página
-            # También puedes usar mensajes de Django o logs para manejar errores
-            print(f"Error al crear el usuario: {e}")
+            messages.error(request, f'Ocurrió un error al crear el usuario, intente más tarde.')  # Mensaje de error
 
     return render(request, 'signup.html')
 
@@ -78,7 +76,6 @@ def signin(request):
                 return redirect('dashboard')
         else:
             messages.error(request, 'Credenciales inválidas.')
-            print(request, 'Credenciales inválidas.')
 
     return render(request, 'signin.html')
 

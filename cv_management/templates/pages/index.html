@@ -1,86 +1,76 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de CV Docentes</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Si deseas una tipografía personalizada, puedes agregarla aquí -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <header class="bg-white shadow">
+<body class="bg-gray-900 text-white"> <!-- Fondo oscuro general -->
+
+    <header class="bg-gray-800 shadow">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <h1 class="text-2xl font-bold">Gestión de CV Docentes</h1>
-                    </div>
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-white">EduCV</h1>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="{% url 'search' %}" class="text-gray-600 hover:text-blue-500">Inicio</a>
-                    <a href="{% url 'consultDocente' %}" class="text-gray-600 hover:text-blue-500">Docentes</a><!--falta crear esta pagina que muestra el listado de profesores?-->
-                    <a href="" class="text-gray-600 hover:text-blue-500">Publicaciones</a><!--no se pa que es esto-->
-                    <a href="" class="text-gray-600 hover:text-blue-500">Contacto</a><!-- no se pa que es esto-->
+                    <a href="{% url 'signin' %}" class="text-white font-semibold hover:text-blue-400 flex items-center">
+                        <img src="https://img.icons8.com/ios-filled/20/ffffff/login-rounded-right.png" class="mr-2" alt="Iniciar Sesión"/>
+                        Iniciar Sesión
+                    </a>
+                    <a href="{% url 'signup' %}" class="text-white font-semibold hover:text-blue-400 flex items-center">
+                        <img src="https://img.icons8.com/ios-filled/20/ffffff/add-user-male.png" class="mr-2" alt="Registrarse"/>
+                        Registrarse
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!--
-    <main class="bg-blue-500 text-white py-20">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
-            <p class="text-lg mb-6">Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.</p>
-            <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
+    <main class="text-black py-40 flex flex-col items-center justify-center w-full" 
+    style="background-image: url('{% static 'fondo1 (1).svg' %}'); background-size: 100% 200%; background-repeat: no-repeat; background-position: center; min-height: 60vh;">
+        <div class="text-center w-full max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
+            <p class="text-base md:text-lg lg:text-xl mb-6" style="text-align: center;">
+                Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.
+            </p>
+            <a href="{% url 'search'%}" class="inline-flex items-center justify-center bg-white text-blue-500 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-blue-500 hover:text-white transition-all duration-300 border-2 border-blue-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l7-7-7-7M5 19l7-7-7-7"></path>
+                </svg>
+                Ver CVs
+            </a>
         </div>
     </main>
-    -->
 
-    <!--
-    <main class="bg-custom text-white py-20 d-flex flex-column align-items-center justify-content-center">
-    <div class="text-center">
-        <img src="{% static 'images/fondo.jpg' %}" class="img-fluid mb-3" alt="Imagen" style="width:600px; height:400px; border-radius:45px; padding:20px; margin-top:10px;">
-        <h2 class="text-4xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
-        <p class="text-lg mb-6" style="text-align: center; font-size: smaller;">
-            Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.
-        </p>
-        <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
-    </div>
-    </main>
-    -->
-
-    <main class="text-black py-80 flex flex-col items-center justify-center w-full" 
-      style="background-image: url('{% static 'fondo1 (1).svg' %}'); background-size: 100% 300%; background-repeat: no-repeat; background-position: center; min-height: 50vh;">
-    <div class="text-center w-full max-w-7xl mx-auto">
-        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">Bienvenido a la Gestión de CV de Docentes</h2>
-        <p class="text-base md:text-lg lg:text-xl mb-6" style="text-align: center;">
-            Administra fácilmente los currículums de los docentes, su experiencia, formación y mucho más.
-        </p>
-        <a href="#" class="bg-white text-blue-500 font-semibold py-2 px-6 rounded-full shadow hover:bg-gray-100">Ver CVs</a>
-    </div>
-    </main>
-    
-    
-
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-2xl font-bold text-center mb-6">¿Qué puedes hacer?</h2>
-            <p class="text-center text-gray-600 mb-10">Explora todas las funcionalidades de la plataforma.</p>
+            <h2 class="text-2xl font-bold text-center mb-6 text-white">¿Qué puedes hacer?</h2>
+            <p class="text-center text-gray-400 mb-10">Explora todas las funcionalidades de la plataforma.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow text-center">
-                    <img src="https://img.icons8.com/ios-filled/50/000000/graduation-cap.png" class="mx-auto mb-4" alt="Consulta de Docentes">
-                    <h3 class="text-xl font-semibold mb-2">Consulta de Docentes</h3>
-                    <p class="text-gray-600">Accede a la información detallada de todos los docentes registrados, incluyendo su experiencia y formación académica.</p>
+                <div class="bg-gray-700 p-6 rounded-lg shadow text-center">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/graduation-cap.png" class="mx-auto mb-4" alt="Consulta de Docentes">
+                    <h3 class="text-xl font-semibold mb-2 text-white">Consulta de Docentes</h3>
+                    <p class="text-gray-300">Accede a la información detallada de todos los docentes registrados, incluyendo su experiencia y formación académica.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow text-center">
-                    <img src="https://img.icons8.com/ios-filled/50/000000/book.png" class="mx-auto mb-4" alt="Publicaciones Académicas">
-                    <h3 class="text-xl font-semibold mb-2">Publicaciones Académicas</h3>
-                    <p class="text-gray-600">Consulta las publicaciones realizadas por los docentes y mantente al día con sus aportes en el campo académico.</p>
+                <div class="bg-gray-700 p-6 rounded-lg shadow text-center">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/book.png" class="mx-auto mb-4" alt="Publicaciones Académicas">
+                    <h3 class="text-xl font-semibold mb-2 text-white">Publicaciones Académicas</h3>
+                    <p class="text-gray-300">Consulta las publicaciones realizadas por los docentes y mantente al día con sus aportes en el campo académico.</p>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow text-center">
-                    <img src="https://img.icons8.com/ios-filled/50/000000/combo-chart.png" class="mx-auto mb-4" alt="Gestión de CV">
-                    <h3 class="text-xl font-semibold mb-2">Gestión de CV</h3>
-                    <p class="text-gray-600">Administra y actualiza los currículums de los docentes, asegurando que toda la información esté siempre al día.</p>
+                <div class="bg-gray-700 p-6 rounded-lg shadow text-center">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/combo-chart.png" class="mx-auto mb-4" alt="Gestión de CV">
+                    <h3 class="text-xl font-semibold mb-2 text-white">Gestión de CV</h3>
+                    <p class="text-gray-300">Administra y actualiza los currículums de los docentes, asegurando que toda la información esté siempre al día.</p>
                 </div>
             </div>
         </div>

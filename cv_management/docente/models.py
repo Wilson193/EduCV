@@ -9,7 +9,6 @@ class Persona(models.Model):
     universidad = models.CharField(max_length=100, null=True, blank=True)
     cargo = models.CharField(max_length=100, null=True, blank=True)
     correo = models.EmailField(unique=True)
-    clave = models.CharField(max_length=20, null=True, blank=True)
     foto = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
     
     class Meta:
@@ -21,9 +20,8 @@ class Docente(Persona):
     categoria = models.CharField(max_length=50, null=True, blank=True)
     especialidad = models.CharField(max_length=100, null=True, blank=True)
     tipo_contrato = models.CharField(max_length=50, null=True, blank=True)
-    estado = models.CharField(max_length=50, null=True, blank=True) # eliminar alguno de los dos más tarde para que no afecte
+    estado = models.IntegerField(null=True, blank=True)
     fecha_contratacion = models.DateField(null=True, blank=True)
-    estado = models.BooleanField(default=False)  # Comienza como False por defecto
     cv = models.OneToOneField('cv.CV', on_delete=models.CASCADE, null=True, blank=True, related_name='docente_cv')
 
 class PrivacidadDocente(models.Model):

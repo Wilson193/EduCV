@@ -109,7 +109,43 @@
     </div>
     <div class="col-span-2">
         <div class="p-10 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-15 dark:bg-gray-800">
-            <h3 class="mb-4 text-xl font-semibold dark:text-white">Información personal</h3>
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold dark:text-white">Información personal</h3>
+                <!-- Estado de verificación al lado del encabezado -->
+                <div class="flex items-center space-x-2">
+                    <div 
+                        class="w-6 h-6 flex items-center justify-center rounded-full 
+                            {% if docente.estado %}
+                                bg-green-500
+                            {% else %}
+                                bg-red-500
+                            {% endif %} text-white"
+                        id="status-icon"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.estado %}
+                                <!-- Ícono de Verificado (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de No Verificado (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium 
+                        {% if docente.estado %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.estado %}
+                            Verificado
+                        {% else %}
+                            No Verificado
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
             <form method="POST" action="{% url 'update_teacher' %}">
                 {% csrf_token %}
                 <div class="grid grid-cols-6 gap-9">
@@ -173,7 +209,41 @@
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
         <div class="flow-root w-full">
-            <h3 class="text-xl font-semibold dark:text-white">Experiencia Laboral</h3>
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-semibold dark:text-white">Experiencia Laboral</h3>
+                <!-- Estado de verificación al lado del encabezado -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if user.docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
+                            bg-green-500
+                        {% else %}
+                            bg-red-500
+                        {% endif %} text-white"
+                        id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if user.docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
+                                <!-- Ícono de Verificado (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de No Verificado (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium 
+                        {% if user.docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if user.docente.cv_docente.experiencia_laboral.exists and experiencias_verificadas %}
+                            Verificado
+                        {% else %}
+                            No Verificado
+                        {% endif %}
+                    </span>
+                </div>
+            </div>      
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                 {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
                     <li class="py-4">
@@ -314,7 +384,8 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div> 
+   
     
     
     
@@ -323,7 +394,41 @@
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800 flex">
         <div class="flow-root w-full">
-            <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-xl font-semibold dark:text-white">Formación Académica</h3>
+                <!-- Estado de verificación -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if user.docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            bg-green-500
+                        {% else %}
+                            bg-red-500
+                        {% endif %} text-white"
+                        id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if user.docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                                <!-- Ícono de Verificado (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de No Verificado (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium 
+                        {% if user.docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if user.docente.cv_docente.formacion_academica.exists and formaciones_verificadas %}
+                            Verificado
+                        {% else %}
+                            No Verificado
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
             <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                 {% for formacion in user.docente.cv_docente.formacion_academica.all %}
                     <li class="py-4">
@@ -465,8 +570,40 @@
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full mb-6">
+        <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-semibold dark:text-white">Producción Académica</h3>
+            <!-- Estado de verificación -->
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        bg-green-500
+                    {% else %}
+                        bg-red-500
+                    {% endif %} text-white"
+                    id="status-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                        {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                            <!-- Ícono de Verificado (Check) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        {% else %}
+                            <!-- Ícono de No Verificado (Cruz) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        {% endif %}
+                    </svg>
+                </div>
+                <span class="text-sm font-medium 
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        text-green-500
+                    {% else %}
+                        text-red-500
+                    {% endif %}">
+                    {% if docente.cv_docente.produccion_academica.exists and producciones_verificadas %}
+                        Verificado
+                    {% else %}
+                        No Verificado
+                    {% endif %}
+                </span>
+            </div>
         </div>
 
         <!-- Contenedor de las producciones académicas -->
@@ -489,9 +626,12 @@
         </div>
 
         <!-- Botón de "+" a la izquierda para agregar una nueva producción académica -->
-        <div class="w-full mt-6 flex justify-start">
+        <div class="w-full mt-6 flex justify-start space-x-6">
             <button type="button" data-modal-target="add-academic-production-modal" data-modal-toggle="add-academic-production-modal" class="w-12 h-12 flex items-center justify-center text-xl font-bold text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 +
+            </button>
+            <button type="button" data-modal-target="SGPA-conexion" data-modal-toggle="SGPA-conexion" class="w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800""w-full px-5 py-3 text-base font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                SGPA
             </button>
         </div>
     </div>
@@ -519,6 +659,7 @@
                     <button type="button" class="px-4 py-2 text-sm text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" data-modal-toggle="details-modal-third-{{ produccion.id }}">
                         Cerrar
                     </button>
+
                 </div>
             </div>
         </div>
@@ -561,12 +702,103 @@
             </form>
         </div>
     </div>
-</div>
+
+    <div id="SGPA-conexion" class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+        <div class="bg-white p-8 rounded-lg shadow-lg dark:bg-gray-800 dark:text-white max-w-lg w-full">
+                <!-- Título del modal -->
+                <div class="text-center mb-6">
+                    <h2 class="text-3xl font-semibold text-gray-900 dark:text-white">Detalles Producción Académica en SGPA</h2>
+                </div>
+                <!-- Contenido del Modal - Información de la Experiencia -->
+                <div class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <!-- Información de la Experiencia -->
+                        <div>
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Articulo Titulo:</strong></p>
+                            <p class="text-gray-500 dark:text-gray-400"> nommbre que ellos tengan</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Area de Conocimiento:</strong></p>
+                            <p class="text-gray-500 dark:text-gray-400">nobre que ellos tengan</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Titulo:</strong></p>
+                            <p class="text-gray-500 dark:text-gray-400">nobre que ellos tengan</p>
+                        </div>
+                        <div>
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Fecha de Publicación:</strong></p>
+                            <p class="text-gray-500 dark:text-gray-400">nobre que ellos tengan</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Detalle de Publicaciones</strong></p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-lg font-medium text-gray-700 dark:text-gray-300"><strong>Descripción:</strong></p>
+                            <p class="text-gray-500 dark:text-gray-400">zonagrande</p>
+                        </div>
+
+                        <!-- Sección del Certificado -->
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="mt-8 flex justify-between items-center">
+                        <!-- Botón Aceptar -->
+                        <button type="submit" class="px-6 py-3 text-sm text-green-600 border border-green-600 rounded-lg hover:bg-green-100 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-700 dark:hover:text-white transition duration-200">
+                            Agregar
+                        </button>
+
+                        <!-- Botón Rechazar -->
+                        <button type="button" class="px-6 py-3 text-sm text-red-600 border border-red-600 rounded-lg hover:bg-red-100 dark:text-red-400 dark:border-red-400 dark:hover:bg-red-700 dark:hover:text-white transition duration-200">
+                           No Agregar
+                         </button>
+
+                        <!-- Botón Cerrar -->
+                         <button type="button" class="px-6 py-3 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-white transition duration-200" data-modal-toggle="SGPA-conexion">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>           
+    </div>
+
 
 <div class="grid grid-cols-1 px-4 pt-1 xl:grid-rows-1 xl:gap-4">
     <div class="w-full p-8 mb-2 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2 dark:border-gray-700 sm:p-6 dark:bg-gray-800">
-        <div class="w-full mb-6">
+        <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-semibold dark:text-white">Habilidades e Idiomas</h3>
+            <!-- Estado de verificación -->
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        bg-green-500
+                    {% else %}
+                        bg-red-500
+                    {% endif %} text-white"
+                    id="status-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                        {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                            <!-- Ícono de Verificado (Check) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        {% else %}
+                            <!-- Ícono de No Verificado (Cruz) -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        {% endif %}
+                    </svg>
+                </div>
+                <span class="text-sm font-medium 
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        text-green-500
+                    {% else %}
+                        text-red-500
+                    {% endif %}">
+                    {% if docente.cv_docente.competencias.exists and competencias_verificadas %}
+                        Verificado
+                    {% else %}
+                        No Verificado
+                    {% endif %}
+                </span>
+            </div>
         </div>
         <!-- Contenedor de las habilidades e idiomas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -640,6 +872,7 @@
             </form>
         </div>
     </div>
+    
 </div>
 
 

@@ -11,6 +11,7 @@ urlpatterns = [
     path('modifyPrivacy/', modify_privacy, name='modify_privacy'),
     path('update_privacy_cv/', update_privacy_cv, name='update_privacy_cv'),
     path('consult/', consult , name='consult'),
+    path('search/consultant_view_consult_cv/<int:docente_id>/', consultant_view_consult_cv , name='consultant_view_consult_cv'),
     path('verify/<int:docente_id>/', verify , name='verify'),
     path('verify_personal_data/<int:docente_id>/', verify_personal_data , name='verify_personal_data'),
     path('verify/<str:model_name>/<int:item_id>/<int:docente_id>/', verify_item, name='verify_item'),
@@ -33,4 +34,5 @@ urlpatterns = [
     path('consult/<int:docente_id>/', generate_curriculum , name='generate_curriculum'),
     path('docentes/resultados/', docentes_resultados, name='docentes_resultados'),
     path('get_document/', get_document, name='get_document'),
+    path('curriculIA/', curriculumia, name='curriculumia'),
 ] 

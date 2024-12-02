@@ -20,6 +20,26 @@
                     Crear CV
                 </button>
             </form>
+
+            <!-- Botón para generar CV con IA -->
+            <button type="button" data-modal-target="modal-toggle" data-modal-toggle="modal-toggle" class="px-6 py-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-700 cursor-pointer">
+                Generar CV con IA
+            </button>
+
+            <!-- Modal de "Próximamente" con Flowbite -->
+            <div id="modal-toggle" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm mx-auto text-center">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Próximamente</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">La funcionalidad para generar el CV con IA estará disponible pronto.</p>
+                    <!-- Cerrar Modal -->
+                    <button type="button" class="px-6 py-2 text-white bg-gray-500 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-700 cursor-pointer" data-modal-toggle="modal-toggle">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+
+            
             <!-- Botón para cancelar y volver al inicio -->
             <a href="{% url 'dashboard' %}" class="px-6 py-3 text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
                 Cancelar

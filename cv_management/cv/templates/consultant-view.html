@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'stacked-layout.html' %}
 {% load static %}
 {% block content %}
 <div class="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4 dark:bg-gray-900">
@@ -32,8 +32,6 @@
             </ol>
             
         </nav>
-        <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">Consultar CV</h1>
-
         <div>
         
     </div> 
@@ -47,90 +45,96 @@
         <div class="flex items-center">
             <img
                 class="w-24 h-24 rounded-full shadow-md border-4 border-white"
-                src="{% if user.docente.foto %}{{ user.docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}"
+                src="{% if docente.foto %}{{ docente.foto.url }}{% else %}{% static 'android-icon-36x36.png' %}{% endif %}"
                 alt="Foto de perfil"
             />
             <div class="ml-4">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ user.docente.nombre }} {{ user.docente.apellido }}</h1>
-                <p class="text-base md:text-lg mt-1 text-gray-700 dark:text-gray-300">Docente {{ user.docente.tipo_contrato }} de {{ user.docente.especialidad }}</p>
-                <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Facultad: {{ user.docente.facultad }} - {{ user.docente.universidad }}</p>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ docente.nombre }} {{ docente.apellido }}</h1>
+                <p class="text-base md:text-lg mt-1 text-gray-700 dark:text-gray-300">Docente {{ docente.tipo_contrato }} de {{ docente.especialidad }}</p>
+                <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Facultad: {{ docente.facultad }} - {{ docente.universidad }}</p>
             </div>
         </div>
         <div class="mt-4 md:mt-0 flex space-x-4">
-            {% if user.docente.cv_docente.privacidad.linkedin_visible %}
-                {% if user.docente.cv_docente.linkedin != 'None' %}
-                <a href="{{ user.docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
+            {% if docente.cv_docente.privacidad.linkedin_visible %}
+                {% if docente.cv_docente.linkedin != 'None' %}
+                <a href="{{ docente.cv_docente.linkedin }}" target="_blank" class="text-blue-600 hover:text-blue-400 dark:text-white dark:hover:text-blue-500">
                     <i class="fab fa-linkedin fa-2x"></i>
                 </a>
                 {% endif %}
             {% endif%}
 
-            {% if user.docente.cv_docente.privacidad.x_visible %}
-                {% if user.docente.cv_docente.x != 'None' %}
-                <a href="{{ user.docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
+            {% if docente.cv_docente.privacidad.x_visible %}
+                {% if docente.cv_docente.x != 'None' %}
+                <a href="{{ docente.cv_docente.x }}" target="_blank" class="text-blue-400 hover:text-blue-300 dark:text-white dark:hover:text-blue-400">
                     <i class="fab fa-twitter fa-2x"></i>
                 </a>
                 {% endif %}
             {% endif%}
 
-            {% if user.docente.cv_docente.privacidad.github_visible %}
-                {% if user.docente.cv_docente.github != 'None' %}
-                <a href="{{ user.docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
+            {% if docente.cv_docente.privacidad.github_visible %}
+                {% if docente.cv_docente.github != 'None' %}
+                <a href="{{ docente.cv_docente.github }}" target="_blank" class="text-gray-900 hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
                     <i class="fab fa-github fa-2x"></i>
                 </a>
                 {% endif %}
             {% endif%}
         </div>
     </div>
-    <!--posible if-->
+
     <!-- Sección de Contacto -->
     <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 mt-8">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Información de Contacto</h2>
+        
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Contacto y PDF</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Información Personal -->
+            {% if conjunto_visible%}
             <div>
-                {% if user.docente.privacidad.cedula_visible %}
+                {% if docente.privacidad.cedula_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Cédula:</strong> {{ user.docente.cedula }}
+                    <strong class="font-semibold dark:text-white">Cédula:</strong> {{ docente.cedula }}
                 </p>
                 {% endif%}
-                {% if user.docente.privacidad.num_telefono_visible %}
+                {% if docente.privacidad.num_telefono_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Teléfono:</strong> {{ user.docente.num_telefono }}
+                    <strong class="font-semibold dark:text-white">Teléfono:</strong> {{ docente.num_telefono }}
                 </p>
                 {% endif%}
-                {% if user.docente.privacidad.correo_visible %}
+                {% if docente.privacidad.correo_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Correo Electrónico:</strong> {{ user.docente.correo }}
+                    <strong class="font-semibold dark:text-white">Correo Electrónico:</strong> {{ docente.correo }}
                 </p>
                 {% endif%}
             </div>
+            {% endif%}
+
 
             <!-- Información Profesional -->
+            {% if conjunto_dos_visible%}
             <div>
-                {% if user.docente.privacidad.categoria_visible %}
+                {% if docente.privacidad.categoria_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Categoría:</strong> {{ user.docente.categoria }}
+                    <strong class="font-semibold dark:text-white">Categoría:</strong> {{ docente.categoria }}
                 </p>
                 {% endif%}
-                {% if user.docente.privacidad.fecha_contratacion_visible %}
+                {% if docente.privacidad.fecha_contratacion_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Tipo de Contrato:</strong> {{ user.docente.tipo_contrato }}
+                    <strong class="font-semibold dark:text-white">Tipo de Contrato:</strong> {{ docente.tipo_contrato }}
                 </p>
                 {% endif%}
-                {% if user.docente.privacidad.tipo_contrato_visible %}
+                {% if docente.privacidad.tipo_contrato_visible %}
                 <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    <strong class="font-semibold dark:text-white">Fecha de Contratación:</strong> {{ user.docente.fecha_contratacion }}
+                    <strong class="font-semibold dark:text-white">Fecha de Contratación:</strong> {{ docente.fecha_contratacion }}
                 </p>
                 {% endif%}
             </div>
+            {% endif%}
         </div>
 
         <!-- Botones de Enlace de Contacto -->
         <div class="flex space-x-4 mt-6">
-            {% if user.docente.cv_docente.privacidad.gmail_enviable %}
+            {% if docente.cv_docente.privacidad.gmail_enviable %}
             <!-- Botón de Gmail -->
-            <a href="https://mail.google.com/mail/?view=cm&to={{ user.docente.correo }}" 
+            <a href="https://mail.google.com/mail/?view=cm&to={{ docente.correo }}" 
             target="_blank" 
             class="flex items-center space-x-2 text-[#DB4437] hover:text-[#C1351D] dark:text-white dark:hover:text-gray-400">
                 <i class="fab fa-google fa-2x"></i>
@@ -138,9 +142,9 @@
             </a>
             {% endif %}
             
-            {% if user.docente.cv_docente.privacidad.outlook_enviable %}
+            {% if docente.cv_docente.privacidad.outlook_enviable %}
             <!-- Botón de Outlook -->
-            <a href="https://outlook.office.com/mail/deeplink/compose?to={{ user.docente.correo }}" 
+            <a href="https://outlook.office.com/mail/deeplink/compose?to={{ docente.correo }}" 
             target="_blank" 
             class="flex items-center space-x-2 text-[#0078D4] hover:text-[#005A9E] dark:text-white dark:hover:text-gray-400">
                 <i class="fab fa-microsoft fa-2x"></i>
@@ -149,7 +153,7 @@
             {% endif %}
             
             <!-- Botón de PDF -->
-            <a href="{% url 'generate_curriculum' docente_id=user.docente.id %}" 
+            <a href="{% url 'generate_curriculum' docente_id=docente.id %}" 
             target="_blank" 
             class="flex items-center space-x-2 text-[#E63E42] hover:text-[#C32F2F] dark:text-white dark:hover:text-gray-400">
                 <i class="fas fa-file-pdf fa-2x"></i>
@@ -170,7 +174,7 @@
     <div class="col-span-3 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Producción Académica</h2>
         <div class="space-y-4">
-            {% for produccion in user.docente.cv_docente.produccion_academica.all %}
+            {% for produccion in docente.cv_docente.produccion_academica.all %}
             <div>
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ produccion.titulo }}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -192,7 +196,7 @@
     <div class="col-span-1 bg-white shadow-md rounded-lg p-6 border border-gray-200 dark:border-gray-700 dark:bg-gray-800">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Competencias</h2>
         <div class="space-y-4">
-            {% for competencia in user.docente.cv_docente.competencias.all %}
+            {% for competencia in docente.cv_docente.competencias.all %}
             <div>
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ competencia.nombre }}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">{{ competencia.descripcion }}</p>
@@ -214,7 +218,7 @@
             Experiencia Laboral
         </button>
         <div class="p-6 space-y-4">
-            {% for experiencia in user.docente.cv_docente.experiencia_laboral.all %}
+            {% for experiencia in docente.cv_docente.experiencia_laboral.all %}
             <div>
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ experiencia.cargo }}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -238,7 +242,7 @@
             Formación Académica
         </button>
         <div class="p-6 space-y-4">
-            {% for formacion in user.docente.cv_docente.formacion_academica.all %}
+            {% for formacion in docente.cv_docente.formacion_academica.all %}
             <div>
                 <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ formacion.titulo }}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
