@@ -39,7 +39,12 @@
       
 </div>
 
-<div class="container mx-auto px-4 py-6">
+<div>
+
+</div>
+
+
+
     <!-- Header Principal -->
     <div class="bg-white border border-gray-200 rounded-lg shadow-md p-6 flex flex-col md:flex-row items-center justify-between dark:border-gray-700 dark:bg-gray-800">
         <div class="flex items-center">
@@ -54,6 +59,39 @@
                 <p class="text-sm md:text-base text-gray-600 dark:text-gray-400">Facultad: {{ docente.facultad }} - {{ docente.universidad }}</p>
             </div>
         </div>
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 flex items-center justify-center rounded-full 
+                        {% if docente.cv_docente.estado %} 
+                            bg-green-500  <!-- Activo -->
+                        {% else %}
+                            bg-red-500    <!-- Inactivo -->
+                        {% endif %} text-white" id="status-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+                            {% if docente.cv_docente.estado %}
+                                <!-- Ícono de Activo (Check) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            {% else %}
+                                <!-- Ícono de Inactivo (Cruz) -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            {% endif %}
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium
+                        {% if docente.cv_docente.estado %}
+                            text-green-500
+                        {% else %}
+                            text-red-500
+                        {% endif %}">
+                        {% if docente.cv_docente.estado %}
+                            Activo
+                        {% else %}
+                            Inactivo
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
         <div class="mt-4 md:mt-0 flex space-x-4">
             {% if docente.cv_docente.privacidad.linkedin_visible %}
                 {% if docente.cv_docente.linkedin != 'None' %}
