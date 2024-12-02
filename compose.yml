@@ -3,15 +3,25 @@ services:
     image: postgres
     volumes:
       - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB=EduCV
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
+  migration:
+    build: ./cv_management
+    command:
+      - python
+      - manage.py
+      - migrate
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:1234@db:5432/EduCV
   web:
     build: ./cv_management
-    command:  python cv_management/manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/code
+
     ports:
       - "8000:8000"
     environment:
@@ -21,3 +31,4 @@ services:
       - DATABASE_URL=postgres://postgres:1234@db:5432/EduCV
     depends_on:
       - db
+      - migration
