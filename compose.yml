@@ -8,8 +8,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    build: ./cv_management
+    command:  python cv_management/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
